@@ -19,11 +19,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     public ?string $username = null;
 
+    #[ORM\Column(nullable: true)]
+    public ?string $nom = null;
+
     #[ORM\Column]
     public array $roles = [];
 
     #[ORM\Column]
     private ?string $password = null;
+    public ?string $plainPassword = null;
+
+    #[ORM\Column(type: 'datetime')]
+    public \DateTime $updatedAt;
+
+    public function __construct()
+    {
+        $this->updatedAt = new \DateTime();
+    }
 
     /**
      * A visual identifier that represents this user.
@@ -47,12 +59,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRoles());
+    }
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function setPassword(string $hashPassword)
+    {
+        $this->password = $hashPassword;
     }
 
     /**
@@ -63,4 +85,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    public function __toString(): string
+    {
+        return $this->username;
+    }
+
+    public function touch(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
 }

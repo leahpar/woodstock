@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>
+        {% if user.id %}
+            {{ user.nom }}
+        {% else %}
+            Nouvel utilisateur
+        {% endif %}
+    </h1>
+
+    {{ include('user/_form.html.twig') }}
+
+{% endblock %}

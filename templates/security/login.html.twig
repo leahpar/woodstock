@@ -9,10 +9,10 @@
 
     <form action="{{ path('app_login') }}" method="post">
 
-        <label for="username">Email:</label>
+        <label for="username">Identifiant:</label>
         <input type="text" id="username" name="_username" value="{{ last_username }}">
 
-        <label for="password">Password:</label>
+        <label for="password">Mot de passe:</label>
         <input type="password" id="password" name="_password">
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -22,6 +22,6 @@
             Se souvenir de moi
         </label>
 
-        <button type="submit">login</button>
+        <button>Se connecter</button>
     </form>
 {% endblock %}

@@ -26,10 +26,13 @@ security:
                 check_path: app_login
                 enable_csrf: true
 
+            logout:
+                path: app_logout
+                target: app_login
+
             remember_me:
                 secret:   '%kernel.secret%' # required
                 lifetime: 604800 # 1 week in seconds
-
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -39,7 +42,11 @@ security:
 
 
     role_hierarchy:
-        ROLE_SUPER_ADMIN: ROLE_PROFILER
+        ROLE_SUPER_ADMIN: [ROLE_PROFILER, ROLE_ADMIN]
+        ROLE_ADMIN: [ROLE_USER_ALL]
+        ROLE_USER_ALL: [ROLE_USER_LIST, ROLE_USER_EDIT]
+
+        # ROLE_USER_EDIT
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

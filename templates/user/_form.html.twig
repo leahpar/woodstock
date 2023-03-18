@@ -1,0 +1,48 @@
+<form method="post">
+    {{ form_widget(form._token) }}
+
+    {{ form_errors(form) }}
+
+    {{ form_row(form.username, {label: "Identifiant"}) }}
+
+    {{ form_row(form.nom, {label: "Nom"}) }}
+
+    {{ form_row(form.plainPassword, {label: "Mot de passe", attr: {autoComplete: "off"}}) }}
+
+    <div>
+        Droits<br>
+        {% set allroles = {
+            'Admin': {
+                'ROLE_ADMIN': 'Administrateur',
+            },
+            'Utilisateurs': {
+                'ROLE_USER_LIST': 'Consulter les utilisateurs',
+                'ROLE_USER_EDIT': 'Modifier les utilisateurs',
+            }
+        } %}
+        {% for group,roles in allroles %}
+            <span>{{ group }}</span>
+            <ul>
+            {% for role,label in roles %}
+                <li>
+                    <input type="checkbox"
+                       id="user_roles_{{ role }}"
+                       name="user[roles][]"
+                       value="{{ role }}"
+                       {{ user.hasRole(role) ? 'checked' }}>
+                    <label for="user_roles_{{ role }}">{{ label }}</label>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+
+    <div>
+    <button>Enregistrer</button>
+    </div>
+
+    {% if user.id %}
+        {{ include('user/_delete_form.html.twig') }}
+    {% endif %}
+
+</form>
