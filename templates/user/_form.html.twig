@@ -18,7 +18,12 @@
             'Utilisateurs': {
                 'ROLE_USER_LIST': 'Consulter les utilisateurs',
                 'ROLE_USER_EDIT': 'Modifier les utilisateurs',
-            }
+            },
+            'Stock': {
+                'ROLE_REFERENCE_LIST':  'Consulter les références',
+                'ROLE_REFERENCE_EDIT':  'Modifier les références',
+                'ROLE_REFERENCE_STOCK': 'Modifier les stocks',
+            },
         } %}
         {% for group,roles in allroles %}
             <span>{{ group }}</span>

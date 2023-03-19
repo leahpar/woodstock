@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}reference index{% endblock %}
+
+{% block content %}
+    <h1>reference index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Reference</th>
+                <th>Quantite</th>
+                <th>Conditionnement</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reference in references %}
+            <tr>
+                <td>{{ reference.nom }}</td>
+                <td>{{ reference.reference }}</td>
+                <td>{{ reference.quantite }}</td>
+                <td>{{ reference.conditionnement }}</td>
+                <td>
+                    <a href="{{ path('reference_show', {'id': reference.id}) }}">show</a>
+                    <a href="{{ path('reference_edit', {'id': reference.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('reference_new') }}">Ajouter une référence</a>
+{% endblock %}

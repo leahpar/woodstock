@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>
+        {% if reference.id %}
+            {{ reference.reference }}
+        {% else %}
+            Nouvelle référence
+        {% endif %}
+    </h1>
+
+    {{ include('reference/_form.html.twig') }}
+
+{% endblock %}

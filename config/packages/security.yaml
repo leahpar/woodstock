@@ -43,10 +43,10 @@ security:
 
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_PROFILER, ROLE_ADMIN]
-        ROLE_ADMIN: [ROLE_USER_ALL]
+        ROLE_ADMIN: [ROLE_ALL]
+        ROLE_ALL: [ROLE_USER_ALL,ROLE_REFERENCE_ALL]
         ROLE_USER_ALL: [ROLE_USER_LIST, ROLE_USER_EDIT]
-
-        # ROLE_USER_EDIT
+        ROLE_REFERENCE_ALL: [ROLE_REFERENCE_LIST, ROLE_REFERENCE_EDIT, ROLE_REFERENCE_STOCK]
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

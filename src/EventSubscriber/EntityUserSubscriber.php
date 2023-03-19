@@ -27,7 +27,6 @@ class EntityUserSubscriber implements EventSubscriberInterface
     public function preUpdate(LifecycleEventArgs $event): void
     {
         $entity = $event->getObject();
-        dump($entity, $entity instanceof User, $entity->plainPassword);
         if ($entity instanceof User && $entity->plainPassword) {
             $this->encodePassword($entity, $entity->plainPassword);
         }

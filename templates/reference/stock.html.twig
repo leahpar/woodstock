@@ -1,0 +1,17 @@
+<form method="post">
+    {{ form_widget(form._token) }}
+
+    {{ form_errors(form) }}
+
+    {{ form_row(form.reference, {label: "Référence"}) }}
+
+    {{ form_row(form.type, {label: "Type"}) }}
+
+    {{ form_row(form.quantite, {label: "Quantité"}) }}
+
+
+    <div>
+        <button>Enregistrer</button>
+    </div>
+
+</form>
