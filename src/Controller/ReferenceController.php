@@ -98,10 +98,7 @@ class ReferenceController extends AbstractController
     #[IsGranted('ROLE_REFERENCE_EDIT')]
     public function delete(Request $request, Reference $reference, ReferenceRepository $referenceRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$reference->id, $request->request->get('_token'))) {
-            $referenceRepository->remove($reference, true);
-        }
-
+        $referenceRepository->remove($reference, true);
         return $this->redirectToRoute('reference_index', [], Response::HTTP_SEE_OTHER);
     }
 

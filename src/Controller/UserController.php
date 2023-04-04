@@ -75,12 +75,9 @@ class UserController extends AbstractController
 
     #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
     #[IsGranted('ROLE_USER_EDIT')]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    public function delete(User $user, UserRepository $userRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->id, $request->request->get('_token'))) {
-            $userRepository->remove($user, true);
-        }
-
+        $userRepository->remove($user, true);
         return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
     }
 }
