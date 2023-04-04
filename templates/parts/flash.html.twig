@@ -1,0 +1,12 @@
+<div>
+    {# read and display all flash messages #}
+    {# label : 'notice', 'success', 'warning', 'error' #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flashMessage {{ label }}">
+                {{ message|raw }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
