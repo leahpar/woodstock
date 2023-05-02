@@ -13,8 +13,10 @@ class ReferenceType extends AbstractType
     {
         $builder
             ->add('nom')
+            ->add('marque')
             ->add('reference')
             ->add('conditionnement')
+            ->add('seuil')
         ;
     }
 
