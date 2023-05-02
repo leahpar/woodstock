@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Reference;
 use App\Entity\Stock;
 use App\Form\ReferenceType;
-use App\Form\StockType;
+use App\Form\StockEntreeType;
 use App\Repository\ReferenceRepository;
 use App\Repository\StockRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,26 +23,6 @@ class ReferenceController extends AbstractController
     {
         return $this->render('reference/index.html.twig', [
             'references' => $referenceRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/stock', name: 'reference_stock', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_REFERENCE_STOCK')]
-    public function stock(Request $request, StockRepository $stockRepository): Response
-    {
-        $stock = new Stock();
-        $form = $this->createForm(StockType::class, $stock);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $stockRepository->save($stock, true);
-
-            return $this->redirectToRoute('reference_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('reference/stock.html.twig', [
-            'stock' => $stock,
-            'form' => $form->createView(),
         ]);
     }
 

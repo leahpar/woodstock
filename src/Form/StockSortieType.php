@@ -11,18 +11,11 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class StockType extends AbstractType
+class StockSortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('type', ChoiceType::class, [
-                'required' => true,
-                'choices' => [
-                    'Entrée' => Stock::TYPE_ENTREE,
-                    'Sortie' => Stock::TYPE_SORTIE,
-                ],
-            ])
             ->add('quantite', IntegerType::class, [
                 'required' => true,
             ])
