@@ -21,11 +21,17 @@ class Reference
     #[ORM\Column(length: 255)]
     public string $nom;
 
+    #[ORM\Column(length: 255)]
+    public string $marque;
+
     #[ORM\Column(length: 255, nullable: true)]
     public ?string $conditionnement = null;
 
     #[ORM\OneToMany(mappedBy: 'reference', targetEntity: Stock::class, orphanRemoval: true)]
     public Collection $stocks;
+
+    #[ORM\Column()]
+    public ?int $seuil = null;
 
     public function __construct()
     {
