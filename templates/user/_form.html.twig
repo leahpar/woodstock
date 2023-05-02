@@ -3,11 +3,32 @@
 
     {{ form_errors(form) }}
 
-    {{ form_row(form.username, {label: "Identifiant"}) }}
+    <div>
+        {{ form_label(form.username, 'Identifiant', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.username, {attr: {class:
+            "..."
+        }}) }}
+    </div>
 
-    {{ form_row(form.nom, {label: "Nom"}) }}
+    <div>
+        {{ form_label(form.nom, 'Nom', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.nom, {attr: {class:
+            "..."
+        }}) }}
+    </div>
 
-    {{ form_row(form.plainPassword, {label: "Mot de passe", attr: {autoComplete: "off"}}) }}
+    <div>
+        {{ form_label(form.plainPassword, 'Mot de passe', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.plainPassword, {attr: {autoComplete: "off", class:
+            "..."
+        }}) }}
+    </div>
 
     <div>
         Droits<br>
@@ -45,9 +66,9 @@
     <div>
     <button>Enregistrer</button>
     </div>
-
-    {% if user.id %}
-        {{ include('user/_delete_form.html.twig') }}
-    {% endif %}
-
 </form>
+
+{% if user.id %}
+    {{ include('user/_delete_form.html.twig') }}
+{% endif %}
+

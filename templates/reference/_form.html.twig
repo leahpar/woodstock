@@ -3,16 +3,39 @@
 
     {{ form_errors(form) }}
 
-    {{ form_row(form.reference, {label: "Référence"}) }}
-    {{ form_row(form.nom, {label: "Nom"}) }}
-    {{ form_row(form.conditionnement, {label: "Conditionnement"}) }}
+    <div>
+    {{ form_label(form.reference, 'Référence', {label_attr: {class:
+        "..."
+    }}) }}
+    {{ form_widget(form.reference, {attr: {class:
+        "..."
+    }}) }}
+    </div>
+
+    <div>
+        {{ form_label(form.nom, 'Nom', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.nom, {attr: {class:
+            "..."
+        }}) }}
+    </div>
+
+    <div>
+        {{ form_label(form.conditionnement, 'Conditionnement', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.conditionnement, {attr: {class:
+            "..."
+        }}) }}
+    </div>
 
     <div>
         <button>Enregistrer</button>
     </div>
 
-    {% if reference.id %}
-        {{ include('reference/_delete_form.html.twig') }}
-    {% endif %}
-
 </form>
+
+{% if reference.id %}
+    {{ include('reference/_delete_form.html.twig') }}
+{% endif %}
