@@ -7,12 +7,32 @@
 
     {{ form_errors(form) }}
 
-    {{ form_row(form.reference, {label: "Référence"}) }}
+    <div>
+        {{ form_label(form.reference, 'Référence', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.reference, {attr: {class:
+            "..."
+        }}) }}
+    </div>
 
-    {{ form_row(form.type, {label: "Type"}) }}
+    <div>
+        {{ form_label(form.type, 'Type', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.type, {attr: {class:
+            "..."
+        }}) }}
+    </div>
 
-    {{ form_row(form.quantite, {label: "Quantité"}) }}
-
+    <div>
+        {{ form_label(form.quantite, 'Quantité', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.quantite, {attr: {class:
+            "..."
+        }}) }}
+    </div>
 
     <div>
         <button>Enregistrer</button>
