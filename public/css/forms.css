@@ -1,0 +1,31 @@
+.formWrapper .formSection{
+		@apply grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3;
+}
+.formWrapper .formSection h2{
+	@apply text-base font-semibold leading-7 text-gray-900;
+}
+.formWrapper .formSection label{
+	@apply block text-sm font-medium leading-6 text-gray-900;
+}
+.formWrapper .formSection input[type='text'],
+.formWrapper .formSection input[type='number'],
+.formWrapper .formSection input[type='date'],
+.formWrapper .formSection input[type='password'],
+.formWrapper .formSection input[type='tel'],
+.formWrapper .formSection input[type='email'],
+.formWrapper .formSection input[type='datetime'],
+.formWrapper .formSection select,
+.formWrapper .formSection textarea{
+	@apply block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6;
+}
+.formWrapper .formSection input[type="checkbox"],
+.formWrapper .formSection input[type="radio"]{
+	@apply h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600;
+}
+.formWrapper .formSection .formGrid{
+	@apply grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2;
+}
+.formWrapper .formSection .formErrors{
+	@apply text-sm text-red-500 mt-2;
+}
+/*# sourceMappingURL=forms.css.map */

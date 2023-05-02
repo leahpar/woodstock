@@ -3,37 +3,99 @@
 {% block title %}reference index{% endblock %}
 
 {% block content %}
-    <h1>reference index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Reference</th>
-                <th>Quantite</th>
-                <th>Conditionnement</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for reference in references %}
-            <tr>
-                <td>{{ reference.nom }}</td>
-                <td>{{ reference.reference }}</td>
-                <td>{{ reference.quantite }}</td>
-                <td>{{ reference.conditionnement }}</td>
-                <td>
-                    <a href="{{ path('reference_show', {'id': reference.id}) }}">show</a>
-                    <a href="{{ path('reference_edit', {'id': reference.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    
+    <div class="md:flex md:items-center md:justify-between">
+      <div class="min-w-0 flex-1">
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Gestion des stocks</h2>
+      </div>
+      <div class="mt-4 flex md:ml-4 md:mt-0">
+        <a href="{{ path('reference_new') }}" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Ajouter une référence</a>
+        
+        {% if is_granted('ROLE_REFERENCE_STOCK') %}
+            <a href="{{ path('reference_stock',{type:'entree'}) }}" class="ml-3 inline-flex items-center rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">Ajouter du stock</a>
+        
+        
+            <a href="{{ path('reference_stock',{type:'sortie'}) }}" class="ml-3 inline-flex items-center rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">Sortir du stock</a>
+        {% endif %}
+        
+      </div>
+    </div>
+    
+    
+    
+    
 
-    <a href="{{ path('reference_new') }}">Ajouter une référence</a>
+      <div class="mt-8 flow-root">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="relative">
+              <!-- Selected row actions, only show when rows are selected. -->
+              <!-- <div class="absolute top-0 left-14 flex h-12 items-center space-x-3 bg-white sm:left-12"> -->
+              <!--   <button type="button" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white">Bulk edit</button> -->
+              <!--   <button type="button" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white">Delete all</button> -->
+              <!-- </div> -->
+    
+              <table class="min-w-full table-fixed divide-y divide-gray-300">
+                  
+                <thead>
+                  <tr>
+                    <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
+                      <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">
+                    </th>
+                    <th scope="col" class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">Nom</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Marque</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Référence</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stock</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Conditionnement</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Seuil</th>
+                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
+                      <span class="sr-only">Actions</span>
+                    </th>
+                  </tr>
+                </thead>
+                
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    
+                    {% for reference in references %}
+                    
+                  <!-- Selected: "bg-gray-50" -->
+                  <tr>
+                    <td class="relative px-7 sm:w-12 sm:px-6">
+                      <!-- Selected row marker, only show when row is selected. -->
+                      <!-- <div class="absolute inset-y-0 left-0 w-0.5 bg-teal-600"></div> -->
+    
+                      <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">
+                    </td>
+                    <!-- Selected: "text-teal-600", Not Selected: "text-gray-900" -->
+                    <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900">{{ reference.nom }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ reference.marque }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ reference.reference }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ reference.quantite }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ reference.conditionnement }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ reference.seuil }}</td>
+                    <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+                      <a href="{{ path('reference_edit', {'id': reference.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ reference.nom }}</span></a>
+                      
+                      <form method="post" action="{{ path('reference_delete', {'id': reference.id}) }}" onsubmit="return confirm('Êtes-vous sûr de supprimer cet élément ?');" class="contents">
+                          <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ reference.nom }}</span></button>
+                      </form>
+                      
+                    </td>
+                  </tr>
+                  
+                  {% else %}
+                      <tr>
+                          <td colspan="99">Aucun stock</td>
+                      </tr>
+                  {% endfor %}
+                  
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
 {% endblock %}
