@@ -3,7 +3,7 @@ twig:
 
     form_themes:
         # Custom complete form theme
-        - 'parts/form.html.twig'
+        #- 'parts/form.html.twig'
 
     # If true, whenever a template is rendered, Symfony checks first if its source code has changed since it was compiled.
     # If it has changed, the template is compiled again automatically.

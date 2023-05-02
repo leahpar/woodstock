@@ -19,8 +19,8 @@ class StockType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'required' => true,
                 'choices' => [
-                    'Entrée' => 'Entrée',
-                    'Sortie' => 'Sortie',
+                    'Entrée' => Stock::TYPE_ENTREE,
+                    'Sortie' => Stock::TYPE_SORTIE,
                 ],
             ])
             ->add('quantite', IntegerType::class, [

@@ -6,6 +6,7 @@ use App\Repository\ReferenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReferenceRepository::class)]
 class Reference
@@ -16,12 +17,15 @@ class Reference
     public ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\Unique]
     public string $reference;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     public string $nom;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     public string $marque;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -60,7 +64,7 @@ class Reference
     {
         $quantite = 0;
         foreach ($this->stocks as $stock) {
-            if ($stock->type === 'Entrée') {
+            if ($stock->type === Stock::TYPE_ENTREE) {
                 $quantite += $stock->quantite;
             } else {
                 $quantite -= $stock->quantite;
