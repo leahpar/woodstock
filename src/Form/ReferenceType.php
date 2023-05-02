@@ -28,6 +28,7 @@ class ReferenceType extends AbstractType
             ])
             ->add('seuil', NumberType::class, [
                 'required' => false,
+                'html5' => true,
             ])
         ;
     }
