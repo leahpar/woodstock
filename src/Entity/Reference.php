@@ -30,7 +30,7 @@ class Reference
     #[ORM\OneToMany(mappedBy: 'reference', targetEntity: Stock::class, orphanRemoval: true)]
     public Collection $stocks;
 
-    #[ORM\Column()]
+    #[ORM\Column(nullable: true)]
     public ?int $seuil = null;
 
     public function __construct()
