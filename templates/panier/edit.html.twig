@@ -2,7 +2,9 @@
 
 {% block content %}
 
-    <div class="md:flex md:items-center md:justify-between mb-8">
+<div class="max-w-2xl mx-auto">
+
+    <div class="md:flex md:items-center md:justify-between md:mb-6">
         <div class="min-w-0 flex-1">
             <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                 {% if panier.type == 'sortie' %}
@@ -15,94 +17,126 @@
         <div class="mt-4 flex md:ml-4 md:mt-0">
         </div>
     </div>
+    
+    <form method="post">
+    {{ form_widget(form._token) }}
+    
+    {{ form_errors(form) }}
+    
+        <div class="bg-gray-50 border border-gray-200 rounded-lg py-6 px-8 mb-8">
+            <div class="space-y-4">
+                <div>
+                    
+                    {{ form_label(form.reference, 'Référence', {label_attr: {class:
+                        ""
+                    }}) }}
+                    <div class="mt-2">
+                        {{ form_widget(form.reference, {attr: {class:
+                            ""
+                        }}) }}
+                    </div>
+                    <div class="formErrors">
+                        {{ form_errors(form.reference) }}
+                    </div>
+                    
+                </div>
+                
+                <div>
+                    
+                    {{ form_label(form.quantite, 'Quantité', {label_attr: {class:""}}) }}
+                    <div class="mt-2">
+                        {{ form_widget(form.quantite, {attr: {class:
+                            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
+                        }}) }}
+                    </div>
+                    <div class="formErrors">
+                        {{ form_errors(form.quantite) }}
+                    </div>
+                    
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <button type="submit"
+                            class="inline-flex min-w-lg items-center gap-x-2 rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="-mr-0.5 h-5 w-5">
+                              <path d="M12 1.5a.75.75 0 01.75.75V7.5h-1.5V2.25A.75.75 0 0112 1.5zM11.25 7.5v5.69l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V7.5h3.75a3 3 0 013 3v9a3 3 0 01-3 3h-9a3 3 0 01-3-3v-9a3 3 0 013-3h3.75z" />
+                            </svg>
+
+
+                        Ajouter à ma sélection
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    
+    </form>
 
     <div class="formWrapper">
 
-        <form method="post">
-            {{ form_widget(form._token) }}
-
-            {{ form_errors(form) }}
-
-            <div class="space-y-12">
-                <div class="formSection">
-
-                    <div>
-                        <h2></h2>
-                    </div>
-
-                    <div class="formGrid">
-
-                        <div class="col-span-full">
-                            {{ form_label(form.reference, 'Référence', {label_attr: {class:
-                                ""
-                            }}) }}
-                            <div class="mt-2">
-                                {{ form_widget(form.reference, {attr: {class:
-                                    ""
-                                }}) }}
-                            </div>
-                            <div class="formErrors">
-                                {{ form_errors(form.reference) }}
-                            </div>
-                        </div>
-
-                        <div class="col-span-full">
-                            {{ form_label(form.quantite, 'Quantité', {label_attr: {class:""}}) }}
-                            <div class="mt-2">
-                                {{ form_widget(form.quantite, {attr: {class:
-                                    ""
-                                }}) }}
-                            </div>
-                            <div class="formErrors">
-                                {{ form_errors(form.quantite) }}
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="mt-6 flex items-center justify-end gap-x-6">
-                <button type="submit"
-                        class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
-                    Ajouter
-                </button>
-            </div>
-
-        </form>
+        
 
 
         <div>
-            <h2>Panier</h2>
-
-            {% for stock in panier.stocks %}
-                <div>
-                    {{ stock.quantite }} x {{ stock.reference }}
-                    <a href="{{ path('panier_stock_del', {id: panier.id, stock: stock.id}) }}">Supprimer</a>
-                </div>
-            {% endfor %}
+            <h2 class="text-xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">Ma sélection</h2>
+            
+            <table class="mainTable">
+                <thead>
+                    <tr>
+                        <th>Quantité</th>
+                        <th>Référence</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in panier.stocks %}
+                        <tr>
+                            <td>{{ stock.quantite }}</td>
+                            <td class="font-medium !text-gray-900">{{ stock.reference }}</td>
+                            <td><a href="{{ path('panier_stock_del', {id: panier.id, stock: stock.id}) }}" class="text-teal-600 hover:text-teal-900">Supprimer</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
         </div>
 
+        <div class="flex justify-between items-center mt-6">
+            
+            <div>
+                <form action="{{ path('panier_del', {'id': panier.id}) }}"
+                      method="POST"
+                      onsubmit="return confirm('Annuler la sélection ?');">
+                    <input type="hidden" name="_method" value="DELETE">
+                    
+                    <button class="inline-flex gap-x-2 rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="-mr-0.5 h-5 w-5 text-teal-500">
+                          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clip-rule="evenodd" />
+                        </svg>
 
-        <div>
-            <form action="{{ path('panier_del', {'id': panier.id}) }}"
-                  method="POST"
-                  onsubmit="return confirm('Annuler le panier ?');">
-                <input type="hidden" name="_method" value="DELETE">
-                <button type="submit">Annuler le panier</button>
-            </form>
-        </div>
-
-        <div>
-            <form action="{{ path('panier_save', {'id': panier.id}) }}"
-                  method="POST"
-                  onsubmit="return confirm('Valider le panier ?');">
-                <button type="submit">Valider le panier</button>
-            </form>
+                      Annuler la sélection
+                    </button>
+                    
+                </form>
+            </div>
+    
+            <div>
+                <form action="{{ path('panier_save', {'id': panier.id}) }}"
+                      method="POST"
+                      onsubmit="return confirm('Valider la sélection ?');">
+                    <button class="inline-flex items-center gap-x-2 rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500">
+                        <svg class="-mr-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                          </svg>
+                      Valider la sélection
+                    </button>
+                </form>
+            </div>
+        
         </div>
 
     </div>
+    
+</div>
 
 {% endblock %}
