@@ -31,6 +31,7 @@ class Panier
     public User $user;
 
     #[ORM\OneToMany(mappedBy: 'panier', targetEntity: Stock::class)]
+    #[ORM\OrderBy(['id' => 'DESC'])]
     public Collection $stocks;
 
     public function __construct()
