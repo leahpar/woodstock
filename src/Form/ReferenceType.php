@@ -18,7 +18,7 @@ class ReferenceType extends AbstractType
                 'required' => true,
             ])
             ->add('marque', TextType::class, [
-                'required' => true,
+                'required' => false,
             ])
             ->add('reference', TextType::class, [
                 'required' => true,

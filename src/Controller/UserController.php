@@ -18,8 +18,11 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_USER_LIST')]
     public function index(UserRepository $userRepository): Response
     {
+        $users = $userRepository->findBy([], ['nom' => 'ASC']);
+        $users = array_filter($users, fn($user) => !$user->hasRole('ROLE_SUPER_ADMIN'));
+
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
         ]);
     }
 

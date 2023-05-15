@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public array $roles = [];
 
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password = '';
     public ?string $plainPassword = null;
 
     #[ORM\Column(type: 'datetime')]

@@ -24,19 +24,16 @@ class EntityUserSubscriber implements EventSubscriberInterface
         ];
     }
 
+    public function prePersist(LifecycleEventArgs $event): void
+    {
+        $this->preUpdate($event);
+    }
+
     public function preUpdate(LifecycleEventArgs $event): void
     {
         $entity = $event->getObject();
-        if ($entity instanceof User && $entity->plainPassword) {
+        if ($entity instanceof User && !empty($entity->plainPassword)) {
             $this->encodePassword($entity, $entity->plainPassword);
-        }
-    }
-
-    public function prePersist(LifecycleEventArgs $event): void
-    {
-        $entity = $event->getObject();
-        if ($entity instanceof User) {
-            $this->encodePassword($entity, $entity->plainPassword ?? bin2hex(random_bytes(4)));
         }
     }
 

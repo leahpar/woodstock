@@ -25,14 +25,13 @@ class Reference
     #[Assert\NotBlank]
     public string $nom;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    public string $marque;
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $marque = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     public ?string $conditionnement = null;
 
-    #[ORM\OneToMany(mappedBy: 'reference', targetEntity: Stock::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'reference', targetEntity: Stock::class, fetch: 'EAGER', orphanRemoval: true)]
     public Collection $stocks;
 
     #[ORM\Column(nullable: true)]

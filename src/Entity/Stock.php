@@ -19,7 +19,7 @@ class Stock
     public ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'stocks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Assert\NotNull]
     public ?Reference $reference = null;
 
@@ -31,7 +31,7 @@ class Stock
     public ?int $quantite = 0;
 
     #[ORM\ManyToOne(inversedBy: 'stocks')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     public ?Panier $panier = null;
 
 

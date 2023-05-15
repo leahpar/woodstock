@@ -27,9 +27,10 @@ class StockType extends AbstractType
             // Version "simple"
             ->add('reference', EntityType::class, [
                 'class' => Reference::class,
-                'choice_label' => 'nom',
+                //'choice_label' => 'nom',
                 'required' => true,
                 'autocomplete' => true,
+                'placeholder' => 'Choisir une référence',
             ])
         ;
     }
