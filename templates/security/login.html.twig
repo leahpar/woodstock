@@ -1,27 +1,73 @@
-{% extends "base.html.twig" %}
+<!DOCTYPE html>
+<html class="h-full bg-gray-900">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        
+          <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />
+        
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
 
-{% block body %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body class="antialiased h-full">
 
     {% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
+    
+    
+        <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+          <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <img class="h-8 w-auto mx-auto" src="{{ asset('img/logo.svg') }}" alt="Woodstock">
+            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">Se connecter à Woodstock</h2>
+          </div>
+          
+          <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <form class="space-y-6" action="{{ path('app_login') }}" method="post">
+              <div>
+                <label for="email" class="block text-sm font-medium leading-6 text-white">Identifiant</label>
+                <div class="mt-2">
+                  <input id="email" name="_username" value="{{ last_username }}" type="text" autocomplete="email" required class="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6">
+                </div>
+              </div>
+        
+              <div>
+                <div class="flex items-center justify-between">
+                  <label for="password" class="block text-sm font-medium leading-6 text-white">Mot de passe</label>
+                  <div class="text-sm">
+                    <a href="#" class="font-semibold text-teal-400 hover:text-teal-300">Mot de passe oublié ?</a>
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <input id="password" name="_password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6">
+                </div>
+              </div>
+              
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+              
+              <div class="flex items-center justify-between">
+                 <div class="flex items-center">
+                   <input id="remember-me" name="_remember_me" checked type="checkbox" class="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">
+                   <label for="remember-me" class="ml-3 block text-sm leading-6 text-gray-900">Se souvenir de moi</label>
+                 </div>
+               </div>
+        
+              <div>
+                <button type="submit" class="flex w-full justify-center rounded-md bg-teal-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500">Se connecter</button>
+              </div>
+            </form>
+            
+          </div>
+        </div>
+    
+    </body>
+</html>
 
-    <form action="{{ path('app_login') }}" method="post">
-
-        <label for="username">Identifiant:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}">
-
-        <label for="password">Mot de passe:</label>
-        <input type="password" id="password" name="_password">
-
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-        <label>
-            <input type="checkbox" name="_remember_me" checked>
-            Se souvenir de moi
-        </label>
-
-        <button>Se connecter</button>
-    </form>
-{% endblock %}
