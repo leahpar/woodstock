@@ -24,11 +24,15 @@ class Stock
     public ?Reference $reference = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    public ?string $type = null;
+    public string $type;
 
     #[ORM\Column]
     #[Assert\Positive]
     public ?int $quantite = 0;
+
+    #[ORM\ManyToOne(inversedBy: 'stocks')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    public ?Panier $panier = null;
+
 
 }
