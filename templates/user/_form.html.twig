@@ -22,6 +22,24 @@
     </div>
 
     <div>
+        {{ form_label(form.equipe, 'Numéro d\'équipe', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.equipe, {attr: {class:
+            "..."
+        }}) }}
+    </div>
+
+    <div>
+        {{ form_label(form.chefEquipe, 'Chef d\'équipe', {label_attr: {class:
+            "..."
+        }}) }}
+        {{ form_widget(form.chefEquipe, {attr: {class:
+            "..."
+        }}) }}
+    </div>
+
+    <div>
         {{ form_label(form.plainPassword, 'Mot de passe', {label_attr: {class:
             "..."
         }}) }}
@@ -39,7 +57,6 @@
             'Utilisateurs': {
                 'ROLE_USER_LIST': 'Consulter les utilisateurs',
                 'ROLE_USER_EDIT': 'Modifier les utilisateurs',
-            },
             },
             'Chantiers': {
                 'ROLE_CHANTIER_LIST': 'Consulter les chantiers',

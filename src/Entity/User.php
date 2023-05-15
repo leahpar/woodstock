@@ -6,12 +6,15 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\Table]
+#[UniqueEntity(fields: ['username'], message: 'Un autre utilisateur existe déjà avec ce nom d\'utilisateur.')]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -20,7 +23,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\Unique]
     public ?string $username = null;
 
     #[ORM\Column(nullable: true)]
@@ -33,6 +35,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private string $password = '';
     public ?string $plainPassword = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?string $equipe = null;
+
+    #[ORM\Column]
+    public bool $chefEquipe = false;
 
     #[ORM\Column(type: 'datetime')]
     public \DateTime $updatedAt;
