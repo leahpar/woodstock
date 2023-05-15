@@ -28,7 +28,7 @@ class Stock
 
     #[ORM\Column]
     #[Assert\Positive]
-    public ?int $quantite = 0;
+    public ?int $quantite = null;
 
     #[ORM\ManyToOne(inversedBy: 'stocks')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]

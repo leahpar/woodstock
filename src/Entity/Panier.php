@@ -34,6 +34,9 @@ class Panier
     #[ORM\OrderBy(['id' => 'DESC'])]
     public Collection $stocks;
 
+    #[ORM\ManyToOne(inversedBy: 'paniers')]
+    public ?Chantier $chantier = null;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();

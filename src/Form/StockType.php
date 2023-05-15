@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Chantier;
 use App\Entity\Reference;
 use App\Entity\Stock;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -31,6 +32,15 @@ class StockType extends AbstractType
                 'required' => true,
                 'autocomplete' => true,
                 'placeholder' => 'Choisir une référence',
+            ])
+
+            // Pour la liaison du panier avec le chantier
+            ->add('chantier', EntityType::class, [
+                'class' => Chantier::class,
+                'required' => false,
+                'autocomplete' => true,
+                'placeholder' => 'Choisir un chantier',
+                'mapped' => false,
             ])
         ;
     }
