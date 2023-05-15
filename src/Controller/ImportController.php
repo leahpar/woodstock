@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Chantier;
 use App\Entity\Reference;
 use App\Entity\Stock;
 use App\Entity\User;
@@ -146,6 +147,53 @@ class ImportController extends AbstractController
             $user->nom = implode(' ', [$row[0], $row[1]]);
             $user->username = $slugger->slug($user->nom);
             $em->persist($user);
+        }
+
+        $em->flush();
+
+        return new Response('ok');
+    }
+
+    #[Route('/import/chantiers', name: 'import_chantiers')]
+    public function imporchantiers(EntityManagerInterface $em)
+    {
+
+        $em->getRepository(Chantier::class)
+            ->createQueryBuilder('u')
+            ->delete()
+            ->getQuery()
+            ->execute();
+
+        // PhpSpreadsheet
+        $xlsx = \PhpOffice\PhpSpreadsheet\IOFactory::load(__DIR__.'/../../data/chantiers.xlsx');
+        $sheet = $xlsx->getActiveSheet();
+        $content = $sheet->toArray(
+            null,  // null value
+            true,  // calculate formulas
+            false, // don't format data
+            false  // return simple array, not excel indexes
+        );
+
+        // remove header
+        array_shift($content);
+        array_shift($content);
+
+        /*
+            TYPE
+            NOM
+            ETAT DU SITE
+         */
+
+        foreach ($content as $row) {
+            if (empty($row[1])) continue;
+
+            preg_match('/(\d+) (.*)/', $row[1], $matches);
+
+            $chantier = new Chantier();
+            $chantier->nom = $matches[2];
+            $chantier->referenceTravaux = $matches[1];
+            $chantier->encours = ($row[2] == 'Active') ? true : false;
+            $em->persist($chantier);
         }
 
         $em->flush();

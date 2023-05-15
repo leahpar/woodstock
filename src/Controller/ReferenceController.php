@@ -3,11 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Reference;
-use App\Entity\Stock;
 use App\Form\ReferenceType;
-use App\Form\StockType;
 use App\Repository\ReferenceRepository;
-use App\Repository\StockRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
