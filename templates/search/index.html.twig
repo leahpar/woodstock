@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Recherche{% endblock %}
+
+{% block content %}
+
+{% set cpt = 0 %}
+{% set cpt = cpt + chantiers|length %}
+{% set cpt = cpt + references|length %}
+{% set cpt = cpt + users|length %}
+
+<div class="pageHeader">
+    <div class="title">
+        <h2>{{ cpt }} résultat{{ cpt > 1 ? 's'}} pour <span>"{{ search }}"</span></h2>
+    </div>
+</div>
+
+
+    <h2>{{ chantiers|length }} Chantier{{ chantiers|length > 1 ? 's' }}</h2>
+    {{ include('chantier/_table.html.twig', { 'chantiers': chantiers }) }}
+
+    <h2>{{ references|length }} Référence{{ references|length > 1 ? 's' }}</h2>
+    {{ include('reference/_table.html.twig', { 'references': references }) }}
+
+    <h2>{{ users|length }} Utilisateur{{ users|length > 1 ? 's' }}</h2>
+    {{ include('user/_table.html.twig', { 'users': users }) }}
+
+{% endblock content %}

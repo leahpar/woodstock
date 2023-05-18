@@ -1,0 +1,37 @@
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="relative">
+                <table class="mainTable">
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Login</th>
+                        <th>Equipe</th>
+                        <th>Chef d'equipe</th>
+                        <th>actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.nom }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.equipe }}</td>
+                            <td>{{ user.chefEquipe ? 'OUI' }}</td>
+                            <td>
+                                <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
+                                <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">Aucun utilisateur</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

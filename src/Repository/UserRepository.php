@@ -42,4 +42,15 @@ class UserRepository extends ServiceEntityRepository
         }
     }
 
+    public function findBySearch(string $search)
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb->where('u.nom LIKE :search')
+            ->orWhere('u.username LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+
+        return $qb->getQuery()->getResult();
+    }
+
 }

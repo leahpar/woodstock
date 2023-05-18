@@ -39,28 +39,15 @@ class ChantierRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Chantier[] Returns an array of Chantier objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findBySearch(string $search)
+    {
+        $qb = $this->createQueryBuilder('c');
 
-//    public function findOneBySomeField($value): ?Chantier
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $qb->where('c.nom LIKE :search')
+            ->orWhere('c.referenceTravaux LIKE :search')
+            ->orWhere('c.referenceEtude LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -1,0 +1,64 @@
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="relative">
+
+                <table class="mainTable">
+
+                    <thead>
+                    <tr>
+{#                        <th scope="col" class="relative">#}
+{#                            <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
+{#                        </th>#}
+                        <th scope="col" class="min-w-[12rem]">Nom</th>
+                        <th scope="col" class="">Ref Travaux</th>
+                        <th scope="col" class="">Ref BE</th>
+                        <th scope="col" class="">En cours</th>
+                        <th scope="col" class="">Commentaire</th>
+                        <th scope="col" class="">
+                            <span class="sr-only">Actions</span>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody class="">
+
+                    {% for chantier in chantiers %}
+
+                        <!-- Selected: "bg-gray-50" -->
+                        <tr>
+{#                            <td class="relative">#}
+{#                                <!-- Selected row marker, only show when row is selected. -->#}
+{#                                <!-- <div class="absolute inset-y-0 left-0 w-0.5 bg-teal-600"></div> -->#}
+
+{#                                <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
+{#                            </td>#}
+                            <!-- Selected: "text-teal-600", Not Selected: "text-gray-900" -->
+                            <td class="font-medium !text-gray-900">{{ chantier.nom }}</td>
+                            <td class="">{{ chantier.referenceTravaux }}</td>
+                            <td class="">{{ chantier.referenceEtude }}</td>
+                            <td class="">{{ chantier.encours ? "OUI" : "NON" }}</td>
+                            <td class="">{{ chantier.commentaire }}</td>
+                            <td class="text-right font-medium sm:pr-3">
+                                <a href="{{ path('chantier_edit', {'id': chantier.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ chantier.nom }}</span></a>
+
+                                <form method="post" action="{{ path('chantier_delete', {'id': chantier.id}) }}" onsubmit="return confirm('Supprimer le chantier ?');" class="contents">
+                                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ chantier.nom }}</span></button>
+                                </form>
+
+                            </td>
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td colspan="99">Aucun chantier</td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -39,28 +39,14 @@ class ReferenceRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Reference[] Returns an array of Reference objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findBySearch(string $search)
+    {
+        $qb = $this->createQueryBuilder('r');
 
-//    public function findOneBySomeField($value): ?Reference
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $qb->where('r.nom LIKE :search')
+            ->orWhere('r.reference LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+
+        return $qb->getQuery()->getResult();
+    }
 }

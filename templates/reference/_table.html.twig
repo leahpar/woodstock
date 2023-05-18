@@ -1,0 +1,66 @@
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="relative">
+
+                <table class="mainTable">
+
+                    <thead>
+                    <tr>
+{#                        <th scope="col" class="relative">#}
+{#                            <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
+{#                        </th>#}
+                        <th scope="col" class="min-w-[12rem]">Nom</th>
+                        <th scope="col" class="">Marque</th>
+                        <th scope="col" class="">Référence</th>
+                        <th scope="col" class="">Stock</th>
+                        <th scope="col" class="">Conditionnement</th>
+                        <th scope="col" class="">Seuil</th>
+                        <th scope="col" class="">
+                            <span class="sr-only">Actions</span>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody class="">
+
+                    {% for reference in references %}
+
+                        <!-- Selected: "bg-gray-50" -->
+                        <tr>
+{#                            <td class="relative">#}
+{#                                <!-- Selected row marker, only show when row is selected. -->#}
+{#                                <!-- <div class="absolute inset-y-0 left-0 w-0.5 bg-teal-600"></div> -->#}
+
+{#                                <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
+{#                            </td>#}
+                            <!-- Selected: "text-teal-600", Not Selected: "text-gray-900" -->
+                            <td class="font-medium !text-gray-900">{{ reference.nom }}</td>
+                            <td class="">{{ reference.marque }}</td>
+                            <td class="">{{ reference.reference }}</td>
+                            <td class="">{{ reference.quantite }}</td>
+                            <td class="">{{ reference.conditionnement }}</td>
+                            <td class="">{{ reference.seuil }}</td>
+                            <td class="text-right font-medium sm:pr-3">
+                                <a href="{{ path('reference_edit', {'id': reference.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ reference.nom }}</span></a>
+
+                                <form method="post" action="{{ path('reference_delete', {'id': reference.id}) }}" onsubmit="return confirm('Êtes-vous sûr de supprimer cet élément ?');" class="contents">
+                                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ reference.nom }}</span></button>
+                                </form>
+
+                            </td>
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td colspan="99">Aucun stock</td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
