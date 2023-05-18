@@ -113,9 +113,11 @@
         </div>
       </form>
 
+        {% if chantier.id %}
         <form method="post" action="{{ path('chantier_delete', {'id': chantier.id}) }}" onsubmit="return confirm('Supprimer le chantier ?');" class="contents">
             <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ chantier.nom }}</span></button>
         </form>
+        {% endif %}
 
     </div>
 

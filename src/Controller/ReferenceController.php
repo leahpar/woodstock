@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Reference;
+use App\Entity\Stock;
 use App\Form\ReferenceType;
 use App\Repository\ReferenceRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,10 +66,13 @@ class ReferenceController extends AbstractController
 
     #[Route('/{id}', name: 'reference_show', methods: ['GET'])]
     #[IsGranted('ROLE_REFERENCE_LIST')]
-    public function show(Reference $reference): Response
+    public function show(Reference $reference, EntityManagerInterface $em): Response
     {
+        $historiqueStocks = $em->getRepository(Stock::class)->getHistoriqueReference($reference);
+
         return $this->render('reference/show.html.twig', [
             'reference' => $reference,
+            'historiqueStocks' => $historiqueStocks,
         ]);
     }
 

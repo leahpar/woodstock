@@ -105,7 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->username;
+        return $this->nom ?? $this->username;
     }
 
     public function touch(): void

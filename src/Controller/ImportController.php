@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Chantier;
+use App\Entity\Panier;
 use App\Entity\Reference;
 use App\Entity\Stock;
 use App\Entity\User;
@@ -39,6 +40,12 @@ class ImportController extends AbstractController
         $refs = [];
         foreach($content as $ref) $refs[$ref[0]] = $ref;
 
+        /** @var User $admin */
+        $admin = $this->getUser();
+        $panier = new Panier();
+        $panier->user = $admin;
+        $panier->type = Stock::TYPE_ENTREE;
+        $em->persist($panier);
 
         /*
             Code de numérisation
@@ -76,6 +83,7 @@ class ImportController extends AbstractController
             $stock->type = 'entree';
             $stock->reference = $reference;
             $stock->quantite = (int)$row[14];
+            $panier->addStock($stock);
             $em->persist($stock);
         }
 

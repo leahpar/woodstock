@@ -1,0 +1,28 @@
+<table>
+
+    <tr>
+        <th>Date</th>
+        <th>Utilisateur</th>
+        <th>Chantier</th>
+        <th>Quantité</th>
+    </tr>
+
+    {% for stock in historiqueStocks %}
+        <tr>
+            <td>{{ stock.panier ? stock.panier.date|date('d/m/Y H:i') }}</td>
+            <td>{{ stock.panier ? stock.panier.user }}</td>
+            <td>
+                {% if stock.panier and stock.panier.chantier %}
+                    <a href="{{ is_granted('ROLE_CHANTIER_LIST') ? path('chantier_show', {id: stock.panier.chantier.id }) }}">
+                    {{ stock.panier.chantier }}
+                    </a>
+                {% endif %}
+            </td>
+            <td>
+                {{ stock.type == 'entree' ? '+' : '-' }}
+                {{ stock.quantite }}
+            </td>
+        </tr>
+    {% endfor %}
+
+</table>

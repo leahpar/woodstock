@@ -1,0 +1,31 @@
+<table>
+
+    <tr>
+        <th>Référence</th>
+        <th>Quantité</th>
+    </tr>
+
+    {% for panier in chantier.paniers %}
+        <tr>
+            <td colspan="99">
+                {{ panier.type == 'entree' ? "Entrée" : "Sortie" }}
+                par
+                {{ panier.user }}
+                le
+                {{ panier.date|date('d/m/Y H:i') }}
+            </td>
+        </tr>
+        {% for stock in panier.stocks %}
+             <tr>
+                 {% set ref = stock.reference %}
+                 <td>
+                     <a href="{{ is_granted('ROLE_REFERENCE_LIST') ? path('reference_show', {id: ref.id}) }}">
+                     {{ ref.reference }} - {{ ref.nom }}
+                     </a>
+                 </td>
+                 <td>{{ stock.quantite }}</td>
+             </tr>
+        {% endfor %}
+    {% endfor %}
+
+</table>

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Reference;
 use App\Entity\Stock;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,28 +40,16 @@ class StockRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Stock[] Returns an array of Stock objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getHistoriqueReference(Reference $reference)
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->select('s')
+            ->leftJoin('s.panier', 'p')
+            ->addSelect('p')
+            ->where('s.reference = :reference')
+            ->setParameter('reference', $reference)
+            ->orderBy('p.date', 'DESC');
 
-//    public function findOneBySomeField($value): ?Stock
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb->getQuery()->getResult();
+    }
 }

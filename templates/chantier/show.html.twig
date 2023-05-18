@@ -36,4 +36,6 @@
     <a href="{{ path('chantier_edit', {'id': chantier.id}) }}">edit</a>
     {% endif %}
 
+    {{ include('chantier/_historique_stock.html.twig') }}
+
 {% endblock %}
