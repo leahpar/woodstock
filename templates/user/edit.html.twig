@@ -9,6 +9,107 @@
         {% endif %}
     </h1>
 
-    {{ include('user/_form.html.twig') }}
+    <form method="post">
+        {{ form_widget(form._token) }}
+
+        {{ form_errors(form) }}
+
+        <div>
+            {{ form_label(form.username, 'Identifiant', {label_attr: {class:
+                "..."
+            }}) }}
+            {{ form_widget(form.username, {attr: {class:
+                "..."
+            }}) }}
+        </div>
+
+        <div>
+            {{ form_label(form.nom, 'Nom', {label_attr: {class:
+                "..."
+            }}) }}
+            {{ form_widget(form.nom, {attr: {class:
+                "..."
+            }}) }}
+        </div>
+
+        <div>
+            {{ form_label(form.equipe, 'Numéro d\'équipe', {label_attr: {class:
+                "..."
+            }}) }}
+            {{ form_widget(form.equipe, {attr: {class:
+                "..."
+            }}) }}
+        </div>
+
+        <div>
+            {{ form_label(form.chefEquipe, 'Chef d\'équipe', {label_attr: {class:
+                "..."
+            }}) }}
+            {{ form_widget(form.chefEquipe, {attr: {class:
+                "..."
+            }}) }}
+        </div>
+
+        <div>
+            {{ form_label(form.plainPassword, 'Mot de passe', {label_attr: {class:
+                "..."
+            }}) }}
+            {{ form_widget(form.plainPassword, {attr: {autoComplete: "off", class:
+                "..."
+            }}) }}
+        </div>
+
+        <div>
+            Droits<br>
+            {# NB: la liste doit correspondre à APp\Entity\Role::cases() #}
+            {% set allroles = {
+                'Admin': {
+                    'ROLE_ADMIN': 'Administrateur',
+                },
+                'Utilisateurs': {
+                    'ROLE_USER_LIST': 'Consulter les utilisateurs',
+                    'ROLE_USER_EDIT': 'Modifier les utilisateurs',
+                },
+                'Chantiers': {
+                    'ROLE_CHANTIER_LIST': 'Consulter les chantiers',
+                    'ROLE_CHANTIER_EDIT': 'Modifier les chantiers',
+                },
+                'Stock': {
+                    'ROLE_REFERENCE_LIST':  'Consulter les références',
+                    'ROLE_REFERENCE_EDIT':  'Modifier les références',
+                    'ROLE_REFERENCE_STOCK': 'Modifier les stocks',
+                },
+            } %}
+            {% for group,roles in allroles %}
+                <span>{{ group }}</span>
+                <ul>
+                    {% for role,label in roles %}
+                        <li>
+                            <input type="checkbox"
+                                   id="user_roles_{{ role }}"
+                                   name="user[roles][]"
+                                   value="{{ role }}"
+                                    {{ user.hasRole(role) ? 'checked' }}>
+                            <label for="user_roles_{{ role }}">{{ label }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </div>
+
+        <div>
+            <button>Enregistrer</button>
+        </div>
+    </form>
+
+    {% if user.id %}
+        <form method="post"
+              action="{{ path('user_delete', {'id': user.id}) }}"
+              onsubmit="return confirm('Supprimer l\'utilisateur ?');"
+              class="contents">
+            <button class="text-teal-600 hover:text-teal-900">
+                Supprimer<span class="sr-only">, {{ user.nom }}</span></button>
+        </form>
+    {% endif %}
 
 {% endblock %}

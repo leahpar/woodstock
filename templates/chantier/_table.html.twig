@@ -11,17 +11,17 @@
 {#                            <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
 {#                        </th>#}
                         <th scope="col" class="min-w-[12rem]">Nom</th>
-                        <th scope="col" class="">Ref Travaux</th>
-                        <th scope="col" class="">Ref BE</th>
-                        <th scope="col" class="">En cours</th>
-                        <th scope="col" class="">Commentaire</th>
-                        <th scope="col" class="">
+                        <th scope="col">Ref Travaux</th>
+                        <th scope="col">Ref BE</th>
+                        <th scope="col">En cours</th>
+                        <th scope="col">Commentaire</th>
+                        <th scope="col">
                             <span class="sr-only">Actions</span>
                         </th>
                     </tr>
                     </thead>
 
-                    <tbody class="">
+                    <tbody>
 
                     {% for chantier in chantiers %}
 
@@ -35,16 +35,14 @@
 {#                            </td>#}
                             <!-- Selected: "text-teal-600", Not Selected: "text-gray-900" -->
                             <td class="font-medium !text-gray-900">{{ chantier.nom }}</td>
-                            <td class="">{{ chantier.referenceTravaux }}</td>
-                            <td class="">{{ chantier.referenceEtude }}</td>
-                            <td class="">{{ chantier.encours ? "OUI" : "NON" }}</td>
-                            <td class="">{{ chantier.commentaire }}</td>
+                            <td>{{ chantier.referenceTravaux }}</td>
+                            <td>{{ chantier.referenceEtude }}</td>
+                            <td>{{ chantier.encours ? "OUI" : "NON" }}</td>
+                            <td>{{ chantier.commentaire }}</td>
                             <td class="text-right font-medium sm:pr-3">
                                 {% if is_granted('ROLE_CHANTIER_EDIT') %}
+                                    <a href="{{ path('chantier_show', {'id': chantier.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ chantier.nom }}</span></a>
                                     <a href="{{ path('chantier_edit', {'id': chantier.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ chantier.nom }}</span></a>
-                                    <form method="post" action="{{ path('chantier_delete', {'id': chantier.id}) }}" onsubmit="return confirm('Supprimer le chantier ?');" class="contents">
-                                        <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ chantier.nom }}</span></button>
-                                    </form>
                                 {% endif %}
                             </td>
                         </tr>

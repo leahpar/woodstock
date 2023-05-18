@@ -2,27 +2,33 @@
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="relative">
+
                 <table class="mainTable">
+
                     <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>Login</th>
-                        <th>Equipe</th>
-                        <th>Chef d'equipe</th>
-                        <th>actions</th>
+                        <th scope="col" class="min-w-[12rem]">Nom</th>
+                        <th scope="col">Login</th>
+                        <th scope="col">Equipe</th>
+                        <th scope="col">Chef d'equipe</th>
+                        <th scope="col">
+                            <span class="sr-only">Actions</span>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for user in users %}
                         <tr>
-                            <td>{{ user.nom }}</td>
+                            <td class="font-medium !text-gray-900">{{ user.nom }}</td>
                             <td>{{ user.username }}</td>
                             <td>{{ user.equipe }}</td>
                             <td>{{ user.chefEquipe ? 'OUI' }}</td>
-                            <td>
+                            <td class="text-right font-medium sm:pr-3">
                                 {% if is_granted('ROLE_USER_EDIT') %}
-                                <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                                <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                                    <a href="{{ path('user_show', {'id': user.id}) }}"
+                                       class="text-teal-600 hover:text-teal-900">Afficher</a>
+                                    <a href="{{ path('user_edit', {'id': user.id}) }}"
+                                       class="text-teal-600 hover:text-teal-900">Modifier</a>
                                 {% endif %}
                             </td>
                         </tr>

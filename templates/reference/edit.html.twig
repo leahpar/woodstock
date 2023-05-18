@@ -116,7 +116,12 @@
           <button type="submit" class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">Enregistrer</button>
         </div>
       </form>
-      
+
+        <form method="post" action="{{ path('reference_delete', {'id': reference.id}) }}" onsubmit="return confirm('Supprimer cette référence ?');" class="contents">
+            <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ reference.nom }}</span></button>
+        </form>
+
+
     </div>
 
 
