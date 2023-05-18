@@ -20,8 +20,10 @@
                             <td>{{ user.equipe }}</td>
                             <td>{{ user.chefEquipe ? 'OUI' }}</td>
                             <td>
+                                {% if is_granted('ROLE_USER_EDIT') %}
                                 <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
                                 <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% else %}

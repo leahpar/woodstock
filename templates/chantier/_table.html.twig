@@ -40,12 +40,12 @@
                             <td class="">{{ chantier.encours ? "OUI" : "NON" }}</td>
                             <td class="">{{ chantier.commentaire }}</td>
                             <td class="text-right font-medium sm:pr-3">
-                                <a href="{{ path('chantier_edit', {'id': chantier.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ chantier.nom }}</span></a>
-
-                                <form method="post" action="{{ path('chantier_delete', {'id': chantier.id}) }}" onsubmit="return confirm('Supprimer le chantier ?');" class="contents">
-                                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ chantier.nom }}</span></button>
-                                </form>
-
+                                {% if is_granted('ROLE_CHANTIER_EDIT') %}
+                                    <a href="{{ path('chantier_edit', {'id': chantier.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ chantier.nom }}</span></a>
+                                    <form method="post" action="{{ path('chantier_delete', {'id': chantier.id}) }}" onsubmit="return confirm('Supprimer le chantier ?');" class="contents">
+                                        <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ chantier.nom }}</span></button>
+                                    </form>
+                                {% endif %}
                             </td>
                         </tr>
 

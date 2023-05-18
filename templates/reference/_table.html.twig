@@ -42,12 +42,12 @@
                             <td class="">{{ reference.conditionnement }}</td>
                             <td class="">{{ reference.seuil }}</td>
                             <td class="text-right font-medium sm:pr-3">
+                                {% if is_granted('ROLE_REFERENCE_EDIT') %}
                                 <a href="{{ path('reference_edit', {'id': reference.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ reference.nom }}</span></a>
-
                                 <form method="post" action="{{ path('reference_delete', {'id': reference.id}) }}" onsubmit="return confirm('Êtes-vous sûr de supprimer cet élément ?');" class="contents">
                                     <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ reference.nom }}</span></button>
                                 </form>
-
+                                {% endif %}
                             </td>
                         </tr>
 
