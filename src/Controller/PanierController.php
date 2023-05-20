@@ -50,6 +50,7 @@ class PanierController extends AbstractController
         $stock->type = $panier->type;
 
         $form = $this->createForm(StockType::class, $stock);
+        $form->get('chantier')->setData($panier->chantier);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
