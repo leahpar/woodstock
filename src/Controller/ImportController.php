@@ -45,6 +45,7 @@ class ImportController extends AbstractController
         $panier = new Panier();
         $panier->user = $admin;
         $panier->type = Stock::TYPE_ENTREE;
+        $panier->brouillon = false;
         $em->persist($panier);
 
         /*
