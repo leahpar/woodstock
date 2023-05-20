@@ -58,12 +58,19 @@
                 </div>
                 {% endif %}
 
-                <div id="refQrScan">XXX</div>
                 <div>
                     {{ form_label(form.stock.reference, 'Référence') }}
                     <div class="mt-2">
                         {{ form_widget(form.stock.reference) }}
                     </div>
+                    <style>
+                        #scanButton:disabled {
+                            cursor: not-allowed;
+                        }
+                    </style>
+                    <button type="button" id="scanButton">XXX</button>
+                    <== ceci est un bouton pour scanner un QRCode
+                    {# ":disabled" si le navigateur ne supporte pas mediaDevices & BarcodeDetector #}
                     <div class="formErrors">
                         {{ form_errors(form.stock.reference) }}
                     </div>
@@ -89,8 +96,6 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="-mr-0.5 h-5 w-5">
                               <path d="M12 1.5a.75.75 0 01.75.75V7.5h-1.5V2.25A.75.75 0 0112 1.5zM11.25 7.5v5.69l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V7.5h3.75a3 3 0 013 3v9a3 3 0 01-3 3h-9a3 3 0 01-3-3v-9a3 3 0 013-3h3.75z" />
                             </svg>
-
-
                         Ajouter à ma sélection
                     </button>
                 </div>
@@ -164,23 +169,105 @@
     
 </div>
 
-{% endblock %}
+{# Code Scanner #}
+<dialog id="videoDialig">
+    <video id="video" width="640" height="480" autoplay></video>
+</dialog>
 
+{% endblock content %}
 
 {% block javascripts %}
+<script>
+    // https://www.jsnow.io/p/javascript/creating-a-real-time-qr-code-scanner-with-vanilla-javascript-part-1
+    // https://www.jsnow.io/p/javascript/creating-a-real-time-qr-code-scanner-with-javascript-part-2
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
-    <div id="qr-reader" style="width: 600px"></div>
-    <script>
-        function onScanSuccess(decodedText, decodedResult) {
-            // Handle on success condition with the decoded text or result.
-            console.log(`Scan result: ${decodedText}`, decodedResult);
-            document.getElementById('panier_stock_reference').value = decodedText;
+    const video = document.querySelector('#video')
+    const videoDialog = document.querySelector('#videoDialig')
+    const scanButton = document.querySelector('#scanButton')
+    const select = document.querySelector('#panier_stock_reference')
+
+    // Check if device has camera
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        // Set background color to red
+        scanButton.disabled = true;
+        console.log('No camera found!')
+    }
+
+    // Check if BarcodeDetector is supported
+    if (!('BarcodeDetector' in window)) {
+        scanButton.disabled = true;
+        console.log('BarcodeDetector is not supported by this browser!')
+    }
+
+
+    video.addEventListener("click", () => {
+        videoDialog.close()
+    });
+
+    videoDialog.addEventListener("close", () => {
+        // Stop video stream & scan
+        if (video.srcObject) {
+            video.srcObject.getTracks().forEach(track => track.stop())
         }
-        let html5QrcodeScanner = new Html5QrcodeScanner(
-            "qr-reader", { fps: 10, qrbox: 250 });
-        //html5QrcodeScanner.render(onScanSuccess);
-        document.getElementById('refQrScan')
-            .addEventListener('click', () => html5QrcodeScanner.render(onScanSuccess));
-    </script>
+
+        if (videoDialog.returnValue) {
+            select.value = videoDialog.returnValue
+            console.log(select.value)
+            select.dispatchEvent(new Event('change'))
+        }
+    })
+
+    // Open the dialog
+    scanButton.addEventListener('click', () => {
+
+        if (!videoDialog.open) videoDialog.showModal()
+        // Use video without audio
+        const constraints = {
+            audio: false,
+            video: {
+                facingMode: 'environment'
+            },
+        }
+
+        // Start video stream
+        console.log('Start video stream')
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => video.srcObject = stream)
+            .then(() => setInterval(detectCode, 100))
+            .catch(err => console.error(err));
+
+        // Create new barcode detector
+        // NB: liste des formats possibles : https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detector
+        const barcodeDetector = new BarcodeDetector({ formats: ['qr_code'] });
+
+        // Detect code function
+        const detectCode = () => {
+            // Start detecting codes on to the video element
+            barcodeDetector.detect(video).then(codes => {
+                // If no codes exit function
+                if (codes.length === 0) return;
+
+                for (const barcode of codes) {
+                    // Log the barcode to the console
+                    console.log(barcode);
+
+                    // Get the barcode value
+                    //select.value = barcode.rawValue
+                    //select.setValue([barcode.rawValue])
+                    videoDialog.returnValue = barcode.rawValue;
+
+                    videoDialog.close();
+                    return;
+                }
+            }).catch(err => {
+                // Log an error if one happens
+                console.error(err);
+            })
+        }
+
+
+    })
+</script>
 {% endblock %}
+
+

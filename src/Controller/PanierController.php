@@ -6,7 +6,6 @@ use App\Entity\Panier;
 use App\Entity\Stock;
 use App\Entity\User;
 use App\Form\PanierType;
-use App\Form\StockType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

@@ -32,6 +32,9 @@ class StockType extends AbstractType
                 //'choice_label' => 'nom',
                 'required' => true,
                 'autocomplete' => true,
+                'tom_select_options' => [
+                    'plugins' => ['change_listener'],
+                ],
                 'placeholder' => 'Choisir une référence',
                 'group_by' => 'categorie',
             ])
