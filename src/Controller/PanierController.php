@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Panier;
 use App\Entity\Stock;
 use App\Entity\User;
+use App\Form\PanierType;
 use App\Form\StockType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,19 +47,13 @@ class PanierController extends AbstractController
     #[IsGranted('ROLE_REFERENCE_STOCK')]
     public function edit(Request $request, Panier $panier, EntityManagerInterface $em): Response
     {
-        $stock = new Stock();
-        $stock->type = $panier->type;
-
-        $form = $this->createForm(StockType::class, $stock);
-        $form->get('chantier')->setData($panier->chantier);
+        $form = $this->createForm(PanierType::class, $panier);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($panier->type == Stock::TYPE_SORTIE) {
-                $panier->chantier = $form->get('chantier')->getData();
-            }
-
+            $stock = $panier->stock;
+            $stock->type = $panier->type;
             $panier->addStock($stock);
             $em->persist($stock);
             $em->flush();

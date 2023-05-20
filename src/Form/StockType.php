@@ -8,6 +8,7 @@ use App\Entity\Stock;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -40,6 +41,11 @@ class StockType extends AbstractType
                 'required' => false,
                 'autocomplete' => true,
                 'placeholder' => 'Choisir un chantier',
+                'mapped' => false,
+            ])
+            ->add('commentaire', TextType::class, [
+                'required' => false,
+                //'placeholder' => 'Choisir un chantier',
                 'mapped' => false,
             ])
         ;

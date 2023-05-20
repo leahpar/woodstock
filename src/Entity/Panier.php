@@ -23,6 +23,9 @@ class Panier
     #[ORM\Column(length: 255)]
     public string $type;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $commentaire = null;
+
     #[ORM\Column]
     public bool $brouillon = true;
 
@@ -30,9 +33,15 @@ class Panier
     #[ORM\JoinColumn(nullable: false)]
     public User $user;
 
+    #[ORM\ManyToOne()]
+    public User $poseur;
+
     #[ORM\OneToMany(mappedBy: 'panier', targetEntity: Stock::class)]
     #[ORM\OrderBy(['id' => 'DESC'])]
     public Collection $stocks;
+
+    // Pour le formulaire E/S
+    public Stock $stock;
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
     public ?Chantier $chantier = null;
