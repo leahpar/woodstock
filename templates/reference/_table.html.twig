@@ -12,10 +12,13 @@
 {#                        </th>#}
                         <th scope="col" class="min-w-[12rem]">Nom</th>
                         <th scope="col">Marque</th>
+                        <th scope="col">Catégorie</th>
                         <th scope="col">Référence</th>
+                        <th scope="col">Code Comptable</th>
                         <th scope="col">Stock</th>
                         <th scope="col">Conditionnement</th>
                         <th scope="col">Seuil</th>
+                        <th scope="col">Prix</th>
                         <th scope="col">
                             <span class="sr-only">Actions</span>
                         </th>
@@ -36,11 +39,14 @@
 {#                            </td>#}
                             <!-- Selected: "text-teal-600", Not Selected: "text-gray-900" -->
                             <td class="font-medium !text-gray-900">{{ reference.nom }}</td>
-                            <td>{{ reference.marque }}</td>
+                            <td>{{ reference.marque ?? '-' }}</td>
+                            <td>{{ reference.categorie ?? '-' }}</td>
                             <td>{{ reference.reference }}</td>
+                            <td>{{ reference.codeComptable ?? '-' }}</td>
                             <td>{{ reference.quantite }}</td>
                             <td>{{ reference.conditionnement }}</td>
-                            <td>{{ reference.seuil }}</td>
+                            <td>{{ reference.seuil ?? '-' }}</td>
+                            <td>{{ reference.prix ?? '-' }}</td>
                             <td class="text-right font-medium sm:pr-3">
                                 {% if is_granted('ROLE_REFERENCE_EDIT') %}
                                 <a href="{{ path('reference_show', {'id': reference.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ reference.nom }}</span></a>

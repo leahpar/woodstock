@@ -36,7 +36,7 @@
                             <!-- Selected: "text-teal-600", Not Selected: "text-gray-900" -->
                             <td class="font-medium !text-gray-900">{{ chantier.nom }}</td>
                             <td>{{ chantier.referenceTravaux }}</td>
-                            <td>{{ chantier.referenceEtude }}</td>
+                            <td>{{ chantier.referenceEtude ?? '-' }}</td>
                             <td>{{ chantier.encours ? "OUI" : "NON" }}</td>
                             <td>{{ chantier.commentaire }}</td>
                             <td class="text-right font-medium sm:pr-3">

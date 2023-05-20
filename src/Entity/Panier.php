@@ -34,7 +34,7 @@ class Panier
     public User $user;
 
     #[ORM\ManyToOne()]
-    public User $poseur;
+    public ?User $poseur = null;
 
     #[ORM\OneToMany(mappedBy: 'panier', targetEntity: Stock::class)]
     #[ORM\OrderBy(['id' => 'DESC'])]

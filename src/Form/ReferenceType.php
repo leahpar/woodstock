@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Reference;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,8 +21,32 @@ class ReferenceType extends AbstractType
             ->add('marque', TextType::class, [
                 'required' => false,
             ])
+            ->add('categorie', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    "BOULONNERIE CHARPENTE" => "BOULONNERIE CHARPENTE",
+                    "CARTOUCHE" => "CARTOUCHE",
+                    "CHARPENTE DOUGLAS" => "CHARPENTE DOUGLAS",
+                    "ECHAFAUDAGE" => "ECHAFAUDAGE",
+                    "EQUERRES" => "EQUERRES",
+                    "ETRIERS" => "ETRIERS",
+                    "FIXATIONS" => "FIXATIONS",
+                    "OSSATURE" => "OSSATURE",
+                    "PANNEAUX" => "PANNEAUX",
+                    "ROULEAUX" => "ROULEAUX",
+                    "SABOTS" => "SABOTS",
+                ],
+            ])
             ->add('reference', TextType::class, [
                 'required' => true,
+            ])
+            ->add('codeComptable', TextType::class, [
+                'required' => false,
+            ])
+            ->add('prix', NumberType::class, [
+                'html5' => true,
+                'scale' => 2,
+                'required' => false,
             ])
             ->add('conditionnement', TextType::class, [
                 'required' => false,

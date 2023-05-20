@@ -4,6 +4,7 @@
         <th>Date</th>
         <th>Utilisateur</th>
         <th>Chantier</th>
+        <th>Poseur</th>
         <th>Quantité</th>
     </tr>
 
@@ -16,6 +17,11 @@
                     <a href="{{ is_granted('ROLE_CHANTIER_LIST') ? path('chantier_show', {id: stock.panier.chantier.id }) }}">
                     {{ stock.panier.chantier }}
                     </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if stock.panier and stock.panier.poseur %}
+                    {{ stock.panier.poseur }}
                 {% endif %}
             </td>
             <td>

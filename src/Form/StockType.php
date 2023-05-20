@@ -33,6 +33,7 @@ class StockType extends AbstractType
                 'required' => true,
                 'autocomplete' => true,
                 'placeholder' => 'Choisir une référence',
+                'group_by' => 'categorie',
             ])
 
             // Pour la liaison du panier avec le chantier

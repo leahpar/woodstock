@@ -21,6 +21,9 @@ class Reference
     #[ORM\Column(length: 255, unique: true)]
     public string $reference;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $codeComptable = null;
+
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     public string $nom;
@@ -29,7 +32,16 @@ class Reference
     public ?string $marque = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    public ?string $categorie = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
     public ?string $conditionnement = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $commentaire = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?float $prix = null;
 
     #[ORM\OneToMany(mappedBy: 'reference', targetEntity: Stock::class, fetch: 'EAGER', orphanRemoval: true)]
     public Collection $stocks;

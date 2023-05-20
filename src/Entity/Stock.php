@@ -30,6 +30,9 @@ class Stock
     #[Assert\Positive]
     public ?int $quantite = null;
 
+    #[ORM\Column(nullable: true)]
+    public ?float $prix = null;
+
     #[ORM\ManyToOne(inversedBy: 'stocks')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     public ?Panier $panier = null;

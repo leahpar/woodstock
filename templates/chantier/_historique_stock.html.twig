@@ -9,10 +9,19 @@
         <tr>
             <td colspan="99">
                 {{ panier.type == 'entree' ? "Entrée" : "Sortie" }}
-                par
-                {{ panier.user }}
-                le
-                {{ panier.date|date('d/m/Y H:i') }}
+
+                par {{ panier.user }}
+
+                le {{ panier.date|date('d/m/Y') }}
+                à {{ panier.date|date('H:i') }}
+
+                {% if panier.poseur %}
+                pour {{ panier.poseur }}
+                {% endif %}
+
+                {% if panier.commentaire %}
+                <br>{{ panier.commentaire }}
+                {% endif %}
             </td>
         </tr>
         {% for stock in panier.stocks %}

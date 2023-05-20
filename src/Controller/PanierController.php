@@ -54,6 +54,7 @@ class PanierController extends AbstractController
 
             $stock = $panier->stock;
             $stock->type = $panier->type;
+            $stock->prix = $stock->reference->prix;
             $panier->addStock($stock);
             $em->persist($stock);
             $em->flush();

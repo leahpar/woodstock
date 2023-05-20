@@ -75,6 +75,7 @@ class ImportController extends AbstractController
             $reference->reference = $row[0];
             $reference->marque = $row[2];
             $reference->nom = $row[4];
+            $reference->categorie = $row[7];
             $reference->conditionnement = $row[15];
             $reference->seuil = (!empty($row[17])) ? (int)$row[17] : null;
             $em->persist($reference);
