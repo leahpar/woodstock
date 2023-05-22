@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Logger\LoggableEntity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,14 +10,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table]
 #[UniqueEntity(fields: ['username'], message: 'Un autre utilisateur existe déjà avec ce nom d\'utilisateur.')]
-
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User  extends LoggableEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -42,15 +44,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     public bool $chefEquipe = false;
 
-    #[ORM\Column(type: 'datetime')]
-    public \DateTime $updatedAt;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Panier::class, orphanRemoval: true)]
+    #[Ignore]
     private Collection $paniers;
 
     public function __construct()
     {
-        $this->updatedAt = new \DateTime();
         $this->paniers = new ArrayCollection();
     }
 
@@ -133,10 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removePanier(Panier $panier): self
     {
-        if ($this->paniers->removeElement($panier)) {
-            $panier->user = null;
-        }
-
+        $this->paniers->removeElement($panier);
         return $this;
     }
 

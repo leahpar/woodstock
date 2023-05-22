@@ -1,0 +1,48 @@
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="relative">
+
+                <table class="mainTable">
+
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Utilisateur</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Objet</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Data</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for log in logs %}
+
+                        <tr>
+                            <td>{{ log.date|date('D, d M Y H:i:s') }}</td>
+                            <td>{{ log.user ?? '-'}}</td>
+                            <td>{{ log.action }}</td>
+                            <td>#{{ log.target }}</td>
+                            <td>
+                                <a href="{{ path((log.entityType)~'_show', {id: log.target}) }}">
+                                    {{ log.entityString }}
+                                </a>
+                            </td>
+                            <td>{{ log.data ? log.data|json_encode}}</td>
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td colspan="99">Aucune action !</td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,14 +7,13 @@ use App\Entity\Stock;
 use App\Entity\User;
 use App\Form\PanierType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/paniers')]
-class PanierController extends AbstractController
+class PanierController extends CommonController
 {
 
     #[Route('/{type}', name: 'panier_new', requirements: ['type' => 'entree|sortie'])]
@@ -46,6 +45,12 @@ class PanierController extends AbstractController
     #[IsGranted('ROLE_REFERENCE_STOCK')]
     public function edit(Request $request, Panier $panier, EntityManagerInterface $em): Response
     {
+        if ($panier->brouillon === false) {
+            return $this->forward('App\Controller\PanierController::show', [
+                'panier' => $panier,
+            ]);
+        }
+
         $form = $this->createForm(PanierType::class, $panier);
         $form->handleRequest($request);
 
@@ -75,6 +80,14 @@ class PanierController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}', name: 'panier_show', methods: ['GET'])]
+    public function show(Panier $panier): Response
+    {
+        return $this->render('panier/show.html.twig', [
+            'panier' => $panier,
+        ]);
+    }
+
     #[Route('/{id}/del', name: 'panier_del', methods: ['DELETE'])]
     public function del(EntityManagerInterface $em, Panier $panier)
     {
@@ -98,6 +111,7 @@ class PanierController extends AbstractController
     public function save(EntityManagerInterface $em, Panier $panier)
     {
         $panier->brouillon = false;
+        $this->log('create', $panier);
         $em->flush();
 
         $this->addFlash("success", "Le panier a été enregistré");

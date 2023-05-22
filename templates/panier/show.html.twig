@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stock{% endblock %}
+
+{% block content %}
+    <h1>
+        {% if panier.type == 'sortie' %}
+            Sortie de stock
+        {% else %}
+            Entrée de stock
+        {% endif %}
+    </h1>
+
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Utilisateur</th>
+            <td>{{ panier.user }}</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>
+                {{ panier.date|date('d/m/Y') }}
+                {{ panier.date|date('H:i') }}
+            </td>
+        </tr>
+        <tr>
+            <th>Poseur</th>
+            <td>{{ panier.poseur ?? '-' }}</td>
+        </tr>
+        <tr>
+            <th>Commentaire</th>
+            <td>{{ panier.commentaire }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+
+        <tr>
+            <th>Référence</th>
+            <th>Quantité</th>
+        </tr>
+
+        {% for stock in panier.stocks %}
+            <tr>
+                {% set ref = stock.reference %}
+                <td>
+                    <a href="{{ is_granted('ROLE_REFERENCE_LIST') ? path('reference_show', {id: ref.id}) }}">
+                        {{ ref.reference }} - {{ ref.nom }}
+                    </a>
+                </td>
+                <td>{{ stock.quantite }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

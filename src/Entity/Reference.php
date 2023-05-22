@@ -2,17 +2,20 @@
 
 namespace App\Entity;
 
+use App\Logger\LoggableEntity;
 use App\Repository\ReferenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReferenceRepository::class)]
 #[UniqueEntity('reference')]
-class Reference
+class Reference extends LoggableEntity
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -44,6 +47,7 @@ class Reference
     public ?float $prix = null;
 
     #[ORM\OneToMany(mappedBy: 'reference', targetEntity: Stock::class, fetch: 'EAGER', orphanRemoval: true)]
+    #[Ignore]
     public Collection $stocks;
 
     #[ORM\Column(nullable: true)]

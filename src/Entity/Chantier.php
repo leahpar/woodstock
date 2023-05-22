@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
+use App\Logger\LoggableEntity;
 use App\Repository\ChantierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ChantierRepository::class)]
-class Chantier
+#[ORM\hasLifecycleCallbacks]
+class Chantier extends LoggableEntity
 {
 
     #[ORM\Id]
@@ -37,6 +40,7 @@ class Chantier
     #[ORM\OneToMany(mappedBy: 'chantier', targetEntity: Panier::class)]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[ORM\OrderBy(['id' => 'DESC'])]
+    #[Ignore]
     public Collection $paniers;
 
     public function __construct()
@@ -67,5 +71,6 @@ class Chantier
     {
         return implode(' - ', [$this->referenceTravaux, $this->nom]);
     }
+
 
 }
