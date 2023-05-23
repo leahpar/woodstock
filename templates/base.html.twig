@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,9 +16,9 @@
         {% endblock %}
 
     </head>
-    <body class="antialiased h-full">
+    <body class="antialiased h-full bg-gray-100">
 
-        <div>
+        <div class="">
 
         {% block body %}
 
@@ -30,7 +30,7 @@
                 <div class="px-4 sm:px-6 lg:px-8">
                     {% block content %}{% endblock %}
                 </div>
-            </main>
+            </main>   
 
             {{ include('parts/footer.html.twig') }}
 

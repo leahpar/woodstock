@@ -3,38 +3,45 @@
 {% block title %}chantier{% endblock %}
 
 {% block content %}
-    <h1>chantier</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Nom</th>
-                <td>{{ chantier.nom }}</td>
-            </tr>
-            <tr>
-                <th>Référence travaux</th>
-                <td>{{ chantier.referenceTravaux }}</td>
-            </tr>
-            <tr>
-                <th>Référence BE</th>
-                <td>{{ chantier.referenceEtude }}</td>
-            </tr>
-            <tr>
-                <th>En cours</th>
-                <td>{{ chantier.encours ? 'OUI' : 'NON' }}</td>
-            </tr>
-            <tr>
-                <th>Commentaire</th>
-                <td>{{ chantier.commentaire }}</td>
-            </tr>
-        </tbody>
-    </table>
 
-    <a href="{{ path('chantier_index') }}">back to list</a>
+<div class="mb-8">
+    <a href="{{ path('chantier_index') }}" class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Retour à la liste</a>
+</div>
 
-    {% if is_granted('ROLE_CHANTIER_EDIT') %}
-    <a href="{{ path('chantier_edit', {'id': chantier.id}) }}">edit</a>
-    {% endif %}
+<div class="overflow-hidden bg-white shadow sm:rounded-lg max-w-4xl mx-auto mb-6">
+    <div class="px-4 py-6 sm:px-6 flex justify-between items-center">
+      <div class="">
+        <h3 class="text-xl font-semibold leading-7 text-gray-900">{{ chantier.nom }}</h3>
+      </div>
+      <div>
+          {% if is_granted('ROLE_CHANTIER_EDIT') %}
+          <a href="{{ path('chantier_edit', {'id': chantier.id}) }}" class="block rounded-md bg-teal-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">Modifier</a>
+          {% endif %}
+      </div>
+  </div>
+  <div class="border-t border-gray-100">
+    <dl class="divide-y divide-gray-100">
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-900">Référence travaux</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.referenceTravaux }}</dd>
+      </div>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-900">Référence BE</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.referenceEtude }}</dd>
+      </div>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-900">En cours</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.encours ? 'OUI' : 'NON' }}</dd>
+      </div>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-900">Commentaire</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.commentaire }}</dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
 
     {{ include('chantier/_historique_stock.html.twig') }}
 
