@@ -1,34 +1,58 @@
-<table>
-
-    <tr>
-        <th>Date</th>
-        <th>Utilisateur</th>
-        <th>Chantier</th>
-        <th>Poseur</th>
-        <th>Quantité</th>
-    </tr>
-
-    {% for stock in historiqueStocks %}
-        <tr>
-            <td>{{ stock.panier ? stock.panier.date|date('d/m/Y H:i') }}</td>
-            <td>{{ stock.panier ? stock.panier.user }}</td>
-            <td>
-                {% if stock.panier and stock.panier.chantier %}
-                    <a href="{{ is_granted('ROLE_CHANTIER_LIST') ? path('chantier_show', {id: stock.panier.chantier.id }) }}">
-                    {{ stock.panier.chantier }}
-                    </a>
-                {% endif %}
-            </td>
-            <td>
-                {% if stock.panier and stock.panier.poseur %}
-                    {{ stock.panier.poseur }}
-                {% endif %}
-            </td>
-            <td>
-                {{ stock.type == 'entree' ? '+' : '-' }}
-                {{ stock.quantite }}
-            </td>
-        </tr>
-    {% endfor %}
-
-</table>
+<div class="max-w-4xl mx-auto">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-base font-semibold leading-6 text-gray-900">Historique</h1>
+      <p class="mt-2 text-sm text-gray-700">Historique des mouvements de stock pour cette référence.</p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+    
+    </div>
+  </div>
+  <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Date</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Utilisateur</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Chantier</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Poseur</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantité</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+                
+                {% for stock in historiqueStocks %}
+                
+                  <tr>
+                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ stock.panier ? stock.panier.date|date('d/m/Y H:i') }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stock.panier ? stock.panier.user }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {% if stock.panier and stock.panier.chantier %}
+                            <a href="{{ is_granted('ROLE_CHANTIER_LIST') ? path('chantier_show', {id: stock.panier.chantier.id }) }}">
+                            {{ stock.panier.chantier }}
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {% if stock.panier and stock.panier.poseur %}
+                            {{ stock.panier.poseur }}
+                        {% endif %}
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {{ stock.type == 'entree' ? '+' : '-' }}
+                        {{ stock.quantite }}
+                    </td>
+                  </tr>
+              
+                {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
