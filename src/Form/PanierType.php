@@ -41,7 +41,7 @@ class PanierType extends AbstractType
                 ])
                 ->add('chantier', EntityType::class, [
                     'class' => Chantier::class,
-                    'required' => false,
+                    'required' => true,
                     'autocomplete' => true,
                     'placeholder' => 'Choisir un chantier',
                 ])
