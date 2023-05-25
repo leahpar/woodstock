@@ -1,0 +1,16 @@
+{
+  "name": "WoodStock",
+  "short_name": "woodstock",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#1f2937",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/img/icon-512.png",
+      "type": "image/png", "sizes": "512x512"
+    }
+  ]
+}
