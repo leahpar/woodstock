@@ -6,7 +6,11 @@
           
         <title>{% block title %}Welcome!{% endblock %}</title>
 
+        <!- PWA -->
         <link rel="manifest" href="{{ asset('manifest.json') }}">
+        <meta name="theme-color" content="#14b8a6">
+        <script src="{{ asset('js/pwa.js') }}"></script>
+
 
         <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />
         
