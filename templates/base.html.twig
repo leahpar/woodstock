@@ -2,17 +2,11 @@
 <html class="h-full">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
           
         <title>{% block title %}Welcome!{% endblock %}</title>
-
-        <!- PWA -->
-        <link rel="manifest" href="{{ asset('manifest.json') }}">
-        <meta name="theme-color" content="#14b8a6">
-        <script src="{{ asset('js/pwa.js') }}"></script>
-
-
-        <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />
+        
+          <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />
         
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
