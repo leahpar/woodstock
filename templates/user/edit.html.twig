@@ -40,59 +40,42 @@
                   <div class="formGrid">
         
                       <div class="col-span-full">
-                          {{ form_label(form.username, 'Identifiant', {label_attr: {class:
-                              "..."
-                          }}) }}
-                          {{ form_widget(form.username, {attr: {class:
-                              "..."
-                          }}) }}
+                          {{ form_label(form.username, 'Identifiant') }}
+                          {{ form_widget(form.username) }}
                           <div class="formErrors">
                               {{ form_errors(form.username) }}
                           </div>
                       </div>
                       
                         <div class="col-span-full">
-                            {{ form_label(form.nom, 'Nom', {label_attr: {class:
-                                  "..."
-                              }}) }}
-                              {{ form_widget(form.nom, {attr: {class:
-                                  "..."
-                              }}) }}
+                            {{ form_label(form.nom, 'Nom') }}
+                              {{ form_widget(form.nom) }}
                             <div class="formErrors">
                                 {{ form_errors(form.nom) }}
                             </div>
                         </div>
                         
                         <div class="col-span-full">
-                            {{ form_label(form.equipe, 'Numéro d\'équipe', {label_attr: {class:
-                                "..."
-                            }}) }}
-                            {{ form_widget(form.equipe, {attr: {class:
-                                "..."
-                            }}) }}
+                            {{ form_label(form.equipe, 'Numéro d\'équipe') }}
+                            {{ form_widget(form.equipe) }}
                             <div class="formErrors">
                                 {{ form_errors(form.equipe) }}
                             </div>
                         </div>
                         
                         <div class="col-span-full">
-                            {{ form_label(form.chefEquipe, 'Chef d\'équipe', {label_attr: {class:
-                                "..."
-                            }}) }}
-                            {{ form_widget(form.chefEquipe, {attr: {class:
-                                "..."
-                            }}) }}
+                            {{ form_label(form.chefEquipe, 'Chef d\'équipe') }}
+                            {{ form_widget(form.chefEquipe) }}
                             <div class="formErrors">
                                 {{ form_errors(form.chefEquipe) }}
                             </div>
                         </div>
                         
                         <div class="col-span-full">
-                            {{ form_label(form.plainPassword, 'Mot de passe', {label_attr: {class:
-                                "..."
-                            }}) }}
-                            {{ form_widget(form.plainPassword, {attr: {autoComplete: "off", class:
-                                "..."
+                            {{ form_label(form.plainPassword, 'Mot de passe') }}
+                            {{ form_widget(form.plainPassword, {attr: {
+                                autoComplete: "off",
+                                placeholder: "Laisser vide pour ne pas changer"
                             }}) }}
                             <div class="formErrors">
                                 {{ form_errors(form.plainPassword) }}
@@ -125,6 +108,10 @@
                                 'Chantiers': {
                                     'ROLE_CHANTIER_LIST': 'Consulter les chantiers',
                                     'ROLE_CHANTIER_EDIT': 'Modifier les chantiers',
+                                },
+                                'Matériel': {
+                                    'ROLE_MATERIEL_LIST': 'Consulter le matériel',
+                                    'ROLE_MATERIEL_EDIT': 'Modifier le matériel',
                                 },
                                 'Stock': {
                                     'ROLE_REFERENCE_LIST':  'Consulter les références',

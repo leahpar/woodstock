@@ -11,6 +11,9 @@ enum Role: string {
     // Chantiers
     case ROLE_CHANTIER_LIST = "ROLE_CHANITER_LIST";
     case ROLE_CHANTIER_EDIT = "ROLE_CHANITER_EDIT";
+    // Matériel
+    case ROLE_MATERIEL_LIST = "ROLE_MATERIEL_LIST";
+    case ROLE_MATERIEL_EDIT = "ROLE_MATERIEL_EDIT";
     // Références
     case ROLE_REFERENCE_LIST = "ROLE_REFERENCE_LIST";
     case ROLE_REFERENCE_EDIT = "ROLE_REFERENCE_EDIT";

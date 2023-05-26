@@ -48,9 +48,21 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[Ignore]
     private Collection $paniers;
 
+    #[ORM\OneToMany(mappedBy: 'proprietaire', targetEntity: Materiel::class)]
+    private Collection $materiels;
+
+    #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private \DateTime $updatedAt;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Pret::class, orphanRemoval: true)]
+    private Collection $prets;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
+        $this->materiels = new ArrayCollection();
+        $this->updatedAt = new \DateTime();
+        $this->prets = new ArrayCollection();
     }
 
     /**
@@ -133,6 +145,61 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     public function removePanier(Panier $panier): self
     {
         $this->paniers->removeElement($panier);
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Materiel>
+     */
+    public function getMateriels(): Collection
+    {
+        return $this->materiels;
+    }
+
+    public function addMateriel(Materiel $materiel): self
+    {
+        if (!$this->materiels->contains($materiel)) {
+            $this->materiels->add($materiel);
+            $materiel->proprietaire = $this;
+        }
+        return $this;
+    }
+
+    public function removeMateriel(Materiel $materiel): self
+    {
+        if ($this->materiels->removeElement($materiel)) {
+            $materiel->proprietaire = null;
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pret>
+     */
+    public function getPrets(): Collection
+    {
+        return $this->prets;
+    }
+
+    public function addPret(Pret $pret): self
+    {
+        if (!$this->prets->contains($pret)) {
+            $this->prets->add($pret);
+            $pret->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePret(Pret $pret): self
+    {
+        if ($this->prets->removeElement($pret)) {
+            // set the owning side to null (unless already changed)
+            if ($pret->getUser() === $this) {
+                $pret->setUser(null);
+            }
+        }
+
         return $this;
     }
 

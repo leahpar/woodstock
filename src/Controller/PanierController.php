@@ -111,6 +111,7 @@ class PanierController extends CommonController
     public function save(EntityManagerInterface $em, Panier $panier)
     {
         $panier->brouillon = false;
+        $em->flush(); // pour avoir l'id
         $this->log('create', $panier);
         $em->flush();
 

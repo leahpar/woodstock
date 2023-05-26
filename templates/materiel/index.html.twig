@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}matériel index{% endblock %}
+
+{% block content %}
+
+    <div class="pageHeader">
+      <div class="title">
+        <h2>Gestion du matériel</h2>
+      </div>
+      <div class="buttons">
+        <a href="{{ path('materiel_new') }}" class="borderedButton">Ajouter un matériel</a>
+      </div>
+    </div>
+
+
+      {{ include('materiel/_table.html.twig', { materiels: materiels }) }}
+      
+      
+{% endblock %}

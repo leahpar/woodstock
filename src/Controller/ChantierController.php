@@ -34,6 +34,7 @@ class ChantierController extends CommonController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($chantier);
+            $em->flush(); // pour avoir l'id
             $this->log('create', $chantier);
             $em->flush();
 

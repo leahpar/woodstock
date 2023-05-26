@@ -9,12 +9,12 @@
         <h2>Gestion des stocks</h2>
       </div>
       <div class="buttons">
-        <a href="{{ path('reference_new') }}" class="borderedButton">Ajouter une référence</a>
+        {% if is_granted('ROLE_REFERENCE_EDIT') %}
+            <a href="{{ path('reference_new') }}" class="borderedButton">Ajouter une référence</a>
+        {% endif %}
 
         {% if is_granted('ROLE_REFERENCE_STOCK') %}
             <a href="{{ path('panier_new',{type:'entree'}) }}" class="button">Ajouter du stock</a>
-
-
             <a href="{{ path('panier_new',{type:'sortie'}) }}" class="button">Sortir du stock</a>
         {% endif %}
 

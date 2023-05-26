@@ -37,6 +37,7 @@ class UserController extends CommonController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($user);
+            $em->flush(); // pour avoir l'id
             $this->log('create', $user);
             $em->flush();
 
@@ -66,7 +67,7 @@ class UserController extends CommonController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->touch();
+            $user->touch(); // Pour déclencher l'event PreUpdate
             $this->log('update', $user);
             $em->flush();
 

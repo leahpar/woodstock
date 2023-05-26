@@ -34,6 +34,7 @@ class ReferenceController extends CommonController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($reference);
+            $em->flush(); // pour avoir l'id
             $this->log('create', $reference);
             $em->flush();
 

@@ -10,9 +10,9 @@
                         <th scope="col">Date</th>
                         <th scope="col">Utilisateur</th>
                         <th scope="col">Action</th>
-                        <th scope="col">Objet</th>
                         <th scope="col">ID</th>
-                        <th scope="col">Data</th>
+                        <th scope="col">Objet</th>
+                         <th scope="col">Data</th>
                     </tr>
                     </thead>
 
@@ -21,16 +21,16 @@
                     {% for log in logs %}
 
                         <tr>
-                            <td>{{ log.date|date('D, d M Y H:i:s') }}</td>
+                            <td>{{ log.date|date('Y-m-d H:i') }}</td>
                             <td>{{ log.user ?? '-'}}</td>
                             <td>{{ log.action }}</td>
-                            <td>#{{ log.target }}</td>
+                            <td>#{{ log.target }} [{{ log.entityType|capitalize }}]</td>
                             <td>
                                 <a href="{{ path((log.entityType)~'_show', {id: log.target}) }}">
                                     {{ log.entityString }}
                                 </a>
                             </td>
-                            <td>{{ log.data ? log.data|json_encode}}</td>
+                             <td>{{ log.data ? log.data|json_encode}}</td>
                         </tr>
 
                     {% else %}

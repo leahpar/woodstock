@@ -4,6 +4,7 @@ namespace App\Logger;
 
 use App\Entity\Chantier;
 use App\Entity\Log;
+use App\Entity\Materiel;
 use App\Entity\Panier;
 use App\Entity\Reference;
 use App\Entity\Stock;
@@ -70,6 +71,7 @@ class LoggerSubscriber implements EventSubscriberInterface
         $entityClass = get_class($entity);
 
         if (!in_array($entityClass, [
+            Materiel::class,
             Reference::class,
             Chantier::class,
             User::class,
