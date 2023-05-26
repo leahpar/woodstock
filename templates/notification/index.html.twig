@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Logs{% endblock %}
+{% block title %}Notifications{% endblock %}
 
 {% block content %}
 
 
     <div class="pageHeader">
         <div class="title">
-            <h2>Logs</h2>
+            <h2>Centre de notifications</h2>
         </div>
         <div class="buttons">
         </div>
     </div>
 
 
-    {{ include('log/_table.html.twig', { logs: logs }) }}
+    {{ include('notification/_table.html.twig', { notifs: notifs }) }}
 
 {% endblock %}

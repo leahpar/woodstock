@@ -22,7 +22,9 @@ class LogController extends AbstractController
 
         /** @var Log $log */
         foreach ($logs as $log) {
-            $log->entity = $em->getRepository($log->class)->find($log->target);
+            if ($log->class) {
+                $log->entity = $em->getRepository($log->class)->find($log->target);
+            }
         }
 
         return $this->render('log/index.html.twig', [

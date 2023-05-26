@@ -298,12 +298,13 @@
           <input id="search-field" class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="Rechercher..." type="search" name="search" minlength="3" value="{{ search ?? null }}">
         </form>
         <div class="flex items-center gap-x-4 lg:gap-x-6">
-          <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+          <a href="{{ path('notifs') }}" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+            {{ app.user.pings|length }}
             <span class="sr-only">Voir les notifications</span>
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
             </svg>
-          </button>
+          </a>
 
           <!-- Separator -->
           <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true"></div>
@@ -333,7 +334,8 @@
             <div class="hidden group-hover:block absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
               <!-- Active: "bg-gray-50", Not Active: "" -->
               <!--<a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">Your profile</a>-->
-              <a href="{{ path('app_logout') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-1">Déconnexion</a>
+              {% set url = is_granted('IS_IMPERSONATOR') ? impersonation_exit_path(path('dashboard')) : path('app_logout') %}
+              <a href="{{ url }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-1">Déconnexion</a>
             </div>
           </div>
         </div>

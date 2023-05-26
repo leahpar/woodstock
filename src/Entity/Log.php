@@ -23,37 +23,42 @@ class Log
     #[ORM\ManyToOne(targetEntity: User::class)]
     public User $user;
 
-    #[ORM\Column]
-    public string $class;
+    #[ORM\Column(nullable: true)]
+    public ?string $class;
 
-    #[ORM\Column]
-    public int $target;
+    #[ORM\Column(nullable: true)]
+    public ?int $target;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     public ?string $entityString = null;
 
     #[ORM\Column(type: 'json', nullable: true)]
     public ?array $data = null;
 
+    // Pour affichage
     public ?LoggableEntity $entity = null;
 
     public function __construct(
         string $type,
         User $user,
-        LoggableEntity $entity,
+        ?LoggableEntity $entity,
     ) {
         $this->action = $type;
-        // Pour avoir la bonne classe, au lieu du proxy en cache (Proxies\__CG__\App\Entity\*)
-        $this->class = preg_replace("/.*(App\\\\Entity\\\\.*)/", "$1", get_class($entity));
+
+        if ($entity) {
+            // Pour avoir la bonne classe, au lieu du proxy en cache (Proxies\__CG__\App\Entity\*)
+            $this->class = preg_replace("/.*(App\\\\Entity\\\\.*)/", "$1", get_class($entity));
+            $this->target = $entity->id;
+            $this->entityString = $entity->toLog();
+        }
+
         $this->user = $user;
-        $this->target = $entity->id;
-        $this->entityString = $entity->toLog();
         $this->date = new \DateTime();
     }
 
-    public function getEntityType(): string
+    public function getEntityType(): ?string
     {
-        return strtolower(preg_replace("/.*\\\\(.*)$/", "$1", $this->class));
+        return $this->class ? strtolower(preg_replace("/.*\\\\(.*)$/", "$1", $this->class)) : null;
     }
 
 }

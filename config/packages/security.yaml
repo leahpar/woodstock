@@ -38,11 +38,12 @@ security:
             # https://symfony.com/doc/current/security.html#the-firewall
 
             # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            switch_user: true
 
 
     role_hierarchy:
-        ROLE_SUPER_ADMIN: [ROLE_PROFILER, ROLE_ADMIN]
+        ROLE_SUPER_ADMIN: [ROLE_PROFILER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_PREVIOUS_ADMIN: ROLE_PROFILER
         ROLE_ADMIN: [ROLE_ALL]
         ROLE_ALL: [ROLE_USER_ALL,ROLE_REFERENCE_ALL, ROLE_CHANTIER_ALL, ROLE_MATERIEL_ALL]
         ROLE_USER_ALL: [ROLE_USER_LIST, ROLE_USER_EDIT]

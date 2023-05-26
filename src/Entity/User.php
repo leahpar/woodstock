@@ -57,12 +57,16 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Pret::class, orphanRemoval: true)]
     private Collection $prets;
 
+    #[ORM\ManyToMany(targetEntity: Notification::class, mappedBy: 'pings')]
+    private Collection $pings;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
         $this->materiels = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->prets = new ArrayCollection();
+        $this->pings = new ArrayCollection();
     }
 
     /**
@@ -185,7 +189,7 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     {
         if (!$this->prets->contains($pret)) {
             $this->prets->add($pret);
-            $pret->setUser($this);
+            $pret->user = $this;
         }
 
         return $this;
@@ -194,12 +198,39 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     public function removePret(Pret $pret): self
     {
         if ($this->prets->removeElement($pret)) {
-            // set the owning side to null (unless already changed)
-            if ($pret->getUser() === $this) {
-                $pret->setUser(null);
-            }
+            $pret->user = null;
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getPings(): Collection
+    {
+        return $this->pings;
+    }
+
+    public function hasPing(Notification $notif): bool
+    {
+        return $this->pings->contains($notif);
+    }
+
+    public function addPing(Notification $ping): self
+    {
+        if (!$this->pings->contains($ping)) {
+            $this->pings->add($ping);
+            $ping->addPing($this);
+        }
+        return $this;
+    }
+
+    public function removePing(Notification $ping): self
+    {
+        if ($this->pings->removeElement($ping)) {
+            $ping->removePing($this);
+        }
         return $this;
     }
 

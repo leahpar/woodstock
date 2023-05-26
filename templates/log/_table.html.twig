@@ -1,3 +1,12 @@
+{% set actions = {
+    'create': 'Création',
+    'update': 'Modification',
+    'delete': 'Suppression',
+    'pret': 'Prêt',
+    'rendu': 'Rendu',
+    'notification': 'Traité',
+} %}
+
 <div class="mt-8 flow-root">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -23,14 +32,22 @@
                         <tr>
                             <td>{{ log.date|date('Y-m-d H:i') }}</td>
                             <td>{{ log.user ?? '-'}}</td>
-                            <td>{{ log.action }}</td>
-                            <td>#{{ log.target }} [{{ log.entityType|capitalize }}]</td>
+                            <td>{{ actions[log.action]??log.action }}</td>
+
                             <td>
-                                <a href="{{ path((log.entityType)~'_show', {id: log.target}) }}">
-                                    {{ log.entityString }}
-                                </a>
+                                {% if log.target %}
+                                    #{{ log.target }} [{{ log.entityType|capitalize }}]
+                                {% endif %}
                             </td>
-                             <td>{{ log.data ? log.data|json_encode}}</td>
+                            <td>
+                                {% if log.target %}
+                                    <a href="{{ path((log.entityType)~'_show', {id: log.target}) }}">
+                                        {{ log.entityString }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                             {# <td>{{ log.data ? log.data|json_encode}}</td> #}
+                             <td>{{ (log.data??[])|map((v,k) => "<b>#{k}:</b> #{v}")|join(' ')|raw}}</td>
                         </tr>
 
                     {% else %}

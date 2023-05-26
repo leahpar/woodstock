@@ -65,11 +65,12 @@ class PanierController extends CommonController
 
             $reference = $stock->reference;
             if ($reference->getQuantite() < 0) {
-                $this->addFlash("error", "Stock négatif pour {$reference->nom} !");
+                $this->addFlash("error", "Stock négatif pour {$reference} !");
             }
             elseif ($reference->getQuantite() < $reference->seuil) {
-                $this->addFlash("warning", "Stock bas pour {$reference->nom}");
+                $this->addFlash("warning", "Stock bas pour {$reference} !");
             }
+
 
             return $this->redirectToRoute('panier_edit', ['id' => $panier->id]);
         }
@@ -110,6 +111,25 @@ class PanierController extends CommonController
     #[Route('/{id}/save', name: 'panier_save')]
     public function save(EntityManagerInterface $em, Panier $panier)
     {
+
+        // Notif stock bas
+        $refs = [];
+        foreach ($panier->stocks as $stock) {
+            $reference = $stock->reference;
+
+            // On ne traite qu'une seule fois chaque référence
+            if (in_array($reference, $refs)) continue;
+
+            if ($reference->getQuantite() < 0) {
+                $this->notif("ROLE_REFERENCE_EDIT", $reference, "Stock négatif pour {$reference} !");
+            }
+            elseif ($reference->getQuantite() < $reference->seuil) {
+                $this->notif("ROLE_REFERENCE_EDIT", $reference, "Stock bas pour {$reference} !");
+            }
+
+            $refs[] = $reference;
+        }
+
         $panier->brouillon = false;
         $em->flush(); // pour avoir l'id
         $this->log('create', $panier);

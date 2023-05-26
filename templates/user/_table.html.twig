@@ -20,7 +20,14 @@
                     {% for user in users %}
                         <tr>
                             <td class="font-medium !text-gray-900">{{ user.nom }}</td>
-                            <td>{{ user.username }}</td>
+                            <td>
+                                {{ user.username }}
+                                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+                                    <a href="{{ path('dashboard', {'_switch_user': user.userIdentifier}) }}">
+                                        <span>🚀</span>
+                                    </a>
+                                {% endif %}
+                            </td>
                             <td>{{ user.equipe }}</td>
                             <td>{{ user.chefEquipe ? 'OUI' }}</td>
                             <td class="text-right font-medium sm:pr-3">

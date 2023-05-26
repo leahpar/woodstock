@@ -1,0 +1,75 @@
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="relative">
+
+                <table class="mainTable">
+
+                    <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Objet</th>
+                        <th scope="col">Traité</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for notif in notifs %}
+
+                        <tr>
+                            <td>
+                                {% if app.user.ping(notif) %}
+                                    <span data-ping="{{ notif.id }}">🔥</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ notif.date|date('Y-m-d H:i') }}</td>
+                            <td>{{ notif.message }}</td>
+                            <td>
+                                {% if notif.target %}
+                                <a href="{{ path((notif.entityType)~'_show', {id: notif.target}) }}">
+                                    {{ notif.entity }}
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if notif.dateTraite %}
+                                    <span>✅</span>
+                                    Le {{ notif.dateTraite|date('Y-m-d H:i') }}
+                                    par {{ notif.user }}
+                                {% else %}
+                                    <form action="{{ path('notif_traiter', {id: notif.id}) }}" method="post">
+                                    <button type="submit">❗</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td colspan="99">Aucune notification !</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascript %}
+<script>
+    const path = "{{ path('notif_ping', {id:'ID'}) }}"
+    let ids = []
+    document.querySelectorAll('[data-ping]').forEach((el) => ids.push(el.dataset.ping))
+    console.log(ids)
+    setTimeout(function () {
+       for (const id of ids) {
+           fetch(path.replace('ID', id), {method: 'POST'})
+       }
+    }, 3000)
+</script>
+{% endblock %}

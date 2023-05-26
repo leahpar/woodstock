@@ -14,7 +14,7 @@ class LoggerService
         private readonly Security $security,
     ) {}
 
-    public function log(string $action, LoggableEntity $entity, array $data = []): void
+    public function log(string $action, ?LoggableEntity $entity, array $data = []): void
     {
         /** @var User $user */
         $user = $this->security->getUser();
