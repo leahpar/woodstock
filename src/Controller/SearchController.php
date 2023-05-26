@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Chantier;
+use App\Entity\Materiel;
 use App\Entity\Reference;
 use App\Entity\User;
 use App\Repository\ChantierRepository;
@@ -34,6 +35,11 @@ class SearchController extends AbstractController
             $references = $em->getRepository(Reference::class)->findBySearch($search);
         }
 
+        $materiels = [];
+        if ($this->isGranted('ROLE_MATERIEL_LIST')) {
+            $materiels = $em->getRepository(Materiel::class)->findBySearch($search);
+        }
+
         $users = [];
         if ($this->isGranted('ROLE_USER_LIST')) {
             $users = $em->getRepository(User::class)->findBySearch($search);
@@ -43,6 +49,7 @@ class SearchController extends AbstractController
             'search' => $search,
             'chantiers' => $chantiers,
             'references' => $references,
+            'materiels' => $materiels,
             'users' => $users,
         ]);
     }

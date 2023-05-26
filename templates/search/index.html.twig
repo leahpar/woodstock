@@ -4,21 +4,26 @@
 
 {% block content %}
 
-{% set cpt = 0 %}
-{% set cpt = cpt + chantiers|length %}
-{% set cpt = cpt + references|length %}
-{% set cpt = cpt + users|length %}
+    {% set cpt = 0 %}
+    {% set cpt = cpt + chantiers|length %}
+    {% set cpt = cpt + materiels|length %}
+    {% set cpt = cpt + references|length %}
+    {% set cpt = cpt + users|length %}
 
-<div class="pageHeader">
-    <div class="title">
-        <h2>{{ cpt }} résultat{{ cpt > 1 ? 's'}} pour <span>"{{ search }}"</span></h2>
+    <div class="pageHeader">
+        <div class="title">
+            <h2>{{ cpt }} résultat{{ cpt > 1 ? 's'}} pour <span>"{{ search }}"</span></h2>
+        </div>
     </div>
-</div>
-
 
     {% if chantiers|length > 0 %}
     <h2>{{ chantiers|length }} Chantier{{ chantiers|length > 1 ? 's' }}</h2>
     {{ include('chantier/_table.html.twig', { 'chantiers': chantiers }) }}
+    {% endif %}
+
+    {% if materiels|length > 0 %}
+    <h2>{{ materiels|length }} Matériel</h2>
+    {{ include('materiel/_table.html.twig', { 'materiels': materiels }) }}
     {% endif %}
 
     {% if references|length > 0 %}

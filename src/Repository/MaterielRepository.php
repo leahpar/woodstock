@@ -39,28 +39,15 @@ class MaterielRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Materiel[] Returns an array of Materiel objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findBySearch(string $search)
+    {
+        $qb = $this->createQueryBuilder('m');
 
-//    public function findOneBySomeField($value): ?Materiel
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $qb->where('m.nom LIKE :search')
+            ->orWhere('m.reference LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
