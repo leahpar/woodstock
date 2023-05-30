@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Catalogue</title>
+</head>
+<body>
+
+<h1>Catalogue des références</h1>
+
+<div style="display: grid; grid-template-columns: repeat(5, 1fr); grid-gap: 10px;">
+{% for ref in references %}
+<div>
+    <h2>{{ ref.nom }}</h2>
+    <p>
+        {{ ref.reference }}
+        {{ ref.marque }}
+        {{ ref.categorie }}
+        {{ ref.conditionnement }}
+    </p>
+    <img src="{{ ref.reference|qrcode }}" width="200px" height="200px">
+</div>
+{% endfor %}
+</div>
+
+</body>
+</html>

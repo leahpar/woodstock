@@ -24,6 +24,15 @@ class ReferenceController extends CommonController
         ]);
     }
 
+    #[Route('/catalogue', name: 'reference_catalogue', methods: ['GET'])]
+    #[IsGranted('ROLE_REFERENCE_LIST')]
+    public function catalogue(ReferenceRepository $referenceRepository): Response
+    {
+        return $this->render('reference/catalogue.html.twig', [
+            'references' => $referenceRepository->findAll(),
+        ]);
+    }
+
     #[Route('/new', name: 'reference_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_REFERENCE_EDIT')]
     public function new(Request $request, EntityManagerInterface $em): Response

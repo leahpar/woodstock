@@ -2,6 +2,8 @@
 
 namespace App\Twig;
 
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -16,6 +18,7 @@ class TwigExtension extends AbstractExtension
             new TwigFilter('selectLabel',  [$this, 'selectLabel']),
             new TwigFilter('euro',  [$this, 'euro'], ['is_safe' => ['html']]),
             new TwigFilter('pourcent',  [$this, 'pourcent'], ['is_safe' => ['html']]),
+            new TwigFilter('qrcode',  [$this, 'qrcode'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -59,6 +62,21 @@ class TwigExtension extends AbstractExtension
     public function pourcent(?string $value = null): ?string
     {
         return $this->number($value * 100, 2, "%");
+    }
+
+    public function qrCode(?string $value = null): ?string
+    {
+        $options = [
+            'version' => 3, // https://www.qrcode.com/en/about/version.html
+            //'versionMin' => 5,
+            //'versionMax' => 10,
+            'eccLevel' => QRCode::ECC_M,
+            //'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+            'imageTransparent' => true,
+        ];
+
+        $qrcode = new QRCode(new QROptions($options));
+        return $qrcode->render($value);
     }
 
 

@@ -10,6 +10,7 @@
       </div>
       <div class="buttons">
         {% if is_granted('ROLE_REFERENCE_EDIT') %}
+            <a href="{{ path('reference_catalogue') }}" class="borderedButton" target="_blank">Catalogue</a>
             <a href="{{ path('reference_new') }}" class="borderedButton">Ajouter une référence</a>
         {% endif %}
 
