@@ -192,6 +192,11 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
         return $this->prets;
     }
 
+    public function getPretsEnCours(): Collection
+    {
+        return $this->prets->filter(fn (Pret $pret) => $pret->dateRetour === null);
+    }
+
     public function addPret(Pret $pret): self
     {
         if (!$this->prets->contains($pret)) {
