@@ -6,3 +6,6 @@ if ("serviceWorker" in navigator) {
             .catch(err => console.log("[ERR] Service worker not registered", err))
     })
 }
+else {
+    console.log('[WARNING] Service worker is not supported.');
+}

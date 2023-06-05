@@ -10,10 +10,27 @@
             <h2>Centre de notifications</h2>
         </div>
         <div class="buttons">
+            <button class="borderedButton" id="notifications" style="display:none;">Activer les notifications</button>
         </div>
     </div>
 
-
     {{ include('notification/_table.html.twig', { notifs: notifs }) }}
 
+{% endblock %}
+
+{% block javascripts %}
+    {# TODO: push #}
+{#    <script src="{{ asset('js/push.js') }}"></script>#}
+{#    <script>#}
+{#        const button = document.getElementById('notifications');#}
+{#        if (Notification.permission !== "granted") {#}
+{#            button.style.display = 'block';#}
+{#            button.addEventListener('click', () => {#}
+{#                // Ask the user for permission#}
+{#                subscribeUserToPush()#}
+{#                    // Reload the page#}
+{#                    .then(() => location.reload())#}
+{#            });#}
+{#        }#}
+{#    </script>#}
 {% endblock %}
