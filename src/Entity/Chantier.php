@@ -43,6 +43,9 @@ class Chantier extends LoggableEntity
     #[Ignore]
     public Collection $paniers;
 
+    #[ORM\ManyToOne(inversedBy: 'chantiers')]
+    public ?User $conducteurTravaux = null;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -71,6 +74,5 @@ class Chantier extends LoggableEntity
     {
         return implode(' - ', [$this->referenceTravaux, $this->nom]);
     }
-
 
 }

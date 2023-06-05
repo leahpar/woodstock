@@ -60,6 +60,9 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[ORM\ManyToMany(targetEntity: Notification::class, mappedBy: 'pings')]
     private Collection $pings;
 
+    #[ORM\OneToMany(mappedBy: 'conducteurTravaux', targetEntity: Chantier::class)]
+    private Collection $chantiers;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -67,6 +70,7 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
         $this->updatedAt = new \DateTime();
         $this->prets = new ArrayCollection();
         $this->pings = new ArrayCollection();
+        $this->chantiers = new ArrayCollection();
     }
 
     /**
@@ -231,6 +235,36 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
         if ($this->pings->removeElement($ping)) {
             $ping->removePing($this);
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chantier>
+     */
+    public function getChantiers(): Collection
+    {
+        return $this->chantiers;
+    }
+
+    public function addChantier(Chantier $chantier): self
+    {
+        if (!$this->chantiers->contains($chantier)) {
+            $this->chantiers->add($chantier);
+            $chantier->setConducteurTravaux($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChantier(Chantier $chantier): self
+    {
+        if ($this->chantiers->removeElement($chantier)) {
+            // set the owning side to null (unless already changed)
+            if ($chantier->getConducteurTravaux() === $this) {
+                $chantier->setConducteurTravaux(null);
+            }
+        }
+
         return $this;
     }
 

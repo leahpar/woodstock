@@ -35,13 +35,9 @@
               <div class="formGrid">
 
                   <div class="col-span-full">
-                      {{ form_label(form.nom, 'Nom', {label_attr: {class:
-                          ""
-                      }}) }}
+                      {{ form_label(form.nom, 'Nom') }}
                       <div class="mt-2">
-                          {{ form_widget(form.nom, {attr: {class:
-                              ""
-                          }}) }}
+                          {{ form_widget(form.nom) }}
                       </div>
                       <div class="formErrors">
                           {{ form_errors(form.nom) }}
@@ -49,13 +45,9 @@
                   </div>
 
                   <div class="col-span-full">
-                      {{ form_label(form.referenceTravaux, 'Référence travaux', {label_attr: {class:
-                          ""
-                      }}) }}
+                      {{ form_label(form.referenceTravaux, 'Référence travaux') }}
                       <div class="mt-2">
-                          {{ form_widget(form.referenceTravaux, {attr: {class:
-                              ""
-                          }}) }}
+                          {{ form_widget(form.referenceTravaux) }}
                       </div>
                       <div class="formErrors">
                           {{ form_errors(form.referenceTravaux) }}
@@ -63,13 +55,9 @@
                   </div>
 
                   <div class="col-span-full">
-                      {{ form_label(form.referenceEtude, 'Référence BE', {label_attr: {class:
-                          ""
-                      }}) }}
+                      {{ form_label(form.referenceEtude, 'Référence BE') }}
                       <div class="mt-2">
-                          {{ form_widget(form.referenceEtude, {attr: {class:
-                              ""
-                          }}) }}
+                          {{ form_widget(form.referenceEtude) }}
                       </div>
                       <div class="formErrors">
                           {{ form_errors(form.referenceEtude) }}
@@ -77,13 +65,19 @@
                   </div>
 
                   <div class="col-span-full">
-                      {{ form_label(form.encours, 'Chantier en cours ?', {label_attr: {class:
-                          ""
-                      }}) }}
+                      {{ form_label(form.conducteurTravaux, 'Conducteur de travaux') }}
                       <div class="mt-2">
-                          {{ form_widget(form.encours, {attr: {class:
-                              ""
-                          }}) }}
+                          {{ form_widget(form.conducteurTravaux) }}
+                      </div>
+                      <div class="formErrors">
+                          {{ form_errors(form.conducteurTravaux) }}
+                      </div>
+                  </div>
+
+                  <div class="col-span-full">
+                      {{ form_label(form.encours, 'Chantier en cours ?') }}
+                      <div class="mt-2">
+                          {{ form_widget(form.encours) }}
                       </div>
                       <div class="formErrors">
                           {{ form_errors(form.encours) }}
@@ -91,19 +85,14 @@
                   </div>
 
                   <div class="col-span-full">
-                      {{ form_label(form.commentaire, 'Commentaire', {label_attr: {class:
-                          ""
-                      }}) }}
+                      {{ form_label(form.commentaire, 'Commentaire') }}
                       <div class="mt-2">
-                          {{ form_widget(form.commentaire, {attr: {class:
-                              ""
-                          }}) }}
+                          {{ form_widget(form.commentaire) }}
                       </div>
                       <div class="formErrors">
                           {{ form_errors(form.commentaire) }}
                       </div>
                   </div>
-
 
               </div>
           </div>
