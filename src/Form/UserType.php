@@ -17,6 +17,7 @@ class UserType extends AbstractType
         $builder
             ->add('username')
             ->add('nom')
+            ->add('telephone')
             ->add('plainPassword')
             ->add('roles', Type\ChoiceType::class, [
                 'choices' => array_map(fn (Role $r) => $r->name, Role::cases()),

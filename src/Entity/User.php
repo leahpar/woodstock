@@ -31,6 +31,9 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[Assert\NotBlank]
     public ?string $nom = null;
 
+    #[ORM\Column(nullable: true)]
+    public ?string $telephone = null;
+
     #[ORM\Column]
     public array $roles = [];
 

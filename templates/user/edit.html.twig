@@ -56,6 +56,14 @@
                         </div>
                         
                         <div class="col-span-full">
+                            {{ form_label(form.telephone, 'Tel Portable') }}
+                              {{ form_widget(form.telephone) }}
+                            <div class="formErrors">
+                                {{ form_errors(form.telephone) }}
+                            </div>
+                        </div>
+
+                        <div class="col-span-full">
                             {{ form_label(form.equipe, 'Numéro d\'équipe') }}
                             {{ form_widget(form.equipe) }}
                             <div class="formErrors">
