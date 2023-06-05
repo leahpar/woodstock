@@ -43,10 +43,17 @@
                   <dt class="text-sm font-medium text-gray-900">Seuil d'alerte</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ reference.seuil }}</dd>
                 </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-900">Compta : Code comptable</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ reference.codeComptaCompte }}</dd>
+              </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-900">Compta : Code analytics</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ reference.codeComptaAnalytique }}</dd>
+              </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <img src="{{ reference.reference|qrcode }}" width="200px" height="200px">
                 </div>
-
             </dl>
           </div>
         </div>

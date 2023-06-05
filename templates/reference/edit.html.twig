@@ -54,16 +54,6 @@
                     </div>
                 </div>
                   
-              <div class="col-span-full">
-                    {{ form_label(form.codeComptable, 'Code comptable') }}
-                  <div class="mt-2">
-                      {{ form_widget(form.codeComptable) }}
-                        </div>
-                    <div class="formErrors">
-                      {{ form_errors(form.codeComptable) }}
-                    </div>
-                </div>
-
                   <div class="col-span-full">
                         {{ form_label(form.marque, 'Marque') }}
                       <div class="mt-2">
@@ -93,6 +83,27 @@
                           {{ form_errors(form.prix) }}
                             </div>
                     </div>
+
+                <div class="col-span-full">
+                    {{ form_label(form.codeComptaCompte, 'Compta : code comptable') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.codeComptaCompte) }}
+                    </div>
+                    <div class="formErrors">
+                        {{ form_errors(form.codeComptaCompte) }}
+                    </div>
+                </div>
+
+                <div class="col-span-full">
+                    {{ form_label(form.codeComptaAnalytique, 'Compta : code analytics') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.codeComptaAnalytique) }}
+                    </div>
+                    <div class="formErrors">
+                        {{ form_errors(form.codeComptaAnalytique) }}
+                    </div>
+                </div>
+
 
 
             </div>

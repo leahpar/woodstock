@@ -25,7 +25,10 @@ class Reference extends LoggableEntity
     public string $reference;
 
     #[ORM\Column(length: 255, nullable: true)]
-    public ?string $codeComptable = null;
+    public ?string $codeComptaAnalytique = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $codeComptaCompte = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]

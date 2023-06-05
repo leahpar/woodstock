@@ -26,6 +26,7 @@ class ReferenceType extends AbstractType
                 'choices' => [
                     "BOULONNERIE CHARPENTE" => "BOULONNERIE CHARPENTE",
                     "CARTOUCHE" => "CARTOUCHE",
+                    "CHARPENTE" => "CHARPENTE",
                     "CHARPENTE DOUGLAS" => "CHARPENTE DOUGLAS",
                     "ECHAFAUDAGE" => "ECHAFAUDAGE",
                     "EQUERRES" => "EQUERRES",
@@ -40,7 +41,10 @@ class ReferenceType extends AbstractType
             ->add('reference', TextType::class, [
                 'required' => true,
             ])
-            ->add('codeComptable', TextType::class, [
+            ->add('codeComptaCompte', TextType::class, [
+                'required' => false,
+            ])
+            ->add('codeComptaAnalytique', TextType::class, [
                 'required' => false,
             ])
             ->add('prix', NumberType::class, [
