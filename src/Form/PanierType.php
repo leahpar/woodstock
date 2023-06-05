@@ -44,6 +44,10 @@ class PanierType extends AbstractType
                     'required' => true,
                     'autocomplete' => true,
                     'placeholder' => 'Choisir un chantier',
+                    'query_builder' => fn ($er)
+                    => $er->createQueryBuilder('c')
+                        ->where('c.encours = :true')
+                        ->setParameter('true', true),
                 ])
                 ->add('commentaire', TextType::class, [
                     'required' => false,
