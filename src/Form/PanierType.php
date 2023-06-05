@@ -8,6 +8,7 @@ use App\Entity\Stock;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -51,12 +52,18 @@ class PanierType extends AbstractType
                 ])
                 ->add('commentaire', TextType::class, [
                     'required' => false,
-                ]);
+                ])
+            ;
         }
 
         $builder
             ->add('stock', StockType::class, [
                 'required' => true,
+            ])
+            ->add('date', DateType::class, [
+                'required' => true,
+                'widget' => 'single_text',
+                'html5' => true,
             ])
         ;
     }
