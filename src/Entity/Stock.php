@@ -37,5 +37,14 @@ class Stock
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     public ?Panier $panier = null;
 
+    public function getDebit(): float
+    {
+        return ($this->type === self::TYPE_SORTIE) ? $this->quantite * $this->prix : 0;
+    }
+
+    public function getCredit(): float
+    {
+        return ($this->type === self::TYPE_ENTREE) ? $this->quantite * $this->prix : 0;
+    }
 
 }

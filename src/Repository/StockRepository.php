@@ -22,24 +22,6 @@ class StockRepository extends ServiceEntityRepository
         parent::__construct($registry, Stock::class);
     }
 
-    public function save(Stock $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(Stock $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
     public function getHistoriqueReference(Reference $reference)
     {
         $qb = $this->createQueryBuilder('s')
@@ -49,6 +31,24 @@ class StockRepository extends ServiceEntityRepository
             ->where('s.reference = :reference')
             ->setParameter('reference', $reference)
             ->orderBy('p.date', 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByMois(\DateTime $date)
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->select('s')
+            ->leftJoin('s.reference', 'r')
+            ->addSelect('r')
+            ->leftJoin('s.panier', 'p')
+            //->addSelect('p')
+            //->leftJoin('p.chantier', 'c')
+            //->addSelect('c')
+            ->andWhere('p.date BETWEEN :debut AND :fin')
+            ->setParameter('debut', $date->format('Y-m-01 00:00:00'))
+            ->setParameter('fin', $date->format('Y-m-t 23:59:59'))
+        ;
 
         return $qb->getQuery()->getResult();
     }

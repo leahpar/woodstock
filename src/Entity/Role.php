@@ -5,6 +5,8 @@ namespace App\Entity;
 enum Role: string {
     // Admin
     case ROLE_ADMIN = "ROLE_ADMIN";
+    // Compta
+    case ROLE_COMPTA = "ROLE_COMPTA";
     // Utilisateurs
     case ROLE_USER_LIST = "ROLE_USER_LIST";
     case ROLE_USER_EDIT = "ROLE_USER_EDIT";
