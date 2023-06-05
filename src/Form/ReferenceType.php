@@ -52,8 +52,13 @@ class ReferenceType extends AbstractType
                 'scale' => 2,
                 'required' => false,
             ])
-            ->add('conditionnement', TextType::class, [
+            ->add('conditionnement', ChoiceType::class, [
                 'required' => false,
+                'choices' => [
+                    "Unité" => "Unité",
+                    "ML" => "ML",
+                    "Boîte" => "Boîte",
+                ],
             ])
             ->add('seuil', NumberType::class, [
                 'required' => false,

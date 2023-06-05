@@ -42,4 +42,20 @@ class TestController extends AbstractController
         $em->flush();
         return new Response('ok');
     }
+
+    #[Route('/updateReferenceConditionnement', name: 'updateReferenceConditionnement')]
+    public function updateReferenceConditionnement(EntityManagerInterface $em)
+    {
+        $references = $em->getRepository(Reference::class)->findAll();
+        /** @var Reference $ref */
+        foreach ($references as $ref) {
+            $ref->conditionnement = match ($ref->conditionnement) {
+                "pièce", "pc", "Cartouche", => "Unité",
+                "1ML", "1 ML", "ML", "ml" => "ML",
+                "Boite", "Boîte" => "Boîte",
+            };
+        }
+        $em->flush();
+        return new Response('ok');
+    }
 }
