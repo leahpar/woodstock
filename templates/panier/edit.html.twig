@@ -125,6 +125,7 @@
                     <tr>
                         <th>Quantité</th>
                         <th>Référence</th>
+                        <th>Stock actuel</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -133,6 +134,14 @@
                         <tr>
                             <td>{{ stock.quantite }}</td>
                             <td class="font-medium !text-gray-900">{{ stock.reference }}</td>
+                            <td>
+                                {{ stock.reference.quantite }}
+                                {% if stock.reference.quantite < 0 %}
+                                    🛑
+                                {% elseif stock.reference.seuil and stock.reference.quantite < stock.reference.seuil %}
+                                    ⚠️
+                                {% endif %}
+                            </td>
                             <td><a href="{{ path('panier_stock_del', {id: panier.id, stock: stock.id}) }}" class="text-teal-600 hover:text-teal-900">Supprimer</a></td>
                         </tr>
                     {% endfor %}
