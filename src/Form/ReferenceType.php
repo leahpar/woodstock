@@ -22,7 +22,7 @@ class ReferenceType extends AbstractType
                 'required' => false,
             ])
             ->add('categorie', ChoiceType::class, [
-                'required' => false,
+                'required' => true,
                 'choices' => [
                     "BOULONNERIE CHARPENTE" => "BOULONNERIE CHARPENTE",
                     "CARTOUCHE" => "CARTOUCHE",
@@ -42,18 +42,18 @@ class ReferenceType extends AbstractType
                 'required' => true,
             ])
             ->add('codeComptaCompte', TextType::class, [
-                'required' => false,
+                'required' => true,
             ])
             ->add('codeComptaAnalytique', TextType::class, [
-                'required' => false,
+                'required' => true,
             ])
             ->add('prix', NumberType::class, [
                 'html5' => true,
                 'scale' => 2,
-                'required' => false,
+                'required' => true,
             ])
             ->add('conditionnement', ChoiceType::class, [
-                'required' => false,
+                'required' => true,
                 'choices' => [
                     "Unité" => "Unité",
                     "ML" => "ML",
@@ -61,7 +61,7 @@ class ReferenceType extends AbstractType
                 ],
             ])
             ->add('seuil', NumberType::class, [
-                'required' => false,
+                'required' => true,
                 'html5' => true,
             ])
         ;
