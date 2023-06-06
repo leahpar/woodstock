@@ -44,9 +44,6 @@ class ReferenceType extends AbstractType
             ->add('codeComptaCompte', TextType::class, [
                 'required' => true,
             ])
-            ->add('codeComptaAnalytique', TextType::class, [
-                'required' => true,
-            ])
             ->add('prix', NumberType::class, [
                 'html5' => true,
                 'scale' => 2,

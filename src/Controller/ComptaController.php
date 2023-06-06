@@ -31,14 +31,14 @@ class ComptaController extends CommonController
                     /* Journal    */ "ANA",
                     /* Date       */ $stock->panier->date->format('t/m/Y'),
                     /* Cpte       */ $stock->reference->codeComptaCompte,
-                    /* Analytique */ $stock->reference->codeComptaAnalytique,
+                    /* Analytique */ $chantier?->referenceTravaux,
                     /* Libellé    */ $stock->type . " stock du " . $stock->panier->date->format('t/m/Y'),
                     /* Débit      */ $stock->getDebit() ?: null,
                     /* Crédit     */ $stock->getCredit() ?: null,
                 ];
             }
             else {
-                $data[$key][5]  += $stock->getDebit();
+                $data[$key][5] += $stock->getDebit();
                 $data[$key][6] += $stock->getCredit();
             }
         }
@@ -46,6 +46,10 @@ class ComptaController extends CommonController
         $filename = "export-";
         $filename .= $date->format('Ym');
         $filename .= ".xlsx";
+
+        // Log
+        $this->log("export_compta", null, ['mois' => $date->format('m/Y')]);
+        $em->flush();
 
         return $exportService->exportComptable($data, $filename);
 

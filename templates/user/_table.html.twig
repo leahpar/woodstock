@@ -21,12 +21,12 @@
                         <tr>
                             <td class="font-medium !text-gray-900">{{ user.nom }}</td>
                             <td>
-                                {{ user.username }}
                                 {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
                                     <a href="{{ path('dashboard', {'_switch_user': user.userIdentifier}) }}">
                                         <span>🚀</span>
                                     </a>
                                 {% endif %}
+                                {{ user.username }}
                             </td>
                             <td>{{ user.equipe }}</td>
                             <td>{{ user.chefEquipe ? 'OUI' }}</td>

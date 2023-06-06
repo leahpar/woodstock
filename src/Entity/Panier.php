@@ -19,8 +19,8 @@ class Panier extends LoggableEntity
     #[ORM\Column]
     public ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    public ?\DateTimeInterface $date = null;
+    #[ORM\Column()]
+    public ?\DateTime $date = null;
 
     #[ORM\Column(length: 255)]
     public string $type;
