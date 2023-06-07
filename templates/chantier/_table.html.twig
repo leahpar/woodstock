@@ -42,8 +42,8 @@
                             <td>{{ chantier.encours ? "OUI" : "NON" }}</td>
                             <td>{{ chantier.commentaire }}</td>
                             <td class="text-right font-medium sm:pr-3">
-                                {% if is_granted('ROLE_CHANTIER_EDIT') %}
                                     <a href="{{ path('chantier_show', {'id': chantier.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ chantier.nom }}</span></a>
+                                {% if is_granted('ROLE_CHANTIER_EDIT') %}
                                     <a href="{{ path('chantier_edit', {'id': chantier.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ chantier.nom }}</span></a>
                                 {% endif %}
                             </td>

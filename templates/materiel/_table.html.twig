@@ -27,13 +27,13 @@
                             <td>{{ materiel.proprietaire ?? '-' }}</td>
                             <td>{{ materiel.emprunteur ?? '-' }}</td>
                             <td class="text-right font-medium sm:pr-3">
+                                <a href="{{ path('materiel_show', {'id': materiel.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ materiel.nom }}</span></a>
                                 {% if is_granted('ROLE_MATERIEL_EDIT') %}
                                     {% if materiel.pret %}
                                         <a href="{{ path('materiel_pret', {'id': materiel.id, 'rendu':true}) }}" class="text-teal-600 hover:text-teal-900">Rendre<span class="sr-only">, {{ materiel.nom }}</span></a>
                                     {% else %}
                                         <a href="{{ path('materiel_pret', {'id': materiel.id}) }}" class="text-teal-600 hover:text-teal-900">Prêter<span class="sr-only">, {{ materiel.nom }}</span></a>
                                     {% endif %}
-                                    <a href="{{ path('materiel_show', {'id': materiel.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ materiel.nom }}</span></a>
                                     <a href="{{ path('materiel_edit', {'id': materiel.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ materiel.nom }}</span></a>
                                 {% endif %}
                             </td>
