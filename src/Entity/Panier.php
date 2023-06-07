@@ -54,7 +54,7 @@ class Panier extends LoggableEntity
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
-        $this->date = new \DateTimeImmutable();
+        $this->date = new \DateTime();
     }
 
     public function addStock(Stock $stock): self
