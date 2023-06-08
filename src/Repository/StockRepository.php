@@ -35,7 +35,7 @@ class StockRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findByMois(\DateTime $date)
+    public function findSortiesByMois(\DateTime $date)
     {
         $qb = $this->createQueryBuilder('s')
             ->select('s')
@@ -45,6 +45,8 @@ class StockRepository extends ServiceEntityRepository
             //->addSelect('p')
             //->leftJoin('p.chantier', 'c')
             //->addSelect('c')
+            ->andWhere('s.type = :type')
+            ->setParameter('type', Stock::TYPE_SORTIE)
             ->andWhere('p.date BETWEEN :debut AND :fin')
             ->setParameter('debut', $date->format('Y-m-01 00:00:00'))
             ->setParameter('fin', $date->format('Y-m-t 23:59:59'))

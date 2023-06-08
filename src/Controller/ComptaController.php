@@ -17,7 +17,7 @@ class ComptaController extends CommonController
     {
 
         $date = new \DateTime($request->request->get('date'));
-        $stocks = $em->getRepository(Stock::class)->findByMois($date);
+        $stocks = $em->getRepository(Stock::class)->findSortiesByMois($date);
 
         $data = [];
         /** @var Stock $stock */
@@ -28,20 +28,32 @@ class ComptaController extends CommonController
 
             if (!isset($data[$key])) {
                 $data[$key] = [
-                    /* Journal    */ "ANA",
-                    /* Date       */ $stock->panier->date->format('t/m/Y'),
-                    /* Cpte       */ $stock->reference->codeComptaCompte,
-                    /* Analytique */ $chantier?->referenceTravaux,
-                    /* Libellé    */ $stock->type . " stock du " . $stock->panier->date->format('t/m/Y'),
-                    /* Débit      */ $stock->getDebit() ?: null,
-                    /* Crédit     */ $stock->getCredit() ?: null,
+                    /* 0 Journal    */ "ANA",
+                    /* 1 Date       */ $stock->panier->date->format('t/m/Y'),
+                    /* 2 Cpte       */ $stock->reference->codeComptaCompte,
+                    /* 3 Analytique */ $chantier?->referenceTravaux,
+                    /* 4 Libellé    */ $stock->type . " stock du " . $stock->panier->date->format('t/m/Y'),
+                    /* 5 Débit      */ $stock->getDebit() ?: null,
+                    /* 6 Crédit     */ 0, // $stock->getCredit() ?: null, // Ligne de crédit ajoutée plus bas
                 ];
             }
             else {
                 $data[$key][5] += $stock->getDebit();
-                $data[$key][6] += $stock->getCredit();
+                //$data[$key][6] += $stock->getCredit();
             }
         }
+
+        // Ajout des lignes de crédit (= copie des sorties en mettant le débit au crédit)
+        foreach ($data as $key => $datum) {
+            $key2 = $key. "-CREDIT";
+            $datum[3] = "7000";
+            $datum[6] = $datum[5];
+            $datum[5] = 0;
+            $data[$key2] = $datum;
+        }
+
+        // Tri
+        ksort($data);
 
         $filename = "export-";
         $filename .= $date->format('Ym');
