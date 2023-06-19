@@ -81,4 +81,13 @@ class Panier extends LoggableEntity
             . ' - ' . $this->user->username;
     }
 
+    public function getPrix(): float
+    {
+        return array_reduce(
+            $this->stocks->toArray(),
+            fn (float $total, Stock $stock) => $total + $stock->getDebit(),
+            0
+        );
+    }
+
 }

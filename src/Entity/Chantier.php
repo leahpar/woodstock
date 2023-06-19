@@ -75,4 +75,14 @@ class Chantier extends LoggableEntity
         return implode(' - ', [$this->referenceTravaux, $this->nom]);
     }
 
+    public function getPrix(): float
+    {
+        return array_reduce(
+            $this->paniers->toArray(),
+            fn (float $total, Panier $panier) => $total + $panier->getPrix(),
+            0
+        );
+    }
+
+
 }
