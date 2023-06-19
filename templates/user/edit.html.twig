@@ -112,32 +112,7 @@
                   <div class="formGrid">
                         
                         <div class="col-span-full space-y-3">
-                            {# NB: la liste doit correspondre à APp\Entity\Role::cases() #}
-                            {% set allroles = {
-                                'Admin': {
-                                    'ROLE_ADMIN': 'Administrateur',
-                                },
-                                'Compta': {
-                                    'ROLE_COMPTA': 'Exports comptables',
-                                },
-                                'Utilisateurs': {
-                                    'ROLE_USER_LIST': 'Consulter les utilisateurs',
-                                    'ROLE_USER_EDIT': 'Modifier les utilisateurs',
-                                },
-                                'Chantiers': {
-                                    'ROLE_CHANTIER_LIST': 'Consulter les chantiers',
-                                    'ROLE_CHANTIER_EDIT': 'Modifier les chantiers',
-                                },
-                                'Matériel': {
-                                    'ROLE_MATERIEL_LIST': 'Consulter le matériel',
-                                    'ROLE_MATERIEL_EDIT': 'Modifier le matériel',
-                                },
-                                'Stock': {
-                                    'ROLE_REFERENCE_LIST':  'Consulter les références',
-                                    'ROLE_REFERENCE_EDIT':  'Modifier les références',
-                                    'ROLE_REFERENCE_STOCK': 'Modifier les stocks',
-                                },
-                            } %}
+                            {% set allroles = getRoles() %}
                             {% for group,roles in allroles %}
                                 <div>
                                     <span class="mb-1">{{ group }}</span>

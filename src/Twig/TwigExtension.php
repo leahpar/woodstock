@@ -6,6 +6,7 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class TwigExtension extends AbstractExtension
 {
@@ -19,6 +20,13 @@ class TwigExtension extends AbstractExtension
             new TwigFilter('euro',  [$this, 'euro'], ['is_safe' => ['html']]),
             new TwigFilter('pourcent',  [$this, 'pourcent'], ['is_safe' => ['html']]),
             new TwigFilter('qrcode',  [$this, 'qrcode'], ['is_safe' => ['html']]),
+        ];
+    }
+    
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('getRoles', [$this, 'getRoles']),
         ];
     }
 
@@ -77,6 +85,38 @@ class TwigExtension extends AbstractExtension
 
         $qrcode = new QRCode(new QROptions($options));
         return $qrcode->render($value);
+    }
+
+    /**
+     * NB: la liste doit correspondre à Ap\Entity\Role::cases()
+     */
+    public function getRoles(): array
+    {
+        return [
+            'Admin' => [
+                'ROLE_ADMIN' => 'Administrateur',
+            ],
+            'Compta' => [
+                'ROLE_COMPTA' => 'Exports comptables',
+            ],
+            'Utilisateurs' => [
+                'ROLE_USER_LIST' => 'Consulter les utilisateurs',
+                'ROLE_USER_EDIT' => 'Modifier les utilisateurs',
+            ],
+            'Chantiers' => [
+                'ROLE_CHANTIER_LIST' => 'Consulter les chantiers',
+                'ROLE_CHANTIER_EDIT' => 'Modifier les chantiers',
+            ],
+            'Matériel' => [
+                'ROLE_MATERIEL_LIST' => 'Consulter le matériel',
+                'ROLE_MATERIEL_EDIT' => 'Modifier le matériel',
+            ],
+            'Stock' => [
+                'ROLE_REFERENCE_LIST' => 'Consulter les références',
+                'ROLE_REFERENCE_EDIT' => 'Modifier les références',
+                'ROLE_REFERENCE_STOCK' => 'Modifier les stocks',
+            ],
+        ];
     }
 
 

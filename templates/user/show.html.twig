@@ -40,7 +40,25 @@
       </div>
       <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-sm font-medium text-gray-900">Roles</dt>
-        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ user.roles ? user.roles|json_encode : '' }}</dd>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+          {% set allroles = getRoles() %}
+          {% for group,roles in allroles %}
+            <div>
+              <ul>
+                {% for role,label in roles %}
+                  {% if user.hasRole(role) %}
+                  <li class="flex items-center space-x-1">
+                    <span class="ml-2">
+                      {# ✅ #} {{ label }}
+                      </span>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          {% endfor %}
+
+        </dd>
       </div>
     </dl>
   </div>
