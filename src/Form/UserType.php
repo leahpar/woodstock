@@ -28,6 +28,9 @@ class UserType extends AbstractType
             ->add('chefEquipe', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('conducteurTravaux', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

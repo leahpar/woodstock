@@ -80,6 +80,14 @@
                         </div>
                         
                         <div class="col-span-full">
+                            {{ form_label(form.conducteurTravaux, 'Conducteur de travaux') }}
+                            {{ form_widget(form.conducteurTravaux) }}
+                            <div class="formErrors">
+                                {{ form_errors(form.conducteurTravaux) }}
+                            </div>
+                        </div>
+
+                        <div class="col-span-full">
                             {{ form_label(form.plainPassword, 'Mot de passe') }}
                             {{ form_widget(form.plainPassword, {attr: {
                                 autoComplete: "off",

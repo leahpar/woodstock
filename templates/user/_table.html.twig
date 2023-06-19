@@ -11,6 +11,7 @@
                         <th scope="col">Login</th>
                         <th scope="col">Equipe</th>
                         <th scope="col">Chef d'equipe</th>
+                        <th scope="col">Conducteur de travaux</th>
                         <th scope="col">
                             <span class="sr-only">Actions</span>
                         </th>
@@ -28,8 +29,9 @@
                                 {% endif %}
                                 {{ user.username }}
                             </td>
-                            <td>{{ user.equipe }}</td>
-                            <td>{{ user.chefEquipe ? 'OUI' }}</td>
+                            <td>{{ user.equipe ?? '-' }}</td>
+                            <td>{{ user.chefEquipe ? 'OUI' : '-' }}</td>
+                            <td>{{ user.conducteurTravaux ? 'OUI' : '-' }}</td>
                             <td class="text-right font-medium sm:pr-3">
                                 <a href="{{ path('user_show', {'id': user.id}) }}"
                                    class="text-teal-600 hover:text-teal-900">Afficher</a>

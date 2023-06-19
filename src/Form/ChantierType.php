@@ -35,6 +35,7 @@ class ChantierType extends AbstractType
                 => $er->createQueryBuilder('u')
                     ->where('u.roles NOT LIKE :role')
                     ->setParameter('role', '%ROLE_SUPER_ADMIN%')
+                    ->andWhere('u.conducteurTravaux = true')
                     ->orderBy('u.nom', 'ASC'),
             ])
             ->add('encours', CheckboxType::class, [
