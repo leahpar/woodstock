@@ -69,6 +69,10 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[ORM\OneToMany(mappedBy: 'conducteurTravaux', targetEntity: Chantier::class)]
     private Collection $chantiers;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Certificat::class, orphanRemoval: true)]
+    #[ORM\OrderBy(['dateFin' => 'DESC', 'dateDebut' => 'DESC'])]
+    private Collection $certificats;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -77,6 +81,7 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
         $this->prets = new ArrayCollection();
         $this->pings = new ArrayCollection();
         $this->chantiers = new ArrayCollection();
+        $this->certificats = new ArrayCollection();
     }
 
     /**
@@ -273,6 +278,36 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
             // set the owning side to null (unless already changed)
             if ($chantier->getConducteurTravaux() === $this) {
                 $chantier->setConducteurTravaux(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Certificat>
+     */
+    public function getCertificats(): Collection
+    {
+        return $this->certificats;
+    }
+
+    public function addCertificat(Certificat $certificat): self
+    {
+        if (!$this->certificats->contains($certificat)) {
+            $this->certificats->add($certificat);
+            $certificat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCertificat(Certificat $certificat): self
+    {
+        if ($this->certificats->removeElement($certificat)) {
+            // set the owning side to null (unless already changed)
+            if ($certificat->getUser() === $this) {
+                $certificat->setUser(null);
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Certificat;
 use App\Entity\Notification;
 use App\Search\NotificationSearch;
 use App\Search\SearchableEntitySearch;
@@ -25,6 +26,22 @@ class NotificationRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Notification::class);
+    }
+
+    public function findNotifAlerteCertificat(Certificat $certificat)
+    {
+        $query = $this->createQueryBuilder('n')
+            ->andWhere('n.role = :role')
+            ->andWhere('n.target = :target')
+            ->andWhere('n.class = :class')
+            ->andWhere('n.date < :date')
+            ->setParameter('role', 'ROLE_CERTIFICAT_EDIT')
+            ->setParameter('target', $certificat->id)
+            ->setParameter('class', Certificat::class)
+            ->setParameter('date', $certificat->dateFin)
+            ->getQuery();
+
+        return $query->getResult();
     }
 
     /**

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}certificat index{% endblock %}
+
+{% block content %}
+
+    <div class="pageHeader">
+      <div class="title">
+        <h2>Gestion des certificats</h2>
+      </div>
+      <div class="buttons">
+        {% if is_granted('ROLE_CERTIFICAT_EDIT') %}
+            <a href="{{ path('certificat_new') }}" class="borderedButton">Ajouter un certificat</a>
+        {% endif %}
+
+      </div>
+    </div>
+
+
+      {{ include('certificat/_table.html.twig', { certificats: certificats }) }}
+      
+      
+{% endblock %}

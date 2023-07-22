@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="max-w-2xl mx-auto">
+
+        <div class="md:flex md:items-center md:justify-between mb-8">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                    {% if certificat.id %}
+                        {{ certificat.nom }}
+                    {% else %}
+                        Nouveau certificat
+                    {% endif %}
+                </h2>
+            </div>
+            <div class="mt-4 flex md:ml-4 md:mt-0">
+            </div>
+        </div>
+
+        <div class="formWrapper">
+
+            <form method="post">
+                {{ form_widget(form._token) }}
+
+                {{ form_errors(form) }}
+
+                <div class="space-y-12">
+                    <div class="formSection">
+
+                        <div>
+                            <h2>Détail du certificat</h2>
+                        </div>
+
+                        <div class="formGrid">
+
+                            <div class="col-span-full">
+                                {{ form_label(form.nom, 'Nom') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.nom) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.nom) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.user, 'Utilisateur') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.user) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.user) }}
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                {{ form_label(form.dateDebut, 'Date de début') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.dateDebut) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.dateDebut) }}
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                {{ form_label(form.dateFin, 'Date de fin') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.dateFin) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.dateFin) }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="formSection">
+
+                        <div>
+                            <h2>Alerte d'échéance</h2>
+                        </div>
+
+                        <div class="formGrid">
+
+                            <div class="sm:col-span-3">
+                                {{ form_label(form.alerteNb, ' ') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.alerteNb) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.alerteNb) }}
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                {{ form_label(form.alertePeriode, ' ') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.alertePeriode) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.alertePeriode) }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <button type="submit"
+                            class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+
+            {% if certificat.id %}
+                <form method="post" action="{{ path('certificat_delete', {'id': certificat.id}) }}"
+                      onsubmit="return confirm('Supprimer ce certificat ?');" class="contents">
+                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span
+                                class="sr-only">, {{ certificat.nom }}</span></button>
+                </form>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

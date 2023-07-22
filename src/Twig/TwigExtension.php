@@ -111,6 +111,10 @@ class TwigExtension extends AbstractExtension
                 'ROLE_MATERIEL_LIST' => 'Consulter le matériel',
                 'ROLE_MATERIEL_EDIT' => 'Modifier le matériel',
             ],
+            'Certificat' => [
+                'ROLE_CERTIFICAT_LIST' => 'Consulter les certificats',
+                'ROLE_CERTIFICAT_EDIT' => 'Modifier les certificats',
+            ],
             'Stock' => [
                 'ROLE_REFERENCE_LIST' => 'Consulter les références',
                 'ROLE_REFERENCE_EDIT' => 'Modifier les références',
