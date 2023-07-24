@@ -83,9 +83,34 @@ class ReferenceController extends CommonController
     {
         $historiqueStocks = $em->getRepository(Stock::class)->getHistoriqueReference($reference);
 
+        $stats = [];
+        $stocks = $em->getRepository(Stock::class)->findBy(['reference' => $reference]);
+        foreach ($stocks as $stock) {
+            // On ne compte pas le volume initial
+            // Ni les stocks en brouillon
+            if (!$stock->panier && $stock->panier->brouillon) continue;
+            $date = $stock->panier->date;
+
+            if (!isset($stats[$date->format('Y')])) $stats[$date->format('Y')] = ['E' => 0, 'S' => 0];
+            if (!isset($stats[$date->format('Y-m')])) $stats[$date->format('Y-m')] = ['E' => 0, 'S' => 0];
+
+            $stats[$date->format('Y')]['E'] += $stock->type === Stock::TYPE_ENTREE ? $stock->quantite : 0;
+            $stats[$date->format('Y')]['S'] += $stock->type === Stock::TYPE_SORTIE ? $stock->quantite : 0;
+            $stats[$date->format('Y-m')]['E'] += $stock->type === Stock::TYPE_ENTREE ? $stock->quantite : 0;
+            $stats[$date->format('Y-m')]['S'] += $stock->type === Stock::TYPE_SORTIE ? $stock->quantite : 0;
+        }
+        // Tri par clé (année / année-mois)
+        uksort(
+            $stats,
+            fn ($a, $b) => str_pad($b, 8, "-99") <=> str_pad($a, 8, "-99")
+        );
+
+        // TODO: ChartJS : https://ux.symfony.com/chartjs
+
         return $this->render('reference/show.html.twig', [
             'reference' => $reference,
             'historiqueStocks' => $historiqueStocks,
+            'stats' => $stats,
         ]);
     }
 
