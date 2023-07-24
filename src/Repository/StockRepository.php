@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Chantier;
 use App\Entity\Reference;
 use App\Entity\Stock;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -51,6 +52,23 @@ class StockRepository extends ServiceEntityRepository
             ->setParameter('debut', $date->format('Y-m-01 00:00:00'))
             ->setParameter('fin', $date->format('Y-m-t 23:59:59'))
         ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByChantier(Chantier $chantier)
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->select('s')
+            ->leftJoin('s.reference', 'r')
+            ->addSelect('r')
+            ->leftJoin('s.panier', 'p')
+            ->andWhere('p IS NOT NULL')
+            ->leftJoin('p.chantier', 'c')
+            ->andWhere('c IS NOT NULL')
+            ->andWhere('c = :chantier')
+            ->setParameter('chantier', $chantier)
+            ->orderBy('p.date', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
