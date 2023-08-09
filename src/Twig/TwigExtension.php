@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\Reference;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Twig\Extension\AbstractExtension;
@@ -27,6 +28,7 @@ class TwigExtension extends AbstractExtension
     {
         return [
             new TwigFunction('getRoles', [$this, 'getRoles']),
+            new TwigFunction('getCategories', [$this, 'getCategories']),
         ];
     }
 
@@ -85,6 +87,11 @@ class TwigExtension extends AbstractExtension
 
         $qrcode = new QRCode(new QROptions($options));
         return $qrcode->render($value);
+    }
+
+    public function getCategories(): array
+    {
+        return array_keys(Reference::CATEGORIES);
     }
 
     /**

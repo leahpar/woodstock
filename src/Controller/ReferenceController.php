@@ -26,10 +26,15 @@ class ReferenceController extends CommonController
 
     #[Route('/catalogue', name: 'reference_catalogue', methods: ['GET'])]
     #[IsGranted('ROLE_REFERENCE_LIST')]
-    public function catalogue(ReferenceRepository $referenceRepository): Response
+    public function catalogue(Request $request, ReferenceRepository $referenceRepository): Response
     {
+        $categories = $request->query->has('categorie')
+            ? $referenceRepository->findBy(['categorie' => $request->query->get('categorie')])
+            : $referenceRepository->findAll();
+
         return $this->render('reference/catalogue.html.twig', [
-            'references' => $referenceRepository->findAll(),
+            'references' => $categories,
+            'categorie' => $request->query->get('categorie'),
         ]);
     }
 
