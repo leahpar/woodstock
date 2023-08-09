@@ -145,3 +145,16 @@
 </div>
 
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+        // Vanilla JS
+        const src = document.querySelector('select#reference_categorie');
+        const dst = document.querySelector('select#reference_codeComptaCompte');
+
+        // On change SRC => update DST with data-code
+        src.addEventListener('change', function() {
+            dst.value = this.options[this.selectedIndex].dataset.code;
+        });
+    </script>
+{% endblock %}

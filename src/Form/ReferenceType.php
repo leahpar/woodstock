@@ -23,26 +23,17 @@ class ReferenceType extends AbstractType
             ])
             ->add('categorie', ChoiceType::class, [
                 'required' => true,
-                'choices' => [
-                    "BOULONNERIE CHARPENTE" => "BOULONNERIE CHARPENTE",
-                    "CARTOUCHE" => "CARTOUCHE",
-                    "CHARPENTE" => "CHARPENTE",
-                    "CHARPENTE DOUGLAS" => "CHARPENTE DOUGLAS",
-                    "ECHAFAUDAGE" => "ECHAFAUDAGE",
-                    "EQUERRES" => "EQUERRES",
-                    "ETRIERS" => "ETRIERS",
-                    "FIXATIONS" => "FIXATIONS",
-                    "OSSATURE" => "OSSATURE",
-                    "PANNEAUX" => "PANNEAUX",
-                    "ROULEAUX" => "ROULEAUX",
-                    "SABOTS" => "SABOTS",
-                ],
+                'choices' => Reference::categoriesChoices(),
+                'choice_attr' => Reference::categoriesCodeDataMapping(),
+                'placeholder' => ' ',
             ])
             ->add('reference', TextType::class, [
                 'required' => true,
             ])
-            ->add('codeComptaCompte', TextType::class, [
+            ->add('codeComptaCompte', ChoiceType::class, [
                 'required' => true,
+                'choices' => Reference::codeComptaChoices(),
+                'placeholder' => ' ',
             ])
             ->add('prix', NumberType::class, [
                 'html5' => true,

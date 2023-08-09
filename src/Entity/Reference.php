@@ -16,6 +16,27 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Reference extends LoggableEntity
 {
 
+    public const CATEGORIES = [
+        // "BOIS"
+        "CHARPENTE" => 60120000,
+        "OSSATURE" => 60120000,
+        "CHARPENTE DOUGLAS" => 60120000,
+        "LAMELLES"=> 60120000,
+        // "QUINCAILLERIE"
+        "EQUERRES" => 60130000,
+        "FIXATIONS" => 60130000,
+        "BOULONNERIE CHARPENTE" => 60130000,
+        "ROULEAUX" => 60130000,
+        "SABOTS" => 60130000,
+        "ETRIERS" => 60130000,
+        "CARTOUCHE" => 60130000,
+        // "AUTRES"
+        "ECHAFAUDAGE" => 60150000,
+        "PANNEAUX" => 60150000,
+        "CONSOMMABLE & PETIT EQUIPEMENT" => 60630000,
+        "EPI" => 60631000,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -92,6 +113,39 @@ class Reference extends LoggableEntity
     public function __toString(): string
     {
         return "[$this->reference] $this->nom ($this->conditionnement)";
+    }
+
+
+    public static function categoriesChoices(): array
+    {
+        return array_combine(
+            array_keys(self::CATEGORIES),
+            array_keys(self::CATEGORIES)
+        );
+    }
+    public static function categoriesCodeDataMapping(): array
+    {
+        // Return [categorie => ["data-code" => codeCompta]]
+        return array_combine(
+            array_keys(self::CATEGORIES),
+            array_map(
+                fn($codeCompta) => ["data-code" => $codeCompta],
+                array_values(self::CATEGORIES)
+            ),
+        );
+    }
+    public static function codeComptaChoices(): array
+    {
+        return array_combine(
+            array_map(
+                fn($codeCompta) => $codeCompta . " (" . implode(', ', array_keys(self::CATEGORIES, $codeCompta)) . ")",
+                array_unique(array_values(self::CATEGORIES))
+            ),
+            array_map(
+                fn($codeCompta) => $codeCompta,
+                array_unique(array_values(self::CATEGORIES))
+            ),
+        );
     }
 
 }
