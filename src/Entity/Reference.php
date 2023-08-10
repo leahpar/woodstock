@@ -32,7 +32,7 @@ class Reference extends LoggableEntity
         "CARTOUCHE" => 60130000,
         // "AUTRES"
         "ECHAFAUDAGE" => 60150000,
-        "PANNEAUX" => 60150000,
+        "PANNEAUX" => 60120000,
         "CONSOMMABLE & PETIT EQUIPEMENT" => 60630000,
         "EPI" => 60631000,
     ];
