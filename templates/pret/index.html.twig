@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="pageHeader">
+      <div class="title">
+        <h2>Prêts en cours</h2>
+      </div>
+    </div>
+
+      {{ include('pret/_table.html.twig', { prets: prets }) }}
+      
+      
+{% endblock %}

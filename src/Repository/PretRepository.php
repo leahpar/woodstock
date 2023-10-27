@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Pret;
+use App\Search\PretSearch;
+use App\Search\SearchableEntitySearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,51 +19,42 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PretRepository extends ServiceEntityRepository
 {
+    /** @use SearchableEntityRepositoryTrait<Pret> */
+    use SearchableEntityRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Pret::class);
     }
 
-    public function save(Pret $entity, bool $flush = false): void
+    private function getSearchQuery(SearchableEntitySearch $search): QueryBuilder
     {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
+        if (!($search instanceof PretSearch)) {
+            throw new \Exception("PretSearch expected (" . __FILE__ . ":" . __LINE__ . ")");
         }
+
+        $query = $this->createQueryBuilder('p');
+
+        $query->leftJoin('p.materiel', 'm')
+            ->addSelect('m')
+            ->leftJoin('p.user', 'u')
+            ->addSelect('u');
+
+        if ($search->enCours === true) {
+            $query->andWhere('p.dateRetour is null');
+        }
+
+        $order = $search->order ?? 'DESC';
+        switch ($search->tri) {
+            case 'date':
+                $query->orderBy('p.datePret', $order);
+                break;
+            case 'equipe':
+                $query->orderBy('m.equipe', $order);
+                break;
+        }
+
+        return $query;
     }
 
-    public function remove(Pret $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-//    /**
-//     * @return Pret[] Returns an array of Pret objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Pret
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
