@@ -5,11 +5,10 @@ namespace App\Controller;
 use App\Entity\Pret;
 use App\Search\PretSearch;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PretController extends AbstractController
+class PretController extends CommonController
 {
     #[Route('/prets', name: 'pret_index')]
     public function index(EntityManagerInterface $em): Response
@@ -22,4 +21,5 @@ class PretController extends AbstractController
             'prets' => $prets,
         ]);
     }
+
 }
