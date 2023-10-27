@@ -6,6 +6,7 @@ use App\Logger\LoggableEntity;
 use App\Repository\MaterielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -31,6 +32,9 @@ class Materiel extends LoggableEntity
     #[ORM\OneToMany(mappedBy: 'materiel', targetEntity: Pret::class)]
     #[ORM\OrderBy(['datePret' => 'DESC', 'id' => 'DESC'])]
     private Collection $prets;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $categorie = null;
 
     public function __construct()
     {
@@ -74,5 +78,6 @@ class Materiel extends LoggableEntity
     {
         return $this->getPret()?->user;
     }
+
 
 }

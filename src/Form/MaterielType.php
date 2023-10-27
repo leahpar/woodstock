@@ -19,6 +19,7 @@ class MaterielType extends AbstractType
                 'required' => true,
             ])
             ->add('reference', TextType::class)
+            ->add('categorie', TextType::class)
             ->add('proprietaire', EntityType::class, [
                 'class' => User::class,
                 'required' => false,

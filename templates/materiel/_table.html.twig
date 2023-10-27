@@ -9,6 +9,7 @@
                     <tr>
                         <th scope="col" class="min-w-[12rem]">Nom</th>
                         <th scope="col">Référence</th>
+                        <th scope="col">Catégorie</th>
                         <th scope="col">Propriétaire</th>
                         <th scope="col">Utilisateur actuel</th>
                         <th scope="col">
@@ -24,6 +25,7 @@
                         <tr>
                             <td class="font-medium !text-gray-900">{{ materiel.nom }}</td>
                             <td>{{ materiel.reference ?? '-' }}</td>
+                            <td>{{ materiel.categorie ?? '-' }}</td>
                             <td>{{ materiel.proprietaire ?? '-' }}</td>
                             <td>{{ materiel.emprunteur ?? '-' }}</td>
                             <td class="text-right font-medium sm:pr-3">
