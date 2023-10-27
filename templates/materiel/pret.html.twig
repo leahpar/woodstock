@@ -51,6 +51,16 @@
                             </div>
 
                             <div class="col-span-full">
+                                {{ form_label(form.dateRetourSouhaitee, 'Date de retour souhaitée') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.dateRetourSouhaitee) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.dateRetourSouhaitee) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
                                 {{ form_label(form.dateRetour, 'Date de retour') }}
                                 <div class="mt-2">
                                     {{ form_widget(form.dateRetour) }}

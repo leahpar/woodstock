@@ -7,7 +7,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 #[ORM\Entity(repositoryClass: PretRepository::class)]
 class Pret
 {
@@ -18,6 +17,9 @@ class Pret
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     public ?\DateTimeInterface $datePret = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?\DateTimeInterface $dateRetourSouhaitee = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     public ?\DateTimeInterface $dateRetour = null;

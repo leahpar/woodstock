@@ -20,6 +20,10 @@ class PretType extends AbstractType
                 'required' => !$options['rendu'],
                 'disabled' => $options['rendu'],
             ])
+            ->add('dateRetourSouhaitee', DateType::class, [
+                'widget' => 'single_text',
+                'required' => false,
+            ])
             ->add('dateRetour', DateType::class, [
                 'widget' => 'single_text',
                 'required' => $options['rendu'],
