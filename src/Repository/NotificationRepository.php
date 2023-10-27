@@ -46,9 +46,6 @@ class NotificationRepository extends ServiceEntityRepository
 
     /**
      * Génère la requête de recherche de cellules (Sans l'exécuter)
-     *
-     * @param SearchableEntitySearch $search
-     * @return QueryBuilder
      */
     private function getSearchQuery(SearchableEntitySearch $search): QueryBuilder
     {
