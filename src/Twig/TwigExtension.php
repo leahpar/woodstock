@@ -5,6 +5,8 @@ namespace App\Twig;
 use App\Entity\Reference;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -12,6 +14,12 @@ use Twig\TwigFunction;
 class TwigExtension extends AbstractExtension
 {
 
+    private Request $request;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->request = $requestStack->getCurrentRequest();
+    }
 
     public function getFilters(): array
     {
@@ -30,6 +38,7 @@ class TwigExtension extends AbstractExtension
             new TwigFunction('getRoles', [$this, 'getRoles']),
             new TwigFunction('getCategories', [$this, 'getCategories']),
             new TwigFunction('getSearchOrder', $this->getSearchOrder(...)),
+            new TwigFunction('getReferer', $this->getReferer(...)),
         ];
     }
 
@@ -140,5 +149,9 @@ class TwigExtension extends AbstractExtension
         return null;
     }
 
+    public function getReferer(): string
+    {
+        return $this->request->headers->get('referer', '/');
+    }
 
 }
