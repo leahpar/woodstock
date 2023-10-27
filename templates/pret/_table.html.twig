@@ -9,6 +9,7 @@
                     <tr>
                         <th scope="col" class="min-w-[12rem]">Matériel</th>
                         <th scope="col">Propriétaire</th>
+                        <th scope="col">Equipe</th>
                         <th scope="col">Utilisateur actuel</th>
                         <th scope="col">Equipe</th>
                         <th scope="col">Date de prêt</th>
@@ -29,6 +30,7 @@
                                 {{ pret.materiel.reference ?? '-' }}
                             </td>
                             <td>{{ pret.materiel.proprietaire ?? "--" }}</td>
+                            <td>{{ pret.materiel.proprietaire.equipe ?? '--' }}</td>
                             <td>{{ pret.user }}</td>
                             <td>{{ pret.user.equipe ?? '--' }}</td>
                             <td>{{ pret.datePret | date('d/m/Y') }}</td>

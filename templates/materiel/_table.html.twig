@@ -11,7 +11,9 @@
                         <th scope="col">Référence</th>
                         <th scope="col">Catégorie</th>
                         <th scope="col">Propriétaire</th>
+                        <th scope="col">Equipe</th>
                         <th scope="col">Utilisateur actuel</th>
+                        <th scope="col">Equipe</th>
                         <th scope="col">
                             <span class="sr-only">Actions</span>
                         </th>
@@ -27,7 +29,9 @@
                             <td>{{ materiel.reference ?? '-' }}</td>
                             <td>{{ materiel.categorie ?? '-' }}</td>
                             <td>{{ materiel.proprietaire ?? '-' }}</td>
+                            <td>{{ materiel.proprietaire.equipe ?? '-' }}</td>
                             <td>{{ materiel.emprunteur ?? '-' }}</td>
+                            <td>{{ materiel.emprunteur.equipe ?? '-' }}</td>
                             <td class="text-right font-medium sm:pr-3">
                                 <a href="{{ path('materiel_show', {'id': materiel.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ materiel.nom }}</span></a>
                                 {% if is_granted('ROLE_MATERIEL_EDIT') %}
