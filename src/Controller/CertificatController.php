@@ -6,6 +6,7 @@ use App\Entity\Certificat;
 use App\Entity\Stock;
 use App\Form\CertificatType;
 use App\Repository\CertificatRepository;
+use App\Search\CertificatSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +18,18 @@ class CertificatController extends CommonController
 {
     #[Route('/', name: 'certificat_index', methods: ['GET'])]
     #[IsGranted('ROLE_CERTIFICAT_LIST')]
-    public function index(CertificatRepository $certificatRepository): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
+        $search = new CertificatSearch($request->query->all());
+        $certificats = $em->getRepository(Certificat::class)->search($search);
+
         return $this->render('certificat/index.html.twig', [
-            'certificats' => $certificatRepository->findAll(),
+            'certificats' => $certificats,
+            'search' => [
+                'page' => $search->page,
+                'limit' => $search->limit,
+                'count' => $certificats->count(),
+            ],
         ]);
     }
 

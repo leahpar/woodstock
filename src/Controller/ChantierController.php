@@ -6,6 +6,7 @@ use App\Entity\Chantier;
 use App\Entity\Stock;
 use App\Form\ChantierType;
 use App\Repository\ChantierRepository;
+use App\Search\ChantierSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +19,18 @@ class ChantierController extends CommonController
 {
     #[Route('/', name: 'chantier_index', methods: ['GET'])]
     #[IsGranted('ROLE_CHANTIER_LIST')]
-    public function index(ChantierRepository $chantierRepository): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
+        $search = new ChantierSearch($request->query->all());
+        $chantiers = $em->getRepository(Chantier::class)->search($search);
+
         return $this->render('chantier/index.html.twig', [
-            'chantiers' => $chantierRepository->findAll(),
+            'chantiers' => $chantiers,
+            'search' => [
+                'page' => $search->page,
+                'limit' => $search->limit,
+                'count' => $chantiers->count(),
+            ],
         ]);
     }
 

@@ -18,6 +18,7 @@
       </div>
     </div>
 
-      {{ include('chantier/_table.html.twig', { 'chantiers': chantiers }) }}
-      
+    {{ include('chantier/_table.html.twig', { 'chantiers': chantiers }) }}
+    {{ include('parts/pagination.html.twig', {'search': search}) }}
+
 {% endblock %}

@@ -3,7 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Log;
+use App\Search\ChantierSearch;
+use App\Search\LogSearch;
+use App\Search\SearchableEntitySearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,51 +20,38 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LogRepository extends ServiceEntityRepository
 {
+    /** @use SearchableEntityRepositoryTrait<Log> */
+    use SearchableEntityRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Log::class);
     }
 
-    public function save(Log $entity, bool $flush = false): void
+    private function getSearchQuery(SearchableEntitySearch $search): QueryBuilder
     {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
+        if (!($search instanceof LogSearch)) {
+            throw new \Exception("LogSearch expected (" . __FILE__ . ":" . __LINE__ . ")");
         }
+
+        $query = $this->createQueryBuilder('l');
+
+        if ($search->search) {
+            //$query->where('c.nom LIKE :search')
+            //    ->orWhere('c.referenceTravaux LIKE :search')
+            //    ->orWhere('c.referenceEtude LIKE :search')
+            //    ->setParameter('search', "%{$search->search}%");
+        }
+
+        $order = $search->order ?? 'DESC';
+        switch ($search->tri) {
+            default:
+            case 'date':
+                $query->orderBy('l.date', $order);
+                break;
+        }
+
+        return $query;
     }
 
-    public function remove(Log $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-//    /**
-//     * @return Log[] Returns an array of Log objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('l')
-//            ->andWhere('l.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('l.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Log
-//    {
-//        return $this->createQueryBuilder('l')
-//            ->andWhere('l.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

@@ -1,0 +1,20 @@
+{#
+    Macro pour générer un lien de tri dans un tableau
+    - field : le champ de recherche à trier
+    - label : le label à afficher
+#}
+{% macro thSort(field, label) %}
+    {% set route = app.request.get('_route') %}
+    {% set params = app.request.query.all %}
+    {% set order = getSearchOrder(params, field) %}
+    {% set newOrder = order == 'asc' ? 'desc' : 'asc' %}
+    <a href="{{ path(route, params|merge({tri: field, order: newOrder})) }}">
+        {{ label }}
+        {% if order == 'asc' %}
+            <span>⬇️</span>
+        {% elseif order == 'desc' %}
+            <span>⬆️</span>
+        {% endif %}
+    </a>
+{% endmacro %}
+

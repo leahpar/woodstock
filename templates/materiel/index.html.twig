@@ -13,8 +13,7 @@
       </div>
     </div>
 
+    {{ include('materiel/_table.html.twig', { materiels: materiels }) }}
+    {{ include('parts/pagination.html.twig', {'search': search}) }}
 
-      {{ include('materiel/_table.html.twig', { materiels: materiels }) }}
-      
-      
 {% endblock %}

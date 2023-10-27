@@ -3,7 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Reference;
+use App\Search\NotificationSearch;
+use App\Search\ReferenceSearch;
+use App\Search\SearchableEntitySearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,37 +20,56 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ReferenceRepository extends ServiceEntityRepository
 {
+    /** @use SearchableEntityRepositoryTrait<Reference> */
+    use SearchableEntityRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Reference::class);
     }
 
-    public function save(Reference $entity, bool $flush = false): void
+    private function getSearchQuery(SearchableEntitySearch $search): QueryBuilder
     {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
+        if (!($search instanceof ReferenceSearch)) {
+            throw new \Exception("ReferenceSearch expected (" . __FILE__ . ":" . __LINE__ . ")");
         }
-    }
 
-    public function remove(Reference $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
+        $query = $this->createQueryBuilder('r');
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
+        $query->leftJoin('r.stocks', 's')
+            ->addSelect('s');
+
+        if ($search->search) {
+            $query->where('r.nom LIKE :search')
+                ->orWhere('r.reference LIKE :search')
+                ->setParameter('search', "%{$search->search}%");
         }
+
+        $order = $search->order ?? 'ASC';
+        switch ($search->tri) {
+            case 'nom':
+            default:
+                $query->orderBy('r.nom', $order);
+                break;
+            case 'marque':
+                $query->orderBy('r.marque', $order);
+                break;
+            case 'reference':
+                $query->orderBy('r.reference', $order);
+                break;
+//            case 'stock':
+//                $query->leftJoin('r.stocks', 's')
+//                $query->orderBy('r.st', $order);
+//                break;
+            case 'seuil':
+                $query->orderBy('r.seuil', $order);
+                break;
+            case 'prix':
+                $query->orderBy('r.prix', $order);
+                break;
+        }
+
+        return $query;
     }
 
-    public function findBySearch(string $search)
-    {
-        $qb = $this->createQueryBuilder('r');
-
-        $qb->where('r.nom LIKE :search')
-            ->orWhere('r.reference LIKE :search')
-            ->setParameter('search', '%' . $search . '%');
-
-        return $qb->getQuery()->getResult();
-    }
 }

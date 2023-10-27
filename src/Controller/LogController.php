@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Log;
+use App\Search\LogSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -12,13 +15,10 @@ class LogController extends AbstractController
 {
     #[Route('/logs', name: 'logs')]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(EntityManagerInterface $em)
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
-        // TODO: add pagination & search
-        $logs = $em->getRepository(Log::class)->findBy(
-            [],
-            ['date' => 'DESC'],
-        );
+        $search = new LogSearch($request->query->all());
+        $logs = $em->getRepository(Log::class)->search($search);
 
         /** @var Log $log */
         foreach ($logs as $log) {
@@ -29,6 +29,11 @@ class LogController extends AbstractController
 
         return $this->render('log/index.html.twig', [
             'logs' => $logs,
+            'search' => [
+                'page' => $search->page,
+                'limit' => $search->limit,
+                'count' => $logs->count(),
+            ],
         ]);
     }
 }

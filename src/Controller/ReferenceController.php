@@ -6,6 +6,7 @@ use App\Entity\Reference;
 use App\Entity\Stock;
 use App\Form\ReferenceType;
 use App\Repository\ReferenceRepository;
+use App\Search\ReferenceSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +18,17 @@ class ReferenceController extends CommonController
 {
     #[Route('/', name: 'reference_index', methods: ['GET'])]
     #[IsGranted('ROLE_REFERENCE_LIST')]
-    public function index(ReferenceRepository $referenceRepository): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
+        $search = new ReferenceSearch($request->query->all());
+        $references = $em->getRepository(Reference::class)->search($search);
         return $this->render('reference/index.html.twig', [
-            'references' => $referenceRepository->findAll(),
+            'references' => $references,
+            'search' => [
+                'page' => $search->page,
+                'limit' => $search->limit,
+                'count' => $references->count(),
+            ],
         ]);
     }
 

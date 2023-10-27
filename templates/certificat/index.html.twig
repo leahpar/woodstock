@@ -17,7 +17,8 @@
     </div>
 
 
-      {{ include('certificat/_table.html.twig', { certificats: certificats }) }}
-      
+    {{ include('certificat/_table.html.twig', { certificats: certificats }) }}
+    {{ include('parts/pagination.html.twig', {'search': search}) }}
+
       
 {% endblock %}

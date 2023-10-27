@@ -7,13 +7,12 @@
 
                     <thead>
                     <tr>
-{#                        <th scope="col" class="relative">#}
-{#                            <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
-{#                        </th>#}
-                        <th scope="col" class="min-w-[12rem]">Certificat</th>
-                        <th scope="col">Utilisateur</th>
-                        <th scope="col">Date de début</th>
-                        <th scope="col">Date de fin</th>
+                        {% from "parts/macros.html.twig" import thSort %}
+
+                        <th scope="col" class="min-w-[12rem]">{{ thSort('nom', 'Certificat') }}</th>
+                        <th scope="col">{{ thSort('user', 'Utilisateur') }}</th>
+                        <th scope="col">{{ thSort('dateDebut', 'Date de début') }}</th>
+                        <th scope="col">{{ thSort('DateFin', 'Date de fin') }}</th>
                         <th scope="col">Alerte échéance</th>
                         <th scope="col">
                             <span class="sr-only">Actions</span>
@@ -25,15 +24,7 @@
 
                     {% for certificat in certificats %}
 
-                        <!-- Selected: "bg-gray-50" -->
                         <tr>
-{#                            <td class="relative">#}
-{#                                <!-- Selected row marker, only show when row is selected. -->#}
-{#                                <!-- <div class="absolute inset-y-0 left-0 w-0.5 bg-teal-600"></div> -->#}
-
-{#                                <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
-{#                            </td>#}
-                            <!-- Selected: "text-teal-600", Not Selected: "text-gray-900" -->
                             <td class="font-medium !text-gray-900">{{ certificat.nom }}</td>
                             <td>{{ certificat.user }}</td>
                             <td>{{ certificat.dateDebut ? certificat.dateDebut|date('d/m/Y') : '-' }}</td>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Search\UserSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,13 +17,18 @@ class UserController extends CommonController
 {
     #[Route('/', name: 'user_index', methods: ['GET'])]
     #[IsGranted('ROLE_USER_LIST')]
-    public function index(UserRepository $userRepository): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
-        $users = $userRepository->findBy([], ['nom' => 'ASC']);
-        $users = array_filter($users, fn($user) => !$user->hasRole('ROLE_SUPER_ADMIN'));
+        $search = new UserSearch($request->query->all());
+        $users = $em->getRepository(User::class)->search($search);
 
         return $this->render('user/index.html.twig', [
             'users' => $users,
+            'search' => [
+                'page' => $search->page,
+                'limit' => $search->limit,
+                'count' => $users->count(),
+            ],
         ]);
     }
 

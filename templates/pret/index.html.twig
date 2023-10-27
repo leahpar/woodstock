@@ -8,7 +8,7 @@
       </div>
     </div>
 
-      {{ include('pret/_table.html.twig', { prets: prets }) }}
-      
-      
+    {{ include('pret/_table.html.twig', { prets: prets }) }}
+    {{ include('parts/pagination.html.twig', {'search': search}) }}
+
 {% endblock %}

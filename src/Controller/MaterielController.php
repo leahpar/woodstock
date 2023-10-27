@@ -7,6 +7,7 @@ use App\Entity\Pret;
 use App\Form\MaterielType;
 use App\Form\PretType;
 use App\Repository\MaterielRepository;
+use App\Search\MaterielSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,18 @@ class MaterielController extends CommonController
 {
     #[Route('/', name: 'materiel_index', methods: ['GET'])]
     #[IsGranted('ROLE_MATERIEL_LIST')]
-    public function index(MaterielRepository $materielRepository): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
+        $search = new MaterielSearch($request->query->all());
+        $materiels = $em->getRepository(Materiel::class)->search($search);
+
         return $this->render('materiel/index.html.twig', [
-            'materiels' => $materielRepository->findAll(),
+            'materiels' => $materiels,
+            'search' => [
+                'page' => $search->page,
+                'limit' => $search->limit,
+                'count' => $materiels->count(),
+            ],
         ]);
     }
 

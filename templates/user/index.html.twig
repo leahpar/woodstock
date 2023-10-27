@@ -13,4 +13,6 @@
     </div>
 
     {{ include('user/_table.html.twig', {'users': users}) }}
+    {{ include('parts/pagination.html.twig', {'search': search}) }}
+
 {% endblock %}

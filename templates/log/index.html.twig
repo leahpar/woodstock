@@ -15,5 +15,6 @@
 
 
     {{ include('log/_table.html.twig', { logs: logs }) }}
+    {{ include('parts/pagination.html.twig', {'search': search}) }}
 
 {% endblock %}

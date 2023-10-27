@@ -29,6 +29,7 @@ class TwigExtension extends AbstractExtension
         return [
             new TwigFunction('getRoles', [$this, 'getRoles']),
             new TwigFunction('getCategories', [$this, 'getCategories']),
+            new TwigFunction('getSearchOrder', $this->getSearchOrder(...)),
         ];
     }
 
@@ -128,6 +129,15 @@ class TwigExtension extends AbstractExtension
                 'ROLE_REFERENCE_STOCK' => 'Modifier les stocks',
             ],
         ];
+    }
+
+    public function getSearchOrder($search, $field): ?string
+    {
+        // $search = route.params
+        if (($search['tri']??null) == $field) {
+            return $search['order']??null;
+        }
+        return null;
     }
 
 

@@ -7,17 +7,16 @@
 
                     <thead>
                     <tr>
-{#                        <th scope="col" class="relative">#}
-{#                            <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
-{#                        </th>#}
-                        <th scope="col" class="min-w-[12rem]">Nom</th>
-                        <th scope="col">Marque</th>
-                        <th scope="col">Catégorie</th>
-                        <th scope="col">Référence</th>
+                        {% from "parts/macros.html.twig" import thSort %}
+
+                        <th scope="col" class="min-w-[12rem]">{{ thSort('nom', 'Nom') }}</th>
+                        <th scope="col">{{ thSort('marque', 'Marque') }}</th>
+                        <th scope="col">{{ thSort('categorie', 'Catégorie') }}</th>
+                        <th scope="col">{{ thSort('reference', 'Référence') }}</th>
                         <th scope="col">Stock</th>
                         <th scope="col">Conditionnement</th>
-                        <th scope="col">Seuil</th>
-                        <th scope="col">Prix</th>
+                        <th scope="col">{{ thSort('seuil', 'Seuil') }}</th>
+                        <th scope="col">{{ thSort('prix', 'Prix') }}</th>
                         <th scope="col">
                             <span class="sr-only">Actions</span>
                         </th>

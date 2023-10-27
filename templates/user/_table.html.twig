@@ -7,11 +7,13 @@
 
                     <thead>
                     <tr>
-                        <th scope="col" class="min-w-[12rem]">Nom</th>
+                        {% from "parts/macros.html.twig" import thSort %}
+
+                        <th scope="col" class="min-w-[12rem]">{{ thSort('nom', 'Nom') }}</th>
                         <th scope="col">Login</th>
-                        <th scope="col">Equipe</th>
-                        <th scope="col">Chef d'equipe</th>
-                        <th scope="col">Conducteur de travaux</th>
+                        <th scope="col">{{ thSort('equipe', 'Equipe') }}</th>
+                        <th scope="col">{{ thSort('chefEquipe', 'Chef d\'equipe') }}</th>
+                        <th scope="col">{{ thSort('conducteurTravaux', 'Conducteur de travaux') }}</th>
                         <th scope="col">
                             <span class="sr-only">Actions</span>
                         </th>

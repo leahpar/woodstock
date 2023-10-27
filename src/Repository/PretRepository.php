@@ -37,8 +37,10 @@ class PretRepository extends ServiceEntityRepository
 
         $query->leftJoin('p.materiel', 'm')
             ->addSelect('m')
-            ->leftJoin('p.user', 'u')
-            ->addSelect('u');
+            ->leftJoin('m.proprietaire', 'u1')
+            ->addSelect('u1')
+            ->leftJoin('p.user', 'u2')
+            ->addSelect('u2');
 
         if ($search->enCours === true) {
             $query->andWhere('p.dateRetour is null');
@@ -46,11 +48,26 @@ class PretRepository extends ServiceEntityRepository
 
         $order = $search->order ?? 'DESC';
         switch ($search->tri) {
-            case 'date':
+            case 'materiel':
+                $query->orderBy('m.nom', $order);
+                break;
+            case 'proprietaire':
+                $query->orderBy('u1.nom', $order);
+                break;
+            case 'equipeA':
+                $query->orderBy('u1.equipe', $order);
+                break;
+            case 'emprunteur':
+                $query->orderBy('u2.nom', $order);
+                break;
+            case 'equipeB':
+                $query->orderBy('u2.equipe', $order);
+                break;
+            case 'datePret':
                 $query->orderBy('p.datePret', $order);
                 break;
-            case 'equipe':
-                $query->orderBy('m.equipe', $order);
+            case 'dateRetourSouhaitee':
+                $query->orderBy('p.dateRetourSouhaitee', $order);
                 break;
         }
 
