@@ -14,7 +14,7 @@ use Twig\TwigFunction;
 class TwigExtension extends AbstractExtension
 {
 
-    private Request $request;
+    private ?Request $request = null;
 
     public function __construct(RequestStack $requestStack)
     {
