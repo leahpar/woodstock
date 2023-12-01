@@ -1,6 +1,4 @@
 // Doit être à la racine de public
-// const cacheName = "woodstock-v1"
-// const offlineFallbackPage = "offline.html"
 
 self.addEventListener("install", installEvent => {
     // installEvent.waitUntil(

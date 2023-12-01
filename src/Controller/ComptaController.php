@@ -64,6 +64,5 @@ class ComptaController extends CommonController
         $em->flush();
 
         return $exportService->exportComptable($data, $filename);
-
     }
 }
