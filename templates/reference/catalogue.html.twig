@@ -1,32 +1,85 @@
 <html>
 <head>
 <title>Catalogue</title>
+
+<style type="text/css">
+body{
+    padding: 0;
+    margin: 0;
+}
+    .page{
+        outline: 1px solid green;
+        
+        box-sizing: border-box;
+        
+        width: 210mm;
+        height: 297mm;
+        
+        padding: 11mm 4.5mm;
+        
+        break-after: page;
+        
+        display: grid;
+        grid-template-columns: repeat(5,38.1mm);
+        grid-template-rows: repeat(13,21.2mm);
+        column-gap: 3mm;
+        
+        font-family: Arial;
+    }
+    .case{
+        outline: 1px solid #eee;
+        display: flex;
+        overflow: hidden;
+    }
+    .case h2{
+        margin: 0px;
+        font-size: 12px;
+    }
+    .case p{
+        margin: 0px;
+        font-size: 9px;
+    }
+    .case div{
+        padding: 2mm 0;
+        padding-right: 2mm;
+    }
+</style>
+
 </head>
 <body>
 
-<h1>Catalogue des références</h1>
+<!--<h1>Catalogue des références</h1>
 {% if categorie %}
 <h2>{{ categorie }}</h2>
 {% endif %}
+-->
 
-<div style="
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-evenly;
-">
+<div class="page">
 {% for ref in references %}
-<div style="width: 280px; height: 330px; text-align: center; ">
-    <h2>{{ ref.nom }}</h2>
-    <p>
-        {{ ref.reference }}
-        {{ ref.marque }}
-        {{ ref.categorie }}
-        {{ ref.conditionnement }}
-    </p>
-    <img src="{{ ref.reference|qrcode }}" width="200px" height="200px">
+    
+<div class="case">
+    <img src="{{ ref.reference|qrcode }}">
+    <div>
+        <h2>{{ ref.nom }}</h2>
+        <p>
+            {{ ref.reference }}
+            {{ ref.marque }}
+            {{ ref.categorie }}
+            {{ ref.conditionnement }}
+        </p>
+    </div>
+    
+    
 </div>
+
+    {% if loop.index is divisible by(65) %}
+    </div>
+    <div class="page">
+    {% endif %}
+    
 {% endfor %}
 </div>
+
 
 </body>
 </html>
