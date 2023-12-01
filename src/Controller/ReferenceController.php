@@ -97,6 +97,12 @@ class ReferenceController extends CommonController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // #5 MAJ prix stock rétroactif
+            /** @var Stock $stock */
+            foreach ($reference->stocks as $stock) {
+                $stock->prix = $reference->prix;
+            }
+
             $this->log('update', $reference);
             $em->flush();
 
