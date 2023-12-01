@@ -90,13 +90,21 @@ class PanierController extends CommonController
     }
 
     #[Route('/{id}/del', name: 'panier_del', methods: ['DELETE'])]
-    public function del(EntityManagerInterface $em, Panier $panier)
+    public function del(Request $request, EntityManagerInterface $em, Panier $panier)
     {
         $em->remove($panier);
         $em->flush();
 
-        $this->addFlash("success", "Le panier a été annulé");
-        return $this->redirectToRoute('dashboard');
+        if ($panier->brouillon) {
+            $this->addFlash("success", "Le panier a été annulé");
+            return $this->redirectToRoute('dashboard');
+        }
+        else {
+            // TODO: check rôle
+            $this->addFlash("success", "La sortie de stock a été supprimée");
+            $referer = $request->headers->get('referer', '/');
+            return $this->redirect($referer);
+        }
     }
 
     #[Route('/{id}/del/{stock}', name: 'panier_stock_del')]
