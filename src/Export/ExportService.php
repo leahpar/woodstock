@@ -2,6 +2,7 @@
 
 namespace App\Export;
 
+use App\Entity\Reference;
 use \PhpOffice\PhpSpreadsheet as PS;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -27,6 +28,22 @@ class ExportService
         }
     }
 
+    private function getWriterResponse(PS\Spreadsheet $spreadsheet, string $filename)
+    {
+        $writer = PS\IOFactory::createWriter($spreadsheet, "Xlsx");
+
+        // Stream du fichier dans une réponse symfony
+        $response = new StreamedResponse();
+        $response->headers->set('Content-Type', 'application/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Cache-Control', 'private');
+
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->setCallback(function () use ($writer) {
+            $writer->save("php://output");
+        });
+        return $response;
+    }
+
     public function exportComptable(array $data, string $filename)
     {
 
@@ -43,20 +60,51 @@ class ExportService
             'Crédit'      => NumberFormat::FORMAT_NUMBER_00,
         ];
         $this->formatDataAndAutosize($sheet, $colonnes, $data);
+        return $this->getWriterResponse($spreadsheet, $filename);
+    }
 
-        $writer = PS\IOFactory::createWriter($spreadsheet, "Xlsx");
+    public function exportInventaire(array $references, string $filename)
+    {
+        $spreadsheet = new PS\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
 
-        // Stream du fichier dans une réponse symfony
-        $response = new StreamedResponse();
-        $response->headers->set('Content-Type', 'application/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Cache-Control', 'private');
+        $colonnes = [
+            'Référence'       => NumberFormat::FORMAT_TEXT,
+            'Nom'             => NumberFormat::FORMAT_TEXT,
+            'Marque'          => NumberFormat::FORMAT_TEXT,
+            'Catégorie'       => NumberFormat::FORMAT_TEXT,
+            'Conditionnement' => NumberFormat::FORMAT_TEXT,
+            'CodeCompta'      => NumberFormat::FORMAT_TEXT,
+            'Seuil'           => NumberFormat::FORMAT_NUMBER,
+            'Prix'            => NumberFormat::FORMAT_NUMBER_00,
+            'Stock'           => NumberFormat::FORMAT_NUMBER,
+            'PrixStock'       => NumberFormat::FORMAT_NUMBER_00,
+        ];
 
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
-        $response->setCallback(function () use ($writer) {
-            $writer->save("php://output");
-        });
-        return $response;
+        $data = array_map(
+            fn (Reference $ref) => [
+                $ref->reference,
+                $ref->nom,
+                $ref->marque,
+                $ref->categorie,
+                $ref->conditionnement,
+                $ref->codeComptaCompte,
+                $ref->seuil,
+                $ref->prix,
+                $ref->getQuantite(),
+                $ref->getPrixStock(),
+            ],
+            $references
+        );
 
+        $this->formatDataAndAutosize($sheet, $colonnes, $data);
+
+        // TOTAL
+        //$range = "J1:J".($sheet->getHighestRow());
+        //$cell = "J".($sheet->getHighestRow()+1);
+        //$sheet->setCellValue($cell, "=SUM($range)");
+
+        return $this->getWriterResponse($spreadsheet, $filename);
     }
 
 }

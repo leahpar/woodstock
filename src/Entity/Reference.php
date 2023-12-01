@@ -110,6 +110,20 @@ class Reference extends LoggableEntity
         return $quantite;
     }
 
+    public function getPrixStock(): float
+    {
+        $prix = 0.0;
+        /** @var Stock $stock */
+        foreach ($this->stocks as $stock) {
+            if ($stock->type === Stock::TYPE_ENTREE) {
+                $prix += $stock->quantite * $stock->prix;
+            } else {
+                $prix -= $stock->quantite * $stock->prix;
+            }
+        }
+        return $prix;
+    }
+
     public function __toString(): string
     {
         return "[$this->reference] $this->nom ($this->conditionnement)";

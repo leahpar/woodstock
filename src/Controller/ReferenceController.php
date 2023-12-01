@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Reference;
 use App\Entity\Stock;
+use App\Export\ExportService;
 use App\Form\ReferenceType;
 use App\Repository\ReferenceRepository;
 use App\Search\ReferenceSearch;
@@ -44,6 +45,24 @@ class ReferenceController extends CommonController
             'references' => $categories,
             'categorie' => $request->query->get('categorie'),
         ]);
+    }
+
+    #[Route('/export', name: 'reference_export')]
+    #[IsGranted('ROLE_REFERENCE_LIST')]
+    public function export(EntityManagerInterface $em, ExportService $exportService)
+    {
+        $search = new ReferenceSearch(['limit' => 0]);
+        $references = $em->getRepository(Reference::class)->search($search);
+
+        $filename = "export-inventaire-";
+        $filename .= date('Ymd');
+        $filename .= ".xlsx";
+
+        // Log
+        $this->log("export_inventaire", null);
+        $em->flush();
+
+        return $exportService->exportInventaire($references->getIterator()->getArrayCopy(), $filename);
     }
 
     #[Route('/new', name: 'reference_new', methods: ['GET', 'POST'])]
@@ -137,5 +156,6 @@ class ReferenceController extends CommonController
 
         return $this->redirectToRoute('reference_index', [], Response::HTTP_SEE_OTHER);
     }
+
 
 }
