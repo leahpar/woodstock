@@ -13,6 +13,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: MaterielRepository::class)]
 class Materiel extends LoggableEntity
 {
+
+    public const CATEGORIES = [
+        "Electroportatif",
+        "Petit outillage",
+        "Echafaudage",
+        "Outillage filaire",
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

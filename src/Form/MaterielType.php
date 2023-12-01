@@ -6,6 +6,7 @@ use App\Entity\Materiel;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +20,9 @@ class MaterielType extends AbstractType
                 'required' => true,
             ])
             ->add('reference', TextType::class)
-            ->add('categorie', TextType::class)
+            ->add('categorie', ChoiceType::class, [
+                'choices' => array_combine(Materiel::CATEGORIES, Materiel::CATEGORIES),
+            ])
             ->add('proprietaire', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
