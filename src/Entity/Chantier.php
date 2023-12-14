@@ -46,9 +46,13 @@ class Chantier extends LoggableEntity
     #[ORM\ManyToOne(inversedBy: 'chantiers')]
     public ?User $conducteurTravaux = null;
 
+    #[ORM\OneToMany(mappedBy: 'chantier', targetEntity: Intervention::class)]
+    private Collection $interventions;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
+        $this->interventions = new ArrayCollection();
     }
 
     public function addPanier(Panier $panier): self
@@ -82,6 +86,36 @@ class Chantier extends LoggableEntity
             fn (float $total, Panier $panier) => $total + $panier->getPrix(),
             0
         );
+    }
+
+    /**
+     * @return Collection<int, Intervention>
+     */
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
+    }
+
+    public function addIntervention(Intervention $intervention): static
+    {
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions->add($intervention);
+            $intervention->setChantier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervention(Intervention $intervention): static
+    {
+        if ($this->interventions->removeElement($intervention)) {
+            // set the owning side to null (unless already changed)
+            if ($intervention->getChantier() === $this) {
+                $intervention->setChantier(null);
+            }
+        }
+
+        return $this;
     }
 
 

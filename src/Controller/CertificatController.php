@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Certificat;
-use App\Entity\Stock;
 use App\Form\CertificatType;
-use App\Repository\CertificatRepository;
 use App\Search\CertificatSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,7 +66,7 @@ class CertificatController extends CommonController
             $this->log('update', $certificat);
             $em->flush();
 
-            return $this->redirectToRoute('certificat_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToLastSearch(defaultRoute: 'certificat_index');
         }
 
         return $this->render('certificat/edit.html.twig', [

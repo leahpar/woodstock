@@ -106,7 +106,7 @@ class ReferenceController extends CommonController
             $this->log('update', $reference);
             $em->flush();
 
-            return $this->redirectToRoute('reference_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToLastSearch(defaultRoute: 'reference_index');
         }
 
         return $this->render('reference/edit.html.twig', [

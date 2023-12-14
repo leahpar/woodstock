@@ -69,7 +69,7 @@ class MaterielController extends CommonController
             $this->log('update', $materiel);
             $em->flush();
 
-            return $this->redirectToRoute('materiel_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToLastSearch(defaultRoute: 'materiel_index');
         }
 
         return $this->render('materiel/edit.html.twig', [

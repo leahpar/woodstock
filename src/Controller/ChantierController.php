@@ -69,7 +69,7 @@ class ChantierController extends CommonController
             $this->log('update', $chantier);
             $em->flush();
 
-            return $this->redirectToRoute('chantier_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToLastSearch(defaultRoute: 'chantier_index');
         }
 
         return $this->render('chantier/edit.html.twig', [

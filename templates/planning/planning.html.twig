@@ -1,0 +1,105 @@
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="relative">
+
+                <table class="mainTable">
+
+                    <thead>
+                    <tr>
+                        <th scope="col" class="min-w-[12rem]">Poseurs</th>
+                        <th scope="col">Heures</th>
+                        {% for date in dates %}
+                            <th scope="col">
+                                {{ date|format_datetime(pattern="eeee dd/MM", locale="fr") }}
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for poseur in poseurs %}
+                        <tr>
+                            <td class="font-medium !text-gray-900">{{ poseur }}</td>
+                            <td class="font-medium !text-gray-900">
+                                {{ totalHeuresPoseurs[poseur.id]??0 }}h
+                                {{ totalHeuresPoseurs[poseur.id]??0 > 39 ? '⚠️' }}
+                            </td>
+                            {% for k,date in dates %}
+                                <td>
+                                    {% for intervention in interventions[poseur.id][k]??[] %}
+                                        <p class="showInterventionButton"
+                                            data-intervention="{{ intervention.id }}">
+                                            {{ intervention.chantier }} - {{ intervention.heures }}h
+                                        </p>
+
+                                    {% endfor %}
+                                    <button class="addInterventionButton"
+                                            data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
+                                            data-poseur="{{ poseur.id }}">➕</button>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<dialog onclick="event.target==this && this.close()"></dialog>
+
+
+<script>
+    const modal = document.querySelector('dialog');
+    const addButtons = document.querySelectorAll('.addInterventionButton');
+    const showButtons = document.querySelectorAll('.showInterventionButton');
+
+    addButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const date = button.dataset.date;
+            const poseur = button.dataset.poseur;
+            fetch('{{ path('planning_new') }}' + '?date='+date+'&poseur='+poseur+'&heures=7')
+                .then(response => response.text())
+                .then(html => {
+                    modal.innerHTML = html;
+                    modal.showModal();
+                });
+        });
+    });
+
+    showButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const id = button.dataset.intervention;
+            fetch('{{ path('planning_edit', {id:'XX'}) }}'.replace('XX', id))
+                .then(response => response.text())
+                .then(html => {
+                    modal.innerHTML = html;
+                    modal.showModal();
+                });
+        });
+    });
+</script>
+{#
+<script>
+    const form = document.querySelector('#addInterventionForm');
+    const modal = document.querySelector('dialog');
+    const buttons = document.querySelectorAll('.addInterventionButton');
+
+    const inputDate = form.querySelector('input[name*=date]');
+    const inputPoseur = form.querySelector('select[name*=poseur]');
+    const inputHeures = form.querySelector('input[name*=heures]');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            inputDate.value = button.dataset.date;
+            //inputPoseur.value = button.dataset.poseur;
+            inputPoseur.tomselect.setValue(button.dataset.poseur);
+            inputHeures.value = 7;
+            modal.showModal();
+        });
+    });
+</script>
+#}

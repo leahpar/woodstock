@@ -1,0 +1,75 @@
+{% if intervention.id > 0 %}
+    {% set action = path('planning_edit', {id: intervention.id}) %}
+{% else %}
+    {% set action = path('planning_new') %}
+{% endif %}
+
+<form method="post" action="{{ action }}">
+
+    {{ form_widget(form._token) }}
+    {{ form_errors(form) }}
+
+    <div class="space-y-12">
+        <div class="formSection">
+
+            <div>
+                <h2>Détail de l'intervention</h2>
+            </div>
+
+            <div class="formGrid">
+
+                <div class="col-span-full">
+                    {{ form_label(form.date, 'Date') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.date) }}
+                    </div>
+                </div>
+
+                <div class="col-span-full">
+                    {{ form_label(form.poseur, 'Poseur') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.poseur) }}
+                    </div>
+                </div>
+
+                <div class="col-span-full">
+                    {{ form_label(form.chantier, 'Chantier') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.chantier) }}
+                    </div>
+                </div>
+
+                <div class="col-span-full">
+                    {{ form_label(form.heures, 'Nombres d\'heures') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.heures) }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-6 flex items-center justify-end gap-x-6">
+{#        <button type="button"#}
+{#                onclick="this.closest('dialog').close();"#}
+{#                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">#}
+{#            Annuler#}
+{#        </button>#}
+        {% if intervention.id %}
+        <button type="submit"
+                onclick="return confirm('Supprimer cette intervention ?');"
+                formaction="{{ path('planning_delete', {id: intervention.id}) }}"
+                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+            Supprimer
+        </button>
+        {% endif %}
+        <button type="submit"
+                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+            Enregistrer
+        </button>
+    </div>
+</form>
+
+

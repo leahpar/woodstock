@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planning{% endblock %}
+
+{% block content %}
+
+    <div class="pageHeader">
+        <div class="title">
+            <h2>Planning</h2>
+        </div>
+
+        <div class="buttons">
+            {% set route = app.request.get('_route') %}
+            {% set params = app.request.query.all %}
+            <a class="borderedButton" href="{{ path(route, params|merge({semaine: semaine-1})) }}">Semaine précédente</a>
+            <a class="borderedButton" href="{{ path(route, params|merge({semaine: semaine+1})) }}">Semaine suivante</a>
+{#            <a href="{{ path('planning_new') }}" class="button">Ajouter une intervention</a>#}
+        </div>
+    </div>
+
+    <twig:planning
+            interventions="{{ interventions }}"
+            dateStart="{{ dateStart }}"
+            dateEnd="{{ dateEnd }}">
+    </twig:planning>
+
+{% endblock %}

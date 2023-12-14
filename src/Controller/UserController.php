@@ -77,7 +77,7 @@ class UserController extends CommonController
             $this->log('update', $user);
             $em->flush();
 
-            return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToLastSearch(defaultRoute: 'user_index');
         }
 
         return $this->render('user/edit.html.twig', [
