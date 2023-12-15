@@ -29,7 +29,8 @@
                                 <td>
                                     {% for intervention in interventions[poseur.id][k]??[] %}
                                         <p class="showInterventionButton"
-                                            data-intervention="{{ intervention.id }}">
+                                           style="cursor:pointer; border: 1px solid black;"
+                                           data-intervention="{{ intervention.id }}">
                                             {% if intervention.activite == 'chantier' %}
                                                 {{ intervention.chantier }}
                                                 - {{ intervention.type }}
@@ -38,8 +39,8 @@
                                             {% endif %}
                                             - {{ intervention.heures }}h
                                         </p>
-
                                     {% endfor %}
+
                                     <button class="addInterventionButton"
                                             data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
                                             data-poseur="{{ poseur.id }}">➕</button>
