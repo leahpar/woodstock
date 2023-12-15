@@ -31,7 +31,8 @@
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stat['E'] }}</td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stat['S'] }}</td>
                   </tr>
-              
+                {% else %}
+                  <tr><td colspan="99">&nbsp;</td></tr>
                 {% endfor %}
               
             </tbody>

@@ -47,6 +47,7 @@ class Chantier extends LoggableEntity
     public ?User $conducteurTravaux = null;
 
     #[ORM\OneToMany(mappedBy: 'chantier', targetEntity: Intervention::class)]
+    #[ORM\OrderBy(['date' => 'DESC'])]
     private Collection $interventions;
 
     public function __construct()
@@ -96,27 +97,26 @@ class Chantier extends LoggableEntity
         return $this->interventions;
     }
 
-    public function addIntervention(Intervention $intervention): static
+    public function getHeuresPlanifiees(?string $type = null): int
     {
-        if (!$this->interventions->contains($intervention)) {
-            $this->interventions->add($intervention);
-            $intervention->setChantier($this);
-        }
-
-        return $this;
+        return array_reduce(
+            $this->interventions->toArray(),
+            fn (int $total, Intervention $int)
+                => $total + ($type && $int->type == $type ? $int->heures : 0),
+            0
+        );
     }
 
-    public function removeIntervention(Intervention $intervention): static
+    public function getMontantPlanifie(?string $type = null): int
     {
-        if ($this->interventions->removeElement($intervention)) {
-            // set the owning side to null (unless already changed)
-            if ($intervention->getChantier() === $this) {
-                $intervention->setChantier(null);
-            }
-        }
-
-        return $this;
+        return array_reduce(
+            $this->interventions->toArray(),
+            fn (int $total, Intervention $int)
+                => $total + ($type && $int->type == $type ? $int->heures * $int->tauxHoraire : 0),
+            0
+        );
     }
+
 
 
 }

@@ -52,7 +52,6 @@ class Planning
         foreach ($this->poseurs as $id => $poseur) {
             $this->totalHeuresPoseurs[$id] = 0;
             $this->interventions[$id] ??= [];
-            dump($this->interventions[$id]);
             foreach ($this->interventions[$id] as $interventions) {
                 $this->totalHeuresPoseurs[$id] += array_reduce($interventions, fn($t, Intervention $i) => $t + $i->heures, 0);
             }

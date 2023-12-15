@@ -2,7 +2,7 @@
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
             <h1 class="text-base font-semibold leading-6 text-gray-900">{#Historique#}</h1>
-            <p class="mt-2 text-sm text-gray-700">Historique des mouvements de stock pour cet chantier.</p>
+            <p class="mt-2 text-sm text-gray-700">Historique des mouvements de stock pour ce chantier.</p>
         </div>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         </div>
@@ -51,7 +51,7 @@
                                 </td>
                             </tr>
                             {% for stock in panier.stocks %}
-                                <tr class="bg-gray-50">
+                                <tr>
                                     {% set ref = stock.reference %}
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                         <a href="{{ is_granted('ROLE_REFERENCE_LIST') ? path('reference_show', {id: ref.id}) }}">
@@ -62,6 +62,8 @@
                                     <td></td>
                                 </tr>
                             {% endfor %}
+                        {% else %}
+                            <tr><td colspan="99">&nbsp;</td></tr>
                         {% endfor %}
 
                         </tbody>

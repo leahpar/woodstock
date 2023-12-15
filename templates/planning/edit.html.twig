@@ -33,6 +33,13 @@
                 </div>
 
                 <div class="col-span-full">
+                    {{ form_label(form.activite, 'Activité') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.activite) }}
+                    </div>
+                </div>
+
+                <div class="col-span-full">
                     {{ form_label(form.chantier, 'Chantier') }}
                     <div class="mt-2">
                         {{ form_widget(form.chantier) }}
@@ -40,7 +47,14 @@
                 </div>
 
                 <div class="col-span-full">
-                    {{ form_label(form.heures, 'Nombres d\'heures') }}
+                    {{ form_label(form.type, 'Type d\'intervention') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.type) }}
+                    </div>
+                </div>
+
+                <div class="col-span-full">
+                    {{ form_label(form.heures, 'Heures planifiées') }}
                     <div class="mt-2">
                         {{ form_widget(form.heures) }}
                     </div>
@@ -71,5 +85,4 @@
         </button>
     </div>
 </form>
-
 

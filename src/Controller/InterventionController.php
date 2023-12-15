@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\InterventionType;
 use App\Search\InterventionSearch;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,7 +45,10 @@ class InterventionController extends CommonController
 
     #[Route('/new', name: 'planning_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_PLANNING_EDIT')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $em,
+    ): Response
     {
         $intervention = new Intervention();
 
@@ -54,6 +58,15 @@ class InterventionController extends CommonController
             $poseur = $em->getRepository(User::class)->find($request->query->getInt('poseur'));
             $intervention->poseur = $poseur;
         }
+
+        // Config manuelle
+        $intervention->tauxHoraire = 50;
+        dump($intervention->date, $intervention->date?->format('N'));
+        $intervention->heures = match ((int)$intervention->date?->format('N')) {
+            1, 2, 3 => 10,
+            4 => 9,
+            default => 0,
+        };
 
         $form = $this->createForm(InterventionType::class, $intervention);
         $form->handleRequest($request);

@@ -45,8 +45,18 @@
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.commentaire }}</dd>
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-900">Prix culumé</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.prix | number_format(2, ',', ' ') }} €</dd>
+                    <dt class="text-sm font-medium text-gray-900">Prix cumulé stock</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.prix|euro }}</dd>
+                </div>
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-900">heures planifiées - atelier</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heuresPlanifiees('atelier') }} H</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montantPlanifie('atelier')|euro }}</dd>
+                </div>
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-900">heures planifiées - pose</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heuresPlanifiees('pose') }} H</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montantPlanifie('pose')|euro }}</dd>
                 </div>
             </dl>
         </div>
@@ -54,5 +64,6 @@
 
     {{ include('chantier/_historique_volumes.html.twig') }}
     {{ include('chantier/_historique_stock.html.twig') }}
+    {{ include('chantier/_historique_planning.html.twig') }}
 
 {% endblock %}

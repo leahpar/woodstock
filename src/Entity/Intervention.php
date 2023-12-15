@@ -25,9 +25,18 @@ class Intervention extends LoggableEntity
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     public ?User $poseur = null;
 
+    #[ORM\Column]
+    public ?string $activite = null;
+
     #[ORM\ManyToOne(inversedBy: 'interventions')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     public ?Chantier $chantier = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?string $type = null;
+
+    #[ORM\Column]
+    public float $tauxHoraire = 0;
 
     //TODO Intervention pas chantier
 
@@ -36,7 +45,7 @@ class Intervention extends LoggableEntity
         return implode(' - ', [
             $this->date->format('d/m/Y'),
             $this->poseur,
-            $this->chantier ?? 'autre',
+            $this->activite,
             $this->heures . 'h',
         ]);
     }
@@ -46,16 +55,18 @@ class Intervention extends LoggableEntity
         return implode(' - ', [
             $this->date->format('d/m/Y'),
             $this->poseur->nom,
+            $this->activite,
             $this->heures . 'h',
         ]);
     }
     public function toLogArray(): array
     {
-        return [
+        return array_filter([
             //'poseur' => $this->poseur->nom,
             //'heures' => $this->heures . 'h',
-            'chantier' => $this->chantier ? $this->chantier->nom : 'autre',
-        ];
+            'chantier' => ($this->activite == 'chantier') ? $this->chantier?->nom : null,
+            'type' => ($this->activite == 'chantier') ? $this->type : null,
+        ]);
     }
 
 }
