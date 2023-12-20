@@ -48,6 +48,13 @@ class InterventionRepository extends ServiceEntityRepository
             $query->andWhere('i.date <= :dateEnd')->setParameter('dateEnd', $search->dateEnd);
         }
 
+        if ($search->poseur) {
+            $query->andWhere('i.poseur = :poseur')->setParameter('poseur', $search->poseur);
+        }
+        elseif ($search->equipe) {
+            $query->andWhere('u.equipe = :equipe')->setParameter('equipe', $search->equipe);
+        }
+
         $order = $search->order ?? 'DESC';
         switch ($search->tri) {
             default:

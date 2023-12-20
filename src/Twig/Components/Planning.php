@@ -4,6 +4,7 @@ namespace App\Twig\Components;
 
 use App\Entity\Intervention;
 use App\Entity\User;
+use App\Search\InterventionSearch;
 use App\Search\UserSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
@@ -22,7 +23,7 @@ class Planning
         private readonly EntityManagerInterface $em,
     ){}
 
-    public function mount($interventions, string $dateStart, string $dateEnd): void
+    public function mount($interventions, InterventionSearch $search): void
     {
         /** @var Intervention $intervention */
         foreach ($interventions as $intervention) {
@@ -31,8 +32,8 @@ class Planning
             $this->interventions[$poseur->id][$date][] = $intervention;
         }
 
-        $date = new \DateTime($dateStart);
-        $end = new \DateTime($dateEnd);
+        $date = new \DateTime($search->dateStart);
+        $end = new \DateTime($search->dateEnd);
         while ($date <= $end) {
             if ($date->format('N') < 6) {
                 $this->dates[$date->format('Y-m-d')] = clone $date;
@@ -40,9 +41,14 @@ class Planning
             $date->modify('+1 day');
         }
 
-        $poseurs = $this->em->getRepository(User::class)->search(
-            new UserSearch(['page' => 1, 'limit' => 0])
-        )->getIterator()->getArrayCopy();
+        if ($search->poseur) {
+            $poseurs = [$search->poseur];
+        }
+        else {
+            $poseurs = $this->em->getRepository(User::class)->search(
+                new UserSearch(['limit' => 0, 'equipe' => $search->equipe])
+            )->getIterator()->getArrayCopy();
+        }
 
         $this->poseurs = array_combine(
             array_map(fn(user $p) => $p->id, $poseurs),

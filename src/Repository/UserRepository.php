@@ -68,6 +68,10 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('search', "%{$search->search}%");
         }
 
+        if ($search->equipe) {
+            $query->andWhere('u.equipe = :equipe')->setParameter('equipe', $search->equipe);
+        }
+
         $order = $search->order ?? 'ASC';
         switch ($search->tri) {
             default:

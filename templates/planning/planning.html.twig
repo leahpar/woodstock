@@ -41,9 +41,11 @@
                                         </p>
                                     {% endfor %}
 
+                                    {% if is_granted('ROLE_PLANNING_EDIT') %}
                                     <button class="addInterventionButton"
                                             data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
                                             data-poseur="{{ poseur.id }}">➕</button>
+                                    {% endif %}
                                 </td>
                             {% endfor %}
                         </tr>
@@ -56,8 +58,10 @@
     </div>
 </div>
 
-<dialog onclick="event.target===this && this.close()"></dialog>
 
+<dialog onclick="event.target===this && this.close()">
+    {# planning/edit.html.twig #}
+</dialog>
 
 <script>
     const modal = document.querySelector('dialog');

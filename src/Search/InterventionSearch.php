@@ -2,11 +2,16 @@
 
 namespace App\Search;
 
+use App\Entity\User;
+
 class InterventionSearch extends SearchableEntitySearch
 {
     public ?int $semaine = null;
     public ?string $dateStart = null;
     public ?string $dateEnd = null;
+
+    public ?string $equipe = null;
+    public ?User $poseur = null;
 
     public function setSemaine(int $s)
     {

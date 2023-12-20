@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Form\InterventionType;
 use App\Search\InterventionSearch;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,14 +29,28 @@ class InterventionController extends CommonController
             'limit'     => 0,
             ...$request->query->all(),
         ]);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $search->equipe = null;
+            $search->poseur = null;
+        }
+        elseif ($user->chefEquipe) {
+            $search->equipe = $user->equipe;
+        }
+        else {
+            $search->poseur = $user;
+        }
+
         $interventions = $em->getRepository(Intervention::class)->search($search);
 
         $form = $this->createForm(InterventionType::class);
 
         return $this->render('planning/index.html.twig', [
             'interventions' => $interventions->getIterator(),
-            'dateStart' => $search->dateStart,
-            'dateEnd' => $search->dateEnd,
+            'search' => $search,
             'semaine' => $search->semaine,
             'form' => $form,
         ]);
@@ -109,14 +122,14 @@ class InterventionController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'planning_show', methods: ['GET'])]
-    #[IsGranted('ROLE_PLANNING_LIST')]
-    public function show(Intervention $intervention): Response
-    {
-        return $this->render('planning/show.html.twig', [
-            'intervention' => $intervention,
-        ]);
-    }
+//    #[Route('/{id}', name: 'planning_show', methods: ['GET'])]
+//    #[IsGranted('ROLE_PLANNING_LIST')]
+//    public function show(Intervention $intervention): Response
+//    {
+//        return $this->render('planning/show.html.twig', [
+//            'intervention' => $intervention,
+//        ]);
+//    }
 
     #[Route('/{id}', name: 'planning_delete', methods: ['POST'])]
     #[IsGranted('ROLE_PLANNING_EDIT')]
