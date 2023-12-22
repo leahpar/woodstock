@@ -111,7 +111,7 @@ class TwigExtension extends AbstractExtension
     {
         return [
             'Admin' => [
-                'ROLE_ADMIN' => 'Administrateur',
+                'ROLE_ADMIN' => 'Administrateur (accès à tout)',
             ],
             'Compta' => [
                 'ROLE_COMPTA' => 'Exports comptables',

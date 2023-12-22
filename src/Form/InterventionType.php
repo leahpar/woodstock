@@ -17,11 +17,15 @@ class InterventionType extends AbstractType
     {
         $builder
             ->add('date', Type\DateType::class, [
-                'html5' => true, // pour avoir le type="date" dans le html
+                'html5' => true, // type="date"
                 'widget' => 'single_text',
             ])
-            ->add('heures', Type\NumberType::class, [
-                'html5' => true, // pour avoir le type="number" dans le html
+            ->add('heuresPlanifiees', Type\NumberType::class, [
+                'html5' => true, // type="number"
+                'attr' => ['min' => 0, 'max' => 10],
+            ])
+            ->add('heuresPassees', Type\NumberType::class, [
+                'html5' => true, // type="number"
                 'attr' => ['min' => 0, 'max' => 10],
             ])
             ->add('poseur', EntityType::class, [

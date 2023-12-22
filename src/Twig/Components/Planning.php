@@ -17,7 +17,8 @@ class Planning
     private array $interventions = [];
     private array $poseurs = [];
     private array $dates = [];
-    private array $totalHeuresPoseurs = [];
+    private array $totalHeuresPlanifieesPoseurs = [];
+    private array $totalHeuresPasseesPoseurs = [];
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -56,10 +57,20 @@ class Planning
         );
 
         foreach ($this->poseurs as $id => $poseur) {
-            $this->totalHeuresPoseurs[$id] = 0;
+            $this->totalHeuresPlanifieesPoseurs[$id] = 0;
+            $this->totalHeuresPasseesPoseurs[$id] = 0;
             $this->interventions[$id] ??= [];
             foreach ($this->interventions[$id] as $interventions) {
-                $this->totalHeuresPoseurs[$id] += array_reduce($interventions, fn($t, Intervention $i) => $t + $i->heures, 0);
+                $this->totalHeuresPlanifieesPoseurs[$id] += array_reduce(
+                    $interventions,
+                    fn($t, Intervention $i) => $t + $i->heuresPlanifiees,
+                    0
+                );
+                $this->totalHeuresPasseesPoseurs[$id] += array_reduce(
+                    $interventions,
+                    fn($t, Intervention $i) => $t + $i->heuresPassees,
+                    0
+                );
             }
         }
     }
@@ -83,9 +94,15 @@ class Planning
     }
 
     #[ExposeInTemplate]
-    public function getTotalHeuresPoseurs(): array
+    public function getTotalHeuresPlanifieesPoseurs(): array
     {
-        return $this->totalHeuresPoseurs;
+        return $this->totalHeuresPlanifieesPoseurs;
+    }
+
+    #[ExposeInTemplate]
+    public function getTotalHeuresPasseesPoseurs(): array
+    {
+        return $this->totalHeuresPasseesPoseurs;
     }
 
 }

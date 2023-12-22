@@ -8,7 +8,8 @@
                     <thead>
                     <tr>
                         <th scope="col" class="min-w-[12rem]">Poseurs</th>
-                        <th scope="col">Heures</th>
+                        <th scope="col">Heures planifiées</th>
+                        <th scope="col">Heures passées</th>
                         {% for date in dates %}
                             <th scope="col">
                                 {{ date|format_datetime(pattern="eeee dd/MM", locale="fr") }}
@@ -22,8 +23,12 @@
                         <tr>
                             <td class="font-medium !text-gray-900">{{ poseur }}</td>
                             <td class="font-medium !text-gray-900">
-                                {{ totalHeuresPoseurs[poseur.id]??0 }}h
-                                {{ totalHeuresPoseurs[poseur.id]??0 > 39 ? '⚠️' }}
+                                {{ totalHeuresPlanifieesPoseurs[poseur.id] }}h
+                                {{ totalHeuresPlanifieesPoseurs[poseur.id] > 39 ? '⚠️' }}
+                            </td>
+                            <td class="font-medium !text-gray-900">
+                                {{ totalHeuresPasseesPoseurs[poseur.id] }}h
+                                {{ totalHeuresPasseesPoseurs[poseur.id] > 39 ? '⚠️' }}
                             </td>
                             {% for k,date in dates %}
                                 <td>
@@ -37,15 +42,15 @@
                                             {% else %}
                                                 {{ intervention.activite }}
                                             {% endif %}
-                                            - {{ intervention.heures }}h
+                                            - {{ intervention.heuresPlanifiees }}h
                                         </p>
                                     {% endfor %}
 
-                                    {% if is_granted('ROLE_PLANNING_EDIT') %}
+{#                                    {% if is_granted('ROLE_PLANNING_EDIT') %}#}
                                     <button class="addInterventionButton"
                                             data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
                                             data-poseur="{{ poseur.id }}">➕</button>
-                                    {% endif %}
+{#                                    {% endif %}#}
                                 </td>
                             {% endfor %}
                         </tr>

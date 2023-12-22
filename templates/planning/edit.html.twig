@@ -54,9 +54,16 @@
                 </div>
 
                 <div class="col-span-full">
-                    {{ form_label(form.heures, 'Heures planifiées') }}
+                    {{ form_label(form.heuresPlanifiees, 'Heures planifiées') }}
                     <div class="mt-2">
-                        {{ form_widget(form.heures) }}
+                        {{ form_widget(form.heuresPlanifiees) }}
+                    </div>
+                </div>
+
+                <div class="col-span-full">
+                    {{ form_label(form.heuresPassees, 'Heures passées') }}
+                    <div class="mt-2">
+                        {{ form_widget(form.heuresPassees) }}
                     </div>
                 </div>
 

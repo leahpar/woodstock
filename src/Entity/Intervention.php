@@ -19,7 +19,10 @@ class Intervention extends LoggableEntity
     public ?\DateTime $date = null;
 
     #[ORM\Column]
-    public ?int $heures = null;
+    public ?int $heuresPlanifiees = null;
+
+    #[ORM\Column]
+    public ?int $heuresPassees = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -46,7 +49,7 @@ class Intervention extends LoggableEntity
             $this->date->format('d/m/Y'),
             $this->poseur,
             $this->activite,
-            $this->heures . 'h',
+            $this->heuresPlanifiees . 'h',
         ]);
     }
 
@@ -56,7 +59,7 @@ class Intervention extends LoggableEntity
             $this->date->format('d/m/Y'),
             $this->poseur->nom,
             $this->activite,
-            $this->heures . 'h',
+            $this->heuresPlanifiees . 'h',
         ]);
     }
     public function toLogArray(): array

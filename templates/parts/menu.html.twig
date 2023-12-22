@@ -142,7 +142,8 @@
                   <div class="text-xs font-semibold leading-6 text-teal-400">Expérimental</div>
                   <ul role="list" class="-mx-2 mt-2 space-y-1">
 
-                    {% if is_granted('ROLE_PLANNING_LIST') %}
+{#                    {% if is_granted('ROLE_PLANNING_LIST') %}#}
+                    {% if is_granted('ROLE_ADMIN') %}
                       <li>
                         {% set class = (route starts with 'planning') ? current : default %}
                         <a href="{{ path('planning_index') }}" class="{{ class }}">
@@ -291,7 +292,8 @@
             <div class="text-xs font-semibold leading-6 text-teal-400">Expérimental</div>
             <ul role="list" class="-mx-2 mt-2 space-y-1">
 
-              {% if is_granted('ROLE_PLANNING_LIST') %}
+{#              {% if is_granted('ROLE_PLANNING_LIST') %}#}
+              {% if is_granted('ROLE_ADMIN') %}
                 <li>
                   {% set class = (route starts with 'planning') ? current : default %}
                   <a href="{{ path('planning_index') }}" class="{{ class }}">

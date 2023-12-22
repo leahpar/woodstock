@@ -97,26 +97,28 @@ class Chantier extends LoggableEntity
         return $this->interventions;
     }
 
-    public function getHeuresPlanifiees(?string $type = null): int
+    public function getHeures(string $truc, string $type): int
     {
+        // $truc = 'planifie' ou 'passe'
+        // $type = 'atelier' ou 'pose'
         return array_reduce(
             $this->interventions->toArray(),
             fn (int $total, Intervention $int)
-                => $total + ($type && $int->type == $type ? $int->heures : 0),
+                => $total + ($type && $int->type == $type ? $int->{'heures'.ucfirst($truc).'es'} : 0),
             0
         );
     }
 
-    public function getMontantPlanifie(?string $type = null): int
+    public function getMontant(string $truc, string $type): int
     {
+        // $truc = 'planifie' ou 'passe'
+        // $type = 'atelier' ou 'pose'
         return array_reduce(
             $this->interventions->toArray(),
             fn (int $total, Intervention $int)
-                => $total + ($type && $int->type == $type ? $int->heures * $int->tauxHoraire : 0),
+                => $total + ($type && $int->type == $type ? $int->{'heures'.ucfirst($truc).'es'} * $int->tauxHoraire : 0),
             0
         );
     }
-
-
 
 }

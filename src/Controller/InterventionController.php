@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class InterventionController extends CommonController
 {
     #[Route('/', name: 'planning_index', methods: ['GET'])]
-    #[IsGranted('ROLE_PLANNING_LIST')]
+//    #[IsGranted('ROLE_PLANNING_LIST')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         if (!$request->query->has('semaine')) {
@@ -57,7 +57,7 @@ class InterventionController extends CommonController
     }
 
     #[Route('/new', name: 'planning_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_PLANNING_EDIT')]
+//    #[IsGranted('ROLE_PLANNING_EDIT')]
     public function new(
         Request $request,
         EntityManagerInterface $em,
@@ -67,7 +67,7 @@ class InterventionController extends CommonController
 
         if ($request->isMethod('GET')) {
             $intervention->date = new \DateTime($request->query->get('date'));
-            $intervention->heures = $request->query->getInt('heures');
+            $intervention->heuresPlanifiees = $request->query->getInt('heures');
             $poseur = $em->getRepository(User::class)->find($request->query->getInt('poseur'));
             $intervention->poseur = $poseur;
         }
@@ -75,7 +75,7 @@ class InterventionController extends CommonController
         // Config manuelle
         $intervention->tauxHoraire = 50;
         dump($intervention->date, $intervention->date?->format('N'));
-        $intervention->heures = match ((int)$intervention->date?->format('N')) {
+        $intervention->heuresPlanifiees = match ((int)$intervention->date?->format('N')) {
             1, 2, 3 => 10,
             4 => 9,
             default => 0,
@@ -101,7 +101,7 @@ class InterventionController extends CommonController
     }
 
     #[Route('/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_PLANNING_EDIT')]
+//    #[IsGranted('ROLE_PLANNING_EDIT')]
     public function edit(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(InterventionType::class, $intervention);
@@ -132,7 +132,7 @@ class InterventionController extends CommonController
 //    }
 
     #[Route('/{id}', name: 'planning_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_PLANNING_EDIT')]
+//    #[IsGranted('ROLE_PLANNING_EDIT')]
     public function delete(Intervention $intervention, EntityManagerInterface $em): Response
     {
         $em->remove($intervention);
