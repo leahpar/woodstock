@@ -6,10 +6,7 @@ use App\Entity\Certificat;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,15 +15,15 @@ class CertificatType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class, [
+            ->add('nom', Type\TextType::class, [
                 'required' => true,
             ])
-            ->add('dateDebut', DateType::class, [
+            ->add('dateDebut', Type\DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
                 'html5' => true,
             ])
-            ->add('dateFin', DateType::class, [
+            ->add('dateFin', Type\DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
                 'html5' => true,
@@ -42,10 +39,10 @@ class CertificatType extends AbstractType
                     ->setParameter('role', '%ROLE_SUPER_ADMIN%')
                     ->orderBy('u.nom', 'ASC'),
             ])
-            ->add('alerteNb', NumberType::class, [
+            ->add('alerteNb', Type\NumberType::class, [
                 'required' => false,
             ])
-            ->add('alertePeriode', ChoiceType::class, [
+            ->add('alertePeriode', Type\ChoiceType::class, [
                 'required' => false,
                 'placeholder' => '',
                 'choices' => [
@@ -55,6 +52,11 @@ class CertificatType extends AbstractType
                 ],
             ])
         ;
+        $builder->add('_referer', Type\HiddenType::class, [
+            'required' => false,
+            'mapped' => false,
+        ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

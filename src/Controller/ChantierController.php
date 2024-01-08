@@ -64,12 +64,21 @@ class ChantierController extends CommonController
         $form = $this->createForm(ChantierType::class, $chantier);
         $form->handleRequest($request);
 
+        if ($request->isMethod("GET")) {
+            $referer = $request->headers->get('referer');
+            $form->get('_referer')->setData($referer);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->log('update', $chantier);
             $em->flush();
 
-            return $this->redirectToLastSearch(defaultRoute: 'chantier_index');
+            if ($form->get('_referer')->getData()) {
+                return $this->redirect($form->get('_referer')->getData());
+            }
+            return $this->redirectToRoute('chantier_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToLastSearch(defaultRoute: 'chantier_index');
         }
 
         return $this->render('chantier/edit.html.twig', [

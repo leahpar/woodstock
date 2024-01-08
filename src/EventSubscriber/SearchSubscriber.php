@@ -24,7 +24,7 @@ class SearchSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::REQUEST => 'onKernelRequest',
+            //KernelEvents::REQUEST => 'onKernelRequest',
         ];
     }
 
@@ -35,8 +35,16 @@ class SearchSubscriber implements EventSubscriberInterface
 
         if (in_array($route, self::SEARCH_ROUTES)) {
             $request->getSession()->set('search', $request->query->get('search'));
+//            array_map(
+//                fn ($key) => $request->getSession()->set($key, $request->query->get($key)),
+//                $request->query->all()
+//            );
         } elseif (in_array($route, self::NOT_SEARCH_ROUTES)) {
             $request->getSession()->remove('search');
+//            array_map(
+//                fn ($key) => $request->getSession()->set($key, $request->query->get($key)),
+//                $request->query->all()
+//            );
         }
     }
 }

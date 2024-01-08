@@ -6,8 +6,7 @@ use App\Entity\Materiel;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,11 +15,11 @@ class MaterielType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class, [
+            ->add('nom', Type\TextType::class, [
                 'required' => true,
             ])
-            ->add('reference', TextType::class)
-            ->add('categorie', ChoiceType::class, [
+            ->add('reference', Type\TextType::class)
+            ->add('categorie', Type\ChoiceType::class, [
                 'choices' => array_combine(Materiel::CATEGORIES, Materiel::CATEGORIES),
             ])
             ->add('proprietaire', EntityType::class, [
@@ -35,6 +34,12 @@ class MaterielType extends AbstractType
                     ->orderBy('u.nom', 'ASC'),
             ])
         ;
+
+        $builder->add('_referer', Type\HiddenType::class, [
+            'required' => false,
+            'mapped' => false,
+        ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

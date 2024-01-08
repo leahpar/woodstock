@@ -6,7 +6,6 @@ use App\Entity\Role;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,13 +24,18 @@ class UserType extends AbstractType
                 'multiple' => true,
             ])
             ->add('equipe')
-            ->add('chefEquipe', CheckboxType::class, [
+            ->add('chefEquipe', Type\CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('conducteurTravaux', CheckboxType::class, [
+            ->add('conducteurTravaux', Type\CheckboxType::class, [
                 'required' => false,
             ])
         ;
+        $builder->add('_referer', Type\HiddenType::class, [
+            'required' => false,
+            'mapped' => false,
+        ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

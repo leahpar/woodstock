@@ -61,12 +61,21 @@ class CertificatController extends CommonController
         $form = $this->createForm(CertificatType::class, $certificat);
         $form->handleRequest($request);
 
+        if ($request->isMethod("GET")) {
+            $referer = $request->headers->get('referer');
+            $form->get('_referer')->setData($referer);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->log('update', $certificat);
             $em->flush();
 
-            return $this->redirectToLastSearch(defaultRoute: 'certificat_index');
+            if ($form->get('_referer')->getData()) {
+                return $this->redirect($form->get('_referer')->getData());
+            }
+            return $this->redirectToRoute('certificat_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToLastSearch(defaultRoute: 'certificat_index');
         }
 
         return $this->render('certificat/edit.html.twig', [

@@ -4,9 +4,7 @@ namespace App\Form;
 
 use App\Entity\Reference;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,32 +13,32 @@ class ReferenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class, [
+            ->add('nom', Type\TextType::class, [
                 'required' => true,
             ])
-            ->add('marque', TextType::class, [
+            ->add('marque', Type\TextType::class, [
                 'required' => false,
             ])
-            ->add('categorie', ChoiceType::class, [
+            ->add('categorie', Type\ChoiceType::class, [
                 'required' => true,
                 'choices' => Reference::categoriesChoices(),
                 'choice_attr' => Reference::categoriesCodeDataMapping(),
                 'placeholder' => ' ',
             ])
-            ->add('reference', TextType::class, [
+            ->add('reference', Type\TextType::class, [
                 'required' => true,
             ])
-            ->add('codeComptaCompte', ChoiceType::class, [
+            ->add('codeComptaCompte', Type\ChoiceType::class, [
                 'required' => true,
                 'choices' => Reference::codeComptaChoices(),
                 'placeholder' => ' ',
             ])
-            ->add('prix', NumberType::class, [
+            ->add('prix', Type\NumberType::class, [
                 'html5' => true,
                 'scale' => 2,
                 'required' => true,
             ])
-            ->add('conditionnement', ChoiceType::class, [
+            ->add('conditionnement', Type\ChoiceType::class, [
                 'required' => true,
                 'choices' => [
                     "Unité" => "Unité",
@@ -48,11 +46,16 @@ class ReferenceType extends AbstractType
                     "Boîte" => "Boîte",
                 ],
             ])
-            ->add('seuil', NumberType::class, [
+            ->add('seuil', Type\NumberType::class, [
                 'required' => true,
                 'html5' => true,
             ])
         ;
+
+        $builder->add('_referer', Type\HiddenType::class, [
+            'required' => false,
+            'mapped' => false,
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

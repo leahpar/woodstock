@@ -64,12 +64,21 @@ class MaterielController extends CommonController
         $form = $this->createForm(MaterielType::class, $materiel);
         $form->handleRequest($request);
 
+        if ($request->isMethod("GET")) {
+            $referer = $request->headers->get('referer');
+            $form->get('_referer')->setData($referer);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->log('update', $materiel);
             $em->flush();
 
-            return $this->redirectToLastSearch(defaultRoute: 'materiel_index');
+            if ($form->get('_referer')->getData()) {
+                return $this->redirect($form->get('_referer')->getData());
+            }
+            return $this->redirectToRoute('materiel_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToLastSearch(defaultRoute: 'materiel_index');
         }
 
         return $this->render('materiel/edit.html.twig', [

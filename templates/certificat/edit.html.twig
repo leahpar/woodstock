@@ -21,6 +21,7 @@
         <div class="formWrapper">
 
             <form method="post">
+                {{ form_widget(form._referer) }}
                 {{ form_widget(form._token) }}
 
                 {{ form_errors(form) }}

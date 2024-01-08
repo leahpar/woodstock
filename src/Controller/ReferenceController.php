@@ -95,6 +95,11 @@ class ReferenceController extends CommonController
         $form = $this->createForm(ReferenceType::class, $reference);
         $form->handleRequest($request);
 
+        if ($request->isMethod("GET")) {
+            $referer = $request->headers->get('referer');
+            $form->get('_referer')->setData($referer);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             // #5 MAJ prix stock rétroactif
@@ -106,7 +111,10 @@ class ReferenceController extends CommonController
             $this->log('update', $reference);
             $em->flush();
 
-            return $this->redirectToLastSearch(defaultRoute: 'reference_index');
+            if ($form->get('_referer')->getData()) {
+                return $this->redirect($form->get('_referer')->getData());
+            }
+            return $this->redirectToRoute('reference_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('reference/edit.html.twig', [

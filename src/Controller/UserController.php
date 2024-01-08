@@ -72,12 +72,21 @@ class UserController extends CommonController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
+        if ($request->isMethod("GET")) {
+            $referer = $request->headers->get('referer');
+            $form->get('_referer')->setData($referer);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $user->touch(); // Pour déclencher l'event PreUpdate
             $this->log('update', $user);
             $em->flush();
 
-            return $this->redirectToLastSearch(defaultRoute: 'user_index');
+            if ($form->get('_referer')->getData()) {
+                return $this->redirect($form->get('_referer')->getData());
+            }
+            return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToLastSearch(defaultRoute: 'user_index');
         }
 
         return $this->render('user/edit.html.twig', [
