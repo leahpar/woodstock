@@ -109,6 +109,8 @@ class Reference extends LoggableEntity
         }
         return $quantite;
     }
+    // Fonction bidon, juste pour que le formulaire fonctionne
+    public function setQuantite(int $qte): void {}
 
     public function getPrixStock(): float
     {

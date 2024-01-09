@@ -124,7 +124,18 @@
                       {{ form_errors(form.seuil) }}
                       </div>
                     </div>
-                
+
+                  <div class="col-span-full">
+                      {% set label = reference.id ? "Régularisation stock" : "Stock initial" %}
+                      {{ form_label(form.quantite, label) }}
+                      <div class="mt-2">
+                          {{ form_widget(form.quantite) }}
+                      </div>
+                      <div class="formErrors">
+                      {{ form_errors(form.quantite) }}
+                      </div>
+                    </div>
+
               </div>
           </div>
           

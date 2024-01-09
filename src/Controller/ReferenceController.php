@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Reference;
 use App\Entity\Stock;
+use App\Entity\User;
 use App\Export\ExportService;
 use App\Form\ReferenceType;
 use App\Repository\ReferenceRepository;
 use App\Search\ReferenceSearch;
+use App\Service\PanierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,8 +69,11 @@ class ReferenceController extends CommonController
 
     #[Route('/new', name: 'reference_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_REFERENCE_EDIT')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, PanierService $panierService): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         $reference = new Reference();
         $form = $this->createForm(ReferenceType::class, $reference);
         $form->handleRequest($request);
@@ -76,7 +81,15 @@ class ReferenceController extends CommonController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($reference);
             $em->flush(); // pour avoir l'id
-            $this->log('create', $reference);
+
+            $data = [];
+            $quantite = $form->get('quantite')->getData();
+            if ($quantite != 0) {
+                $panierService->stockRegulReference($reference, $quantite, $user);
+                $data['stock'] = $quantite;
+            }
+
+            $this->log('create', $reference, $data);
             $em->flush();
 
             return $this->redirectToRoute('reference_index', [], Response::HTTP_SEE_OTHER);
@@ -90,8 +103,11 @@ class ReferenceController extends CommonController
 
     #[Route('/{id}/edit', name: 'reference_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_REFERENCE_EDIT')]
-    public function edit(Request $request, Reference $reference, EntityManagerInterface $em): Response
+    public function edit(Request $request, Reference $reference, EntityManagerInterface $em, PanierService $panierService): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         $form = $this->createForm(ReferenceType::class, $reference);
         $form->handleRequest($request);
 
@@ -108,7 +124,16 @@ class ReferenceController extends CommonController
                 $stock->prix = $reference->prix;
             }
 
-            $this->log('update', $reference);
+            // Gestion du stock
+            $data = [];
+            $quantite = $form->get('quantite')->getData();
+            if ($quantite != $reference->getQuantite()) {
+                $quantite = $quantite - $reference->getQuantite();
+                $panierService->stockRegulReference($reference, $quantite, $user);
+                $data['stock'] = (($quantite>0) ? '+' : '').$quantite;
+            }
+
+            $this->log('update', $reference, $data);
             $em->flush();
 
             if ($form->get('_referer')->getData()) {
@@ -134,7 +159,7 @@ class ReferenceController extends CommonController
         foreach ($stocks as $stock) {
             // On ne compte pas le volume initial
             // Ni les stocks en brouillon
-            if (!$stock->panier && $stock->panier->brouillon) continue;
+            if (!$stock->panier || $stock->panier->brouillon) continue;
             $date = $stock->panier->date;
 
             if (!isset($stats[$date->format('Y')])) $stats[$date->format('Y')] = ['E' => 0, 'S' => 0];

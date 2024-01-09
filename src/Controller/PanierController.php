@@ -6,6 +6,7 @@ use App\Entity\Panier;
 use App\Entity\Stock;
 use App\Entity\User;
 use App\Form\PanierType;
+use App\Service\PanierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,25 +19,14 @@ class PanierController extends CommonController
 
     #[Route('/{type}', name: 'panier_new', requirements: ['type' => 'entree|sortie'])]
     #[IsGranted('ROLE_REFERENCE_STOCK')]
-    public function new(EntityManagerInterface $em, string $type)
+    public function new(EntityManagerInterface $em, string $type, PanierService $panierService)
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        $panier = $em->getRepository(Panier::class)->findOneBy([
-            'user' => $user,
-            'type' => $type,
-            'brouillon' => true,
-        ]);
-
-        if (!$panier) {
-            $panier = new Panier();
-            $panier->user = $user;
-            $panier->type = $type;
-            $panier->brouillon = true;
-            $em->persist($panier);
-            $em->flush();
-        }
+        $panier = $panierService->getPanierBrouillon($user, $type);
+        $em->persist($panier);
+        $em->flush();
 
         return $this->redirectToRoute('panier_edit', ['id' => $panier->id]);
     }

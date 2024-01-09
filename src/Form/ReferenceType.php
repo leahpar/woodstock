@@ -52,9 +52,16 @@ class ReferenceType extends AbstractType
             ])
         ;
 
+        // Redirection vers la page précédente
         $builder->add('_referer', Type\HiddenType::class, [
             'required' => false,
             'mapped' => false,
+        ]);
+
+        // Gestion stock initial / modification du stock actuel
+        $builder->add('quantite', Type\NumberType::class, [
+            'required' => false,
+            //'mapped' => false,
         ]);
     }
 
