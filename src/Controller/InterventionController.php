@@ -10,21 +10,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/planning')]
 class InterventionController extends CommonController
 {
     #[Route('/', name: 'planning_index', methods: ['GET'])]
-//    #[IsGranted('ROLE_PLANNING_LIST')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
-        if (!$request->query->has('semaine')) {
+        if (!$request->query->has('semaine') && !$request->query->has('mois')) {
             return $this->redirectToRoute('planning_index', ['semaine' => date('W')]);
         }
 
         $search = new InterventionSearch([
-            'semaine'   => date('W'),
+            'annee'     => $request->query->getInt('annee', date('Y')),
+            'semaine'   => (int)$request->query->get('semaine'),
+            'mois'      => (int)$request->query->get('mois'),
             'page'      => 1,
             'limit'     => 0,
             ...$request->query->all(),
@@ -51,18 +51,22 @@ class InterventionController extends CommonController
         return $this->render('planning/index.html.twig', [
             'interventions' => $interventions->getIterator(),
             'search' => $search,
-            'semaine' => $search->semaine,
             'form' => $form,
         ]);
     }
 
     #[Route('/new', name: 'planning_new', methods: ['GET', 'POST'])]
-//    #[IsGranted('ROLE_PLANNING_EDIT')]
     public function new(
         Request $request,
         EntityManagerInterface $em,
     ): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user->chefEquipe && !$this->isGranted('ROLE_PLANNING_EDIT')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $intervention = new Intervention();
 
         if ($request->isMethod('GET')) {
@@ -74,7 +78,7 @@ class InterventionController extends CommonController
 
         // Config manuelle
         $intervention->tauxHoraire = 50;
-        dump($intervention->date, $intervention->date?->format('N'));
+        //dump($intervention->date, $intervention->date?->format('N'));
         $intervention->heuresPlanifiees = match ((int)$intervention->date?->format('N')) {
             1, 2, 3 => 10,
             4 => 9,
@@ -101,10 +105,13 @@ class InterventionController extends CommonController
     }
 
     #[Route('/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
-//    #[IsGranted('ROLE_PLANNING_EDIT')]
     public function edit(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
     {
-        $form = $this->createForm(InterventionType::class, $intervention);
+        /** @var User $user */
+        $user = $this->getUser();
+        $form = $this->createForm(InterventionType::class, $intervention, [
+            'is_chef_equipe' => $user->chefEquipe || $this->isGranted('ROLE_PLANNING_EDIT'),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -123,7 +130,6 @@ class InterventionController extends CommonController
     }
 
 //    #[Route('/{id}', name: 'planning_show', methods: ['GET'])]
-//    #[IsGranted('ROLE_PLANNING_LIST')]
 //    public function show(Intervention $intervention): Response
 //    {
 //        return $this->render('planning/show.html.twig', [
@@ -131,15 +137,55 @@ class InterventionController extends CommonController
 //        ]);
 //    }
 
-    #[Route('/{id}', name: 'planning_delete', methods: ['POST'])]
-//    #[IsGranted('ROLE_PLANNING_EDIT')]
-    public function delete(Intervention $intervention, EntityManagerInterface $em): Response
+    #[Route('/valider', name: 'planning_valider', methods: ['POST'])]
+    public function valider(Request $request, EntityManagerInterface $em): Response
     {
+        if (!$request->request->has('date')) {
+            throw $this->createNotFoundException();
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user->chefEquipe && !$this->isGranted('ROLE_PLANNING_EDIT')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $date = new \DateTime($request->request->get('date'));
+        $valider = $request->request->getBoolean('valider');
+        $interventions = $em->getRepository(Intervention::class)->findBy([
+            'date' => $date,
+        ]);
+        foreach ($interventions as $intervention) {
+            $intervention->valide = $valider;
+        }
+
+        $this->log('valider', null, ['date' => $date->format('d/m/Y'), 'action' => $valider ? 'valider' : 'dévalider']);
+        $em->flush();
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+        //return $this->redirectToRoute('planning_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/{id}', name: 'planning_delete', methods: ['POST'])]
+    public function delete(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user->chefEquipe && !$this->isGranted('ROLE_PLANNING_EDIT')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $em->remove($intervention);
         $this->log('delete', $intervention, $intervention->toLogArray());
         $em->flush();
 
-        return $this->redirectToRoute('planning_index', [], Response::HTTP_SEE_OTHER);
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+        //return $this->redirectToRoute('planning_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 
 }

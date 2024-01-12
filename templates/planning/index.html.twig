@@ -11,9 +11,16 @@
 
         <div class="buttons">
             {% set route = app.request.get('_route') %}
-            {% set params = app.request.query.all %}
-            <a class="borderedButton" href="{{ path(route, params|merge({semaine: semaine-1})) }}">Semaine précédente</a>
-            <a class="borderedButton" href="{{ path(route, params|merge({semaine: semaine+1})) }}">Semaine suivante</a>
+{#            {% set params = app.request.query.all | filter((v,k) => (k != 'semaine' and k != 'mois')) %}#}
+
+            <a class="borderedButton" href="{{ path(route, search.moisPrecedent) }}">Mois précédent</a>
+            <a class="borderedButton" href="{{ path(route, search.semainePrecedente) }}">Semaine précédente</a>
+
+            <a class="borderedButton" href="{{ path(route) }}">Semaine courante</a>
+            <a class="borderedButton" href="{{ path(route, {mois: 'now'|date('m')}) }}">Mois courant</a>
+
+            <a class="borderedButton" href="{{ path(route, search.semaineSuivante) }}">Semaine suivante</a>
+            <a class="borderedButton" href="{{ path(route, search.moisSuivant) }}">Mois suivant</a>
         </div>
     </div>
 

@@ -7,6 +7,7 @@
 
                     <thead>
                     <tr>
+                        <th scope="col" class="min-w-[12rem]">Equipe</th>
                         <th scope="col" class="min-w-[12rem]">Poseurs</th>
                         <th scope="col">Heures planifiées</th>
                         <th scope="col">Heures passées</th>
@@ -21,6 +22,7 @@
                     <tbody>
                     {% for poseur in poseurs %}
                         <tr>
+                            <td class="font-medium !text-gray-900">{{ poseur.equipe }}</td>
                             <td class="font-medium !text-gray-900">{{ poseur }}</td>
                             <td class="font-medium !text-gray-900">
                                 {{ totalHeuresPlanifieesPoseurs[poseur.id] }}h
@@ -35,6 +37,7 @@
                                     {% for intervention in interventions[poseur.id][k]??[] %}
                                         <p class="showInterventionButton"
                                            style="cursor:pointer; border: 1px solid black;"
+                                           data-disabled="{{ date.valide }}"
                                            data-intervention="{{ intervention.id }}">
                                             {% if intervention.activite == 'chantier' %}
                                                 {{ intervention.chantier }}
@@ -46,15 +49,43 @@
                                         </p>
                                     {% endfor %}
 
-{#                                    {% if is_granted('ROLE_PLANNING_EDIT') %}#}
-                                    <button class="addInterventionButton"
-                                            data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
-                                            data-poseur="{{ poseur.id }}">➕</button>
-{#                                    {% endif %}#}
+                                    {% if is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe %}
+                                    {% if not date.valide %}
+                                        <button class="addInterventionButton"
+                                                data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
+                                                data-disabled="{{ date.valide }}"
+                                                data-poseur="{{ poseur.id }}">➕</button>
+                                    {% else %}
+                                        <span>✔️</span>
+                                    {% endif %}
+                                    {% endif %}
                                 </td>
                             {% endfor %}
                         </tr>
                     {% endfor %}
+
+
+                    {# Valider les heures #}
+                    {% if is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe %}
+                    <tr>
+                        <td colspan="4">Validation planning</td>
+                        {% for k,date in dates %}
+                            <td>
+                                <form action="{{ path('planning_valider') }}"
+                                      onsubmit="return confirm('{{ date.valide ? 'Dévalider' : 'Valider' }} ?')"
+                                      method="post">
+                                    <input type="hidden" name="date" value="{{ date|format_datetime(pattern="yyyy-MM-dd") }}">
+                                    {% if date.valide %}
+                                        <button type="submit" name="valider" value="0">✔️ Dévalider</button>
+                                    {% else %}
+                                        <button type="submit" name="valider" value="1">❌ Valider</button>
+                                    {% endif %}
+                                </form>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% endif %}
+
                     </tbody>
                 </table>
 
@@ -70,7 +101,7 @@
 
 <script>
     const modal = document.querySelector('dialog');
-    const addButtons = document.querySelectorAll('.addInterventionButton');
+    const addButtons = document.querySelectorAll('.addInterventionButton:not([data-disabled="true"])');
     const showButtons = document.querySelectorAll('.showInterventionButton');
 
     addButtons.forEach(button => {
@@ -88,11 +119,18 @@
     showButtons.forEach(button => {
         button.addEventListener('click', () => {
             const id = button.dataset.intervention;
+            const disabled = button.dataset.disabled;
             fetch('{{ path('planning_edit', {id:'XX'}) }}'.replace('XX', id))
                 .then(response => response.text())
                 .then(html => modal.innerHTML = html)
                 .then(() => modal.showModal())
                 .then(() => toto())
+                .then(() => {
+                    if (disabled) {
+                        modal.querySelector('form').querySelectorAll('input,select,textarea,button').forEach(input => input.disabled = true);
+                        modal.querySelector('form').querySelectorAll('button').forEach(input => input.style.display = 'none');
+                    }
+                })
         });
     });
 

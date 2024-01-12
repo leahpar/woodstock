@@ -26,20 +26,25 @@ class Planning
 
     public function mount($interventions, InterventionSearch $search): void
     {
-        /** @var Intervention $intervention */
-        foreach ($interventions as $intervention) {
-            $poseur = $intervention->poseur;
-            $date = $intervention->date->format('Y-m-d');
-            $this->interventions[$poseur->id][$date][] = $intervention;
-        }
-
         $date = new \DateTime($search->dateStart);
         $end = new \DateTime($search->dateEnd);
         while ($date <= $end) {
             if ($date->format('N') < 6) {
                 $this->dates[$date->format('Y-m-d')] = clone $date;
+                // Warning: Property declared dynamically, this is deprecated starting from PHP 8.2
+                $this->dates[$date->format('Y-m-d')]->valide = false;
             }
             $date->modify('+1 day');
+        }
+
+        /** @var Intervention $intervention */
+        foreach ($interventions as $intervention) {
+            $poseur = $intervention->poseur;
+            $date = $intervention->date->format('Y-m-d');
+            $this->interventions[$poseur->id][$date][] = $intervention;
+            if ($intervention->valide) {
+                $this->dates[$date]->valide = true;
+            }
         }
 
         if ($search->poseur) {
@@ -47,7 +52,7 @@ class Planning
         }
         else {
             $poseurs = $this->em->getRepository(User::class)->search(
-                new UserSearch(['limit' => 0, 'equipe' => $search->equipe])
+                new UserSearch(['limit' => 0, 'equipe' => $search->equipe, 'tri' => 'equipe'])
             )->getIterator()->getArrayCopy();
         }
 

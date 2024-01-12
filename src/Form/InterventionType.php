@@ -19,18 +19,24 @@ class InterventionType extends AbstractType
             ->add('date', Type\DateType::class, [
                 'html5' => true, // type="date"
                 'widget' => 'single_text',
+                'required' => true,
+                'disabled' => !$options['is_chef_equipe'],
             ])
             ->add('heuresPlanifiees', Type\NumberType::class, [
                 'html5' => true, // type="number"
                 'attr' => ['min' => 0, 'max' => 10],
+                'required' => true,
+                'disabled' => !$options['is_chef_equipe'],
             ])
             ->add('heuresPassees', Type\NumberType::class, [
                 'html5' => true, // type="number"
                 'attr' => ['min' => 0, 'max' => 10],
+                'required' => false,
             ])
             ->add('poseur', EntityType::class, [
                 'class' => User::class,
                 'required' => true,
+                'disabled' => !$options['is_chef_equipe'],
                 'autocomplete' => true,
                 'placeholder' => '',
                 'query_builder' => fn ($er)
@@ -40,6 +46,8 @@ class InterventionType extends AbstractType
                         ->orderBy('u.nom', 'ASC'),
             ])
             ->add('activite', Type\ChoiceType::class, [
+                'required' => true,
+                'disabled' => !$options['is_chef_equipe'],
                 'choices' => [
                     'Chantier' => 'chantier',
                     'Absent' => 'absent',
@@ -55,6 +63,7 @@ class InterventionType extends AbstractType
             ->add('chantier', EntityType::class, [
                 'class' => Chantier::class,
                 'required' => true,
+                'disabled' => !$options['is_chef_equipe'],
                 'autocomplete' => true,
                 'placeholder' => '',
                 'query_builder' => fn ($er)
@@ -67,7 +76,8 @@ class InterventionType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => false,
-                //'required' => true,
+                'required' => true,
+                'disabled' => !$options['is_chef_equipe'],
             ])
         ;
     }
@@ -76,6 +86,7 @@ class InterventionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Intervention::class,
+            'is_chef_equipe' => true,
         ]);
     }
 }

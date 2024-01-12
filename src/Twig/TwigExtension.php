@@ -138,7 +138,7 @@ class TwigExtension extends AbstractExtension
                 'ROLE_REFERENCE_STOCK' => 'Modifier les stocks',
             ],
             'Planning' => [
-                'ROLE_PLANNING_LIST' => 'Consulter le planning',
+//                'ROLE_PLANNING_LIST' => 'Consulter le planning',
                 'ROLE_PLANNING_EDIT' => 'Modifier le planning',
             ],
         ];

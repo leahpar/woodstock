@@ -19,10 +19,10 @@ class Intervention extends LoggableEntity
     public ?\DateTime $date = null;
 
     #[ORM\Column]
-    public ?int $heuresPlanifiees = null;
+    public int $heuresPlanifiees = 0;
 
     #[ORM\Column]
-    public ?int $heuresPassees = null;
+    public int $heuresPassees = 0;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -35,13 +35,16 @@ class Intervention extends LoggableEntity
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     public ?Chantier $chantier = null;
 
+    // 'Atelier' / 'Pose'
     #[ORM\Column(nullable: true)]
     public ?string $type = null;
 
     #[ORM\Column]
     public float $tauxHoraire = 0;
 
-    //TODO Intervention pas chantier
+    #[ORM\Column]
+    public bool $valide = false;
+
 
     public function __toString(): string
     {
