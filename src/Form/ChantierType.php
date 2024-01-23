@@ -42,6 +42,18 @@ class ChantierType extends AbstractType
             ->add('commentaire', Type\TextareaType::class, [
                 'required' => false,
             ])
+            ->add('heuresDevisAtelier', Type\NumberType::class, [
+                'required' => false,
+                'empty_data' => 0,
+            ])
+            ->add('heuresDevisPose', Type\NumberType::class, [
+                'required' => false,
+                'empty_data' => 0,
+            ])
+            ->add('tauxHoraire', Type\NumberType::class, [
+                'required' => false,
+                'empty_data' => 0,
+            ])
         ;
 
         $builder->add('_referer', Type\HiddenType::class, [

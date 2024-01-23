@@ -2,116 +2,165 @@
 
 {% block content %}
 
-<div class="max-w-2xl mx-auto">
-    
-    <div class="md:flex md:items-center md:justify-between mb-8">
-      <div class="min-w-0 flex-1">
-        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-        {% if chantier.id %}
-            {{ chantier.nom }}
-        {% else %}
-            Nouvelle référence
-        {% endif %}    
-        </h2>
-      </div>
-      <div class="mt-4 flex md:ml-4 md:mt-0">
-      </div>
-    </div>
-    
-    <div class="formWrapper">
-        
-      <form method="post">
-      {{ form_widget(form._referer) }}
-      {{ form_widget(form._token) }}
-      
-      {{ form_errors(form) }}
-      
-        <div class="space-y-12">
-          <div class="formSection">
-              
-            <div>
-              <h2>Détail du chantier</h2>
+    <div class="max-w-2xl mx-auto">
+
+        <div class="md:flex md:items-center md:justify-between mb-8">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                    {% if chantier.id %}
+                        {{ chantier.nom }}
+                    {% else %}
+                        Nouvelle référence
+                    {% endif %}
+                </h2>
             </div>
-
-              <div class="formGrid">
-
-                  <div class="col-span-full">
-                      {{ form_label(form.nom, 'Nom') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.nom) }}
-                      </div>
-                      <div class="formErrors">
-                          {{ form_errors(form.nom) }}
-                      </div>
-                  </div>
-
-                  <div class="col-span-full">
-                      {{ form_label(form.referenceTravaux, 'Référence travaux') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.referenceTravaux) }}
-                      </div>
-                      <div class="formErrors">
-                          {{ form_errors(form.referenceTravaux) }}
-                      </div>
-                  </div>
-
-                  <div class="col-span-full">
-                      {{ form_label(form.referenceEtude, 'Référence BE') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.referenceEtude) }}
-                      </div>
-                      <div class="formErrors">
-                          {{ form_errors(form.referenceEtude) }}
-                      </div>
-                  </div>
-
-                  <div class="col-span-full">
-                      {{ form_label(form.conducteurTravaux, 'Conducteur de travaux') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.conducteurTravaux) }}
-                      </div>
-                      <div class="formErrors">
-                          {{ form_errors(form.conducteurTravaux) }}
-                      </div>
-                  </div>
-
-                  <div class="col-span-full">
-                      {{ form_label(form.encours, 'Chantier en cours ?') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.encours) }}
-                      </div>
-                      <div class="formErrors">
-                          {{ form_errors(form.encours) }}
-                      </div>
-                  </div>
-
-                  <div class="col-span-full">
-                      {{ form_label(form.commentaire, 'Commentaire') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.commentaire) }}
-                      </div>
-                      <div class="formErrors">
-                          {{ form_errors(form.commentaire) }}
-                      </div>
-                  </div>
-
-              </div>
-          </div>
-          
+            <div class="mt-4 flex md:ml-4 md:mt-0">
+            </div>
         </div>
-      
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-          <button type="submit" class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">Enregistrer</button>
-        </div>
-      </form>
 
-        {% if chantier.id %}
-        <form method="post" action="{{ path('chantier_delete', {'id': chantier.id}) }}" onsubmit="return confirm('Supprimer le chantier ?');" class="contents">
-            <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ chantier.nom }}</span></button>
-        </form>
-        {% endif %}
+        <div class="formWrapper">
+
+            <form method="post">
+                {{ form_widget(form._referer) }}
+                {{ form_widget(form._token) }}
+
+                {{ form_errors(form) }}
+
+                <div class="space-y-12">
+                    <div class="formSection">
+
+                        <div>
+                            <h2>Détail du chantier</h2>
+                        </div>
+
+                        <div class="formGrid">
+
+                            <div class="col-span-full">
+                                {{ form_label(form.nom, 'Nom') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.nom) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.nom) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.referenceTravaux, 'Référence travaux') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.referenceTravaux) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.referenceTravaux) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.referenceEtude, 'Référence BE') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.referenceEtude) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.referenceEtude) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.conducteurTravaux, 'Conducteur de travaux') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.conducteurTravaux) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.conducteurTravaux) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.encours, 'Chantier en cours ?') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.encours) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.encours) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.commentaire, 'Commentaire') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.commentaire) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.commentaire) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="formSection">
+
+                        <div>
+                            <h2>Heures</h2>
+                        </div>
+
+                        <div class="formGrid">
+
+
+                            <div class="col-span-full">
+                                {{ form_label(form.heuresDevisAtelier, 'Heures devis atelier') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.heuresDevisAtelier) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.heuresDevisAtelier) }}
+                                </div>
+                            </div>
+
+
+                            <div class="col-span-full">
+                                {{ form_label(form.heuresDevisPose, 'Heures devis pose') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.heuresDevisPose) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.heuresDevisPose) }}
+                                </div>
+                            </div>
+
+
+                            <div class="col-span-full">
+                                {{ form_label(form.tauxHoraire, 'Taux horaire') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.tauxHoraire) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.tauxHoraire) }}
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <button type="submit"
+                            class="rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+
+            {% if chantier.id %}
+                <form method="post" action="{{ path('chantier_delete', {'id': chantier.id}) }}"
+                      onsubmit="return confirm('Supprimer le chantier ?');" class="contents">
+                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span
+                                class="sr-only">, {{ chantier.nom }}</span></button>
+                </form>
+            {% endif %}
+
+        </div>
 
     </div>
-
-</div>
 {% endblock %}

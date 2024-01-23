@@ -49,6 +49,16 @@
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.prix|euro }}</dd>
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-900">heures devis - atelier</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('devis', 'atelier') }} h</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('devis', 'atelier')|euro }}</dd>
+                </div>
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-900">heures devis - pose</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('devis', 'pose') }} h</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('devis', 'pose')|euro }}</dd>
+                </div>
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">heures planifiées - atelier</dt>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('planifie', 'atelier') }} h</dd>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('planifie', 'atelier')|euro }}</dd>

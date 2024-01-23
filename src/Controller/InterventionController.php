@@ -9,7 +9,7 @@ use App\Search\InterventionSearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/planning')]
 class InterventionController extends CommonController
@@ -78,7 +78,9 @@ class InterventionController extends CommonController
 
         // Config manuelle
         $intervention->tauxHoraire = 50;
-        //dump($intervention->date, $intervention->date?->format('N'));
+        if ($intervention->chantier) {
+            $intervention->tauxHoraire = $intervention->chantier->tauxHoraire;
+        }
         $intervention->heuresPlanifiees = match ((int)$intervention->date?->format('N')) {
             1, 2, 3 => 10,
             4 => 9,

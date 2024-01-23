@@ -7,7 +7,7 @@ use App\Repository\ChantierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ChantierRepository::class)]
@@ -40,7 +40,7 @@ class Chantier extends LoggableEntity
     #[ORM\OneToMany(mappedBy: 'chantier', targetEntity: Panier::class)]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[ORM\OrderBy(['id' => 'DESC'])]
-    #[Ignore]
+    #[Serializer\Ignore]
     public Collection $paniers;
 
     #[ORM\ManyToOne(inversedBy: 'chantiers')]
@@ -49,6 +49,15 @@ class Chantier extends LoggableEntity
     #[ORM\OneToMany(mappedBy: 'chantier', targetEntity: Intervention::class)]
     #[ORM\OrderBy(['date' => 'DESC'])]
     private Collection $interventions;
+
+    #[ORM\Column()]
+    public int $heuresDevisAtelier = 0;
+
+    #[ORM\Column()]
+    public int $heuresDevisPose = 0;
+
+    #[ORM\Column()]
+    public float $tauxHoraire = 50;
 
     public function __construct()
     {
@@ -99,8 +108,11 @@ class Chantier extends LoggableEntity
 
     public function getHeures(string $truc, string $type): int
     {
-        // $truc = 'planifie' ou 'passe'
+        // $truc = 'devis', 'planifie' ou 'passe'
         // $type = 'atelier' ou 'pose'
+        if ($truc == 'devis') {
+            return $this->{'heuresDevis'.ucfirst($type)};
+        }
         return array_reduce(
             $this->interventions->toArray(),
             fn (int $total, Intervention $int)
@@ -111,8 +123,11 @@ class Chantier extends LoggableEntity
 
     public function getMontant(string $truc, string $type): int
     {
-        // $truc = 'planifie' ou 'passe'
+        // $truc = 'devis', 'planifie' ou 'passe'
         // $type = 'atelier' ou 'pose'
+        if ($truc == 'devis') {
+            return $this->{'heuresDevis'.ucfirst($type)} * $this->tauxHoraire;
+        }
         return array_reduce(
             $this->interventions->toArray(),
             fn (int $total, Intervention $int)
