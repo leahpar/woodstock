@@ -114,6 +114,7 @@ class InterventionController extends CommonController
         $form = $this->createForm(InterventionType::class, $intervention, [
             'is_chef_equipe' => $user->chefEquipe || $this->isGranted('ROLE_PLANNING_EDIT'),
         ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
