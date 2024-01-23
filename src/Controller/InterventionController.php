@@ -81,13 +81,27 @@ class InterventionController extends CommonController
         if ($intervention->chantier) {
             $intervention->tauxHoraire = $intervention->chantier->tauxHoraire;
         }
-        $intervention->heuresPlanifiees = match ((int)$intervention->date?->format('N')) {
+
+        /* Autoremplissage des heures planifiées suivant le jour et heures disponibles */
+        $heuresDispo = match ((int)$intervention->date?->format('N')) {
             1, 2, 3 => 10,
             4 => 9,
             default => 0,
         };
+        $interventions = $em->getRepository(Intervention::class)->findBy([
+            'date' => $intervention->date,
+            'poseur' => $intervention->poseur,
+        ]);
+        /** @var Intervention $i */
+        foreach ($interventions as $i) {
+            $heuresDispo -= $i->heuresPlanifiees;
+        }
+        $intervention->heuresPlanifiees = $heuresDispo;
+        /* END */
 
-        $form = $this->createForm(InterventionType::class, $intervention);
+        $form = $this->createForm(InterventionType::class, $intervention, [
+            'max_heures_planifiees' => $heuresDispo,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -111,8 +125,27 @@ class InterventionController extends CommonController
     {
         /** @var User $user */
         $user = $this->getUser();
+
+        /* Autoremplissage des heures planifiées suivant le jour et heures disponibles */
+        $heuresDispo = match ((int)$intervention->date?->format('N')) {
+            1, 2, 3 => 10,
+            4 => 9,
+            default => 0,
+        };
+        $interventions = $em->getRepository(Intervention::class)->findBy([
+            'date' => $intervention->date,
+            'poseur' => $intervention->poseur,
+        ]);
+        /** @var Intervention $i */
+        foreach ($interventions as $i) {
+            if ($i->id == $intervention->id) continue;
+            $heuresDispo -= $i->heuresPlanifiees;
+        }
+        /* END */
+
         $form = $this->createForm(InterventionType::class, $intervention, [
             'is_chef_equipe' => $user->chefEquipe || $this->isGranted('ROLE_PLANNING_EDIT'),
+            'max_heures_planifiees' => $heuresDispo,
         ]);
 
         $form->handleRequest($request);
