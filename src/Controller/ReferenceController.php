@@ -74,7 +74,13 @@ class ReferenceController extends CommonController
         /** @var User $user */
         $user = $this->getUser();
 
-        $reference = new Reference();
+        if ($request->isMethod("GET") && $request->query->has('id')) {
+            // Dupliquer une référence : on récupère la référence et on la clone (sans l'id)
+            $reference = $em->getRepository(Reference::class)->find($request->query->get('id'));
+            $reference->id = null;
+        }
+        $reference ??= new Reference();
+
         $form = $this->createForm(ReferenceType::class, $reference);
         $form->handleRequest($request);
 

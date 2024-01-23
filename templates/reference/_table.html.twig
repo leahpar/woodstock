@@ -48,6 +48,7 @@
                                 <a href="{{ path('reference_show', {'id': reference.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ reference.nom }}</span></a>
                                 {% if is_granted('ROLE_REFERENCE_EDIT') %}
                                 <a href="{{ path('reference_edit', {'id': reference.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ reference.nom }}</span></a>
+                                <a href="{{ path('reference_new', {'id': reference.id}) }}" class="text-teal-600 hover:text-teal-900">Dupliquer<span class="sr-only">, {{ reference.nom }}</span></a>
                                 {% endif %}
                             </td>
                         </tr>
