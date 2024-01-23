@@ -13,6 +13,11 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->add('_referer', Type\HiddenType::class, [
+            'required' => false,
+            'mapped' => false,
+        ]);
+
         $builder
             ->add('username')
             ->add('nom')
@@ -31,11 +36,12 @@ class UserType extends AbstractType
                 'required' => false,
             ])
         ;
-        $builder->add('_referer', Type\HiddenType::class, [
-            'required' => false,
-            'mapped' => false,
-        ]);
 
+        // Infos diverses
+        $builder->add('taille')
+            ->add('pointure')
+            ->add('permis')
+            ->add('personneAContacter');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

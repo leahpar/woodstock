@@ -18,6 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: ['username'], message: 'Un autre utilisateur existe déjà avec ce nom d\'utilisateur.')]
 class User  extends LoggableEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    // Infos diverses utilisateur
+    use UserInfosTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
