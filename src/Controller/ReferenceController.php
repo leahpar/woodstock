@@ -44,6 +44,7 @@ class ReferenceController extends CommonController
             : $referenceRepository->findAll();
 
         return $this->render('reference/catalogue.html.twig', [
+            'format' => $request->query->get('format', 'A4'),
             'references' => $categories,
             'categorie' => $request->query->get('categorie'),
         ]);

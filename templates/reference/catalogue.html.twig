@@ -2,7 +2,7 @@
 <head>
 <title>Catalogue</title>
 
-<style type="text/css">
+<style>
 body{
     padding: 0;
     margin: 0;
@@ -32,11 +32,11 @@ body{
         overflow: hidden;
     }
     .case h2{
-        margin: 0px;
+        margin: 0;
         font-size: 12px;
     }
     .case p{
-        margin: 0px;
+        margin: 0;
         font-size: 9px;
     }
     .case div{
@@ -54,7 +54,7 @@ body{
 {% endif %}
 -->
 
-<div class="page">
+<div class="page {{ format }}">
 {% for ref in references %}
     
 <div class="case">

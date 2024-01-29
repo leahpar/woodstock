@@ -34,11 +34,20 @@
         <a href="{{ path('reference_export') }}" class="button">Export inventaire</a>
         {% if is_granted('ROLE_REFERENCE_EDIT') %}
             <div class="borderedButton xx_dropdown">
-                Catalogue
+                Catalogue A4
                 <div class="xx_dropdown-content">
-                    <a href="{{ path('reference_catalogue') }}" class="borderedButton" target="_blank">Toutes catégories</a>
+                    <a href="{{ path('reference_catalogue', {format: 'A4'}) }}" class="borderedButton" target="_blank">Toutes catégories</a>
                     {% for cat in getCategories() %}
-                        <a href="{{ path('reference_catalogue', {categorie: cat}) }}" class="borderedButton" target="_blank">{{ cat }}</a>
+                        <a href="{{ path('reference_catalogue', {categorie: cat, format: 'A4'}) }}" class="borderedButton" target="_blank">{{ cat }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="borderedButton xx_dropdown">
+                Catalogue A3
+                <div class="xx_dropdown-content">
+                    <a href="{{ path('reference_catalogue', {format: 'A3'}) }}" class="borderedButton" target="_blank">Toutes catégories</a>
+                    {% for cat in getCategories() %}
+                        <a href="{{ path('reference_catalogue', {categorie: cat, format: 'A3'}) }}" class="borderedButton" target="_blank">{{ cat }}</a>
                     {% endfor %}
                 </div>
             </div>
