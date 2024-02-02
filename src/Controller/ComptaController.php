@@ -15,7 +15,6 @@ class ComptaController extends CommonController
     #[Route('/export', name: 'compta_export')]
     public function export(Request $request, EntityManagerInterface $em, ExportService $exportService)
     {
-
         $date = new \DateTime($request->request->get('date'));
         $stocks = $em->getRepository(Stock::class)->findSortiesByMois($date);
 
@@ -24,32 +23,43 @@ class ComptaController extends CommonController
         foreach ($stocks as $stock) {
             /** @var Chantier $chantier */
             $chantier = $stock?->panier?->chantier;
-            $key = ($chantier?->id ?? "XX")."-".$stock->reference->codeComptaCompte;
 
+            dump($stock);
+            $key = ($chantier->referenceTravaux?:'7001')."-".$stock->reference->codeComptaCompte;
             if (!isset($data[$key])) {
                 $data[$key] = [
                     /* 0 Journal    */ "ANA",
                     /* 1 Date       */ $stock->panier->date->format('t/m/Y'),
                     /* 2 Cpte       */ $stock->reference->codeComptaCompte,
-                    /* 3 Analytique */ $chantier?->referenceTravaux,
+                    /* 3 Analytique */ $chantier->referenceTravaux?:'7001',
                     /* 4 Libellé    */ $stock->type . " stock du " . $stock->panier->date->format('t/m/Y'),
-                    /* 5 Débit      */ $stock->getDebit() ?: null,
-                    /* 6 Crédit     */ 0, // $stock->getCredit() ?: null, // Ligne de crédit ajoutée plus bas
+                    /* 5 Débit      */ $stock->getDebit()  ?: 0,
+                    /* 6 Crédit     */ $stock->getCredit() ?: 0,
                 ];
             }
             else {
                 $data[$key][5] += $stock->getDebit();
-                //$data[$key][6] += $stock->getCredit();
+                $data[$key][6] += $stock->getCredit();
             }
-        }
 
-        // Ajout des lignes de crédit (= copie des sorties en mettant le débit au crédit)
-        foreach ($data as $key => $datum) {
-            $key2 = $key. "-CREDIT";
-            $datum[3] = "7000";
-            $datum[6] = $datum[5];
-            $datum[5] = 0;
-            $data[$key2] = $datum;
+            $key .= "-CREDIT";
+            if (!isset($data[$key])) {
+                $data[$key] = [
+                    /* 0 Journal    */ "ANA",
+                    /* 1 Date       */ $stock->panier->date->format('t/m/Y'),
+                    /* 2 Cpte       */ $stock->reference->codeComptaCompte,
+                    /* 3 Analytique */ '7000',
+                    /* 4 Libellé    */ $stock->type . " stock du " . $stock->panier->date->format('t/m/Y'),
+                    // NB: colonnes inversées !
+                    /* 5 Débit      */ $stock->getCredit() ?: 0,
+                    /* 6 Crédit     */ $stock->getDebit()  ?: 0,
+                ];
+            }
+            else {
+                // NB: colonnes inversées !
+                $data[$key][6] += $stock->getDebit();
+                $data[$key][5] += $stock->getCredit();
+            }
         }
 
         // Tri
@@ -57,7 +67,7 @@ class ComptaController extends CommonController
 
         $filename = "export-";
         $filename .= $date->format('Ym');
-        $filename .= ".xlsx";
+        $filename .= ".csv";
 
         // Log
         $this->log("export_compta", null, ['mois' => $date->format('m/Y')]);

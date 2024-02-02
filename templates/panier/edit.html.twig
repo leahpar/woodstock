@@ -46,6 +46,8 @@
                         {{ form_errors(form.poseur) }}
                     </div>
                 </div>
+                {% endif %}
+
                 <div>
                     {{ form_label(form.chantier, 'Chantier') }}
                     <div class="mt-2">
@@ -66,7 +68,6 @@
                         {{ form_errors(form.commentaire) }}
                     </div>
                 </div>
-                {% endif %}
 
                 <div>
                     <div class="flex mt-2 items-end space-x-2">

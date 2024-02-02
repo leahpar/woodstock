@@ -27,16 +27,10 @@
 
                     {% for reference in references %}
 
-                        <!-- Selected: "bg-gray-50" -->
                         <tr>
-{#                            <td class="relative">#}
-{#                                <!-- Selected row marker, only show when row is selected. -->#}
-{#                                <!-- <div class="absolute inset-y-0 left-0 w-0.5 bg-teal-600"></div> -->#}
-
-{#                                <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-600">#}
-{#                            </td>#}
-                            <!-- Selected: "text-teal-600", Not Selected: "text-gray-900" -->
-                            <td class="font-medium !text-gray-900">{{ reference.nom }}</td>
+                            <td class="font-medium !text-gray-900">
+                                <a href="{{ path('reference_show', {'id': reference.id}) }}">{{ reference.nom }}</a>
+                            </td>
                             <td>{{ reference.marque ?? '-' }}</td>
                             <td>{{ reference.categorie ?? '-' }}</td>
                             <td>{{ reference.reference }}</td>

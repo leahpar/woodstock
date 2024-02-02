@@ -16,20 +16,21 @@
                         <tr>
                             <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Référence</th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantité</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Prix</th>
                         </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
 
                         {% for panier in chantier.paniers %}
                             <tr>
-                                <td colspan="2"
+                                <td colspan="3"
                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
 
                                     <span class="font-medium">
                                         {{ panier.type == 'entree' ? "Entrée" : "Sortie" }}
                                         par {{ panier.user }}
                                         le {{ panier.date|date('d/m/Y') }}
-                                        à {{ panier.date|date('H:i') }}
+                                        {# à {{ panier.date|date('H:i') }} #}
                                         {% if panier.poseur %}
                                             pour {{ panier.poseur }}
                                         {% endif %}
@@ -59,11 +60,12 @@
                                         </a>
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stock.quantite }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stock.montant | euro }}</td>
                                     <td></td>
                                 </tr>
                             {% endfor %}
                         {% else %}
-                            <tr><td colspan="99">&nbsp;</td></tr>
+                            <tr><td colspan="3">&nbsp;</td></tr>
                         {% endfor %}
 
                         </tbody>

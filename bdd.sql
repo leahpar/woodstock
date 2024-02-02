@@ -24,3 +24,18 @@ set s.prix = r.prix;
 -- 111 => 110
 update panier set chantier_id = 110 where chantier_id = 111;
 delete from chantier where id = 111;
+
+-- Check paniers brouillons
+SELECT p.user_id, p.type, count(distinct p.id), count(distinct s.id)
+FROM panier p
+left join stock s on s.panier_id = p.id
+WHERE p.brouillon = 1
+group by 1, 2
+ORDER BY p.user_id ASC, p.type asc, p.date asc;
+
+SELECT p.* , count(distinct s.id)
+FROM panier p
+left join stock s on s.panier_id = p.id
+WHERE p.brouillon = 1
+group by p.id
+ORDER BY p.user_id ASC, p.type asc, p.date asc;

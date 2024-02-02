@@ -40,17 +40,14 @@ class StockRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s')
             ->select('s')
-            ->leftJoin('s.reference', 'r')
-            ->addSelect('r')
-            ->leftJoin('s.panier', 'p')
-            //->addSelect('p')
-            //->leftJoin('p.chantier', 'c')
-            //->addSelect('c')
-            ->andWhere('s.type = :type')
-            ->setParameter('type', Stock::TYPE_SORTIE)
+            ->leftJoin('s.reference', 'r')->addSelect('r')
+            ->leftJoin('s.panier',    'p')->addSelect('p')
+            ->leftJoin('p.chantier',  'c')->addSelect('c')
+//            ->andWhere('s.type = :type')
+//            ->setParameter('type', Stock::TYPE_SORTIE)
             ->andWhere('p.date BETWEEN :debut AND :fin')
             ->setParameter('debut', $date->format('Y-m-01 00:00:00'))
-            ->setParameter('fin', $date->format('Y-m-t 23:59:59'))
+            ->setParameter('fin',   $date->format('Y-m-t 23:59:59'))
         ;
 
         return $qb->getQuery()->getResult();

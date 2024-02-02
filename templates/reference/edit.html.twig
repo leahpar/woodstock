@@ -2,159 +2,164 @@
 
 {% block content %}
 
-<div class="max-w-2xl mx-auto">
-    
-    <div class="md:flex md:items-center md:justify-between mb-8">
-      <div class="min-w-0 flex-1">
-        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-        {% if reference.id %}
-            {{ reference.reference }}
-        {% else %}
-            Nouvelle référence
-        {% endif %}    
-        </h2>
-      </div>
-      <div class="mt-4 flex md:ml-4 md:mt-0">
-      </div>
-    </div>
-    
-    <div class="formWrapper">
-        
-      <form method="post">
-      {{ form_widget(form._referer) }}
-      {{ form_widget(form._token) }}
+    <div class="max-w-2xl mx-auto">
 
-      {{ form_errors(form) }}
-      
-        <div class="space-y-12">
-          <div class="formSection">
-              
-            <div>
-              <h2>Détail de la référence</h2>
+        <div class="md:flex md:items-center md:justify-between mb-8">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                    {% if reference.id %}
+                        {{ reference.reference }}
+                    {% else %}
+                        Nouvelle référence
+                    {% endif %}
+                </h2>
             </div>
-      
-            <div class="formGrid">
-                
-              <div class="col-span-full">
-                  {{ form_label(form.nom, 'Nom') }}
-                <div class="mt-2">
-                    {{ form_widget(form.nom) }}
-                    </div>
-                    <div class="formErrors">
-                    {{ form_errors(form.nom) }}
-                    </div>
-              </div>
-              
-              <div class="col-span-full">
-                    {{ form_label(form.reference, 'Référence') }}
-                  <div class="mt-2">
-                      {{ form_widget(form.reference) }}
-                        </div>
-                    <div class="formErrors">
-                      {{ form_errors(form.reference) }}
-                    </div>
-                </div>
-                  
-                  <div class="col-span-full">
-                        {{ form_label(form.marque, 'Marque') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.marque) }}
-                            </div>
-                        <div class="formErrors">
-                          {{ form_errors(form.marque) }}
-                            </div>
-                    </div>
-      
-                  <div class="col-span-full">
-                        {{ form_label(form.categorie, 'Catégorie') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.categorie) }}
-                            </div>
-                        <div class="formErrors">
-                          {{ form_errors(form.categorie) }}
-                            </div>
-                    </div>
-
-            <div class="col-span-full">
-                        {{ form_label(form.prix, 'Prix') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.prix) }}
-                            </div>
-                        <div class="formErrors">
-                          {{ form_errors(form.prix) }}
-                            </div>
-                    </div>
-
-                <div class="col-span-full">
-                    {{ form_label(form.codeComptaCompte, 'Compta : code compte') }}
-                    <div class="mt-2">
-                        {{ form_widget(form.codeComptaCompte) }}
-                    </div>
-                    <div class="formErrors">
-                        {{ form_errors(form.codeComptaCompte) }}
-                    </div>
-                </div>
-
+            <div class="mt-4 flex md:ml-4 md:mt-0">
             </div>
-          </div>
-          
-          <div class="formSection">
-              <div>
-                <h2>Informations de stock</h2>
-              </div>
-              
-              <div class="formGrid">
-                
-                <div class="sm:col-span-3">
-                    {{ form_label(form.conditionnement, 'Conditionnement') }}
-                    <div class="mt-2">
-                        {{ form_widget(form.conditionnement) }}
-                    </div>
-                    <div class="formErrors">
-                      {{ form_errors(form.conditionnement) }}
+        </div>
+
+        <div class="formWrapper">
+
+            <form method="post">
+                {{ form_widget(form._referer) }}
+                {{ form_widget(form._token) }}
+
+                {{ form_errors(form) }}
+
+                <div class="space-y-12">
+                    <div class="formSection">
+
+                        <div>
+                            <h2>Détail de la référence</h2>
                         </div>
-                  </div>
-                
-                  <div class="sm:col-span-3">
-                      {{ form_label(form.seuil, 'Seuil d\'alerte') }}
-                      <div class="mt-2">
-                          {{ form_widget(form.seuil) }}
-                      </div>
-                      <div class="formErrors">
-                      {{ form_errors(form.seuil) }}
-                      </div>
+
+                        <div class="formGrid">
+
+                            <div class="col-span-full">
+                                {{ form_label(form.nom, 'Nom') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.nom) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.nom) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.reference, 'Référence') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.reference) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.reference) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.marque, 'Marque') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.marque) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.marque) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.categorie, 'Catégorie') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.categorie) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.categorie) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.prix, 'Prix') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.prix) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.prix) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.codeComptaCompte, 'Compta : code compte') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.codeComptaCompte) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.codeComptaCompte) }}
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
-                  <div class="col-span-full">
-                      {% set label = reference.id ? "Régularisation stock" : "Stock initial" %}
-                      {{ form_label(form.quantite, label) }}
-                      <div class="mt-2">
-                          {{ form_widget(form.quantite) }}
-                      </div>
-                      <div class="formErrors">
-                      {{ form_errors(form.quantite) }}
-                      </div>
+                    <div class="formSection">
+                        <div>
+                            <h2>Informations de stock</h2>
+                        </div>
+
+                        <div class="formGrid">
+
+                            <div class="sm:col-span-3">
+                                {{ form_label(form.conditionnement, 'Conditionnement') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.conditionnement) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.conditionnement) }}
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                {{ form_label(form.seuil, 'Seuil d\'alerte') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.seuil) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.seuil) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {% set label = reference.id ? "Stock actuel" : "Stock initial" %}
+                                {{ form_label(form.quantite, label) }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.quantite) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.quantite) }}
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
-              </div>
-          </div>
-          
+                </div>
+
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <button type="submit"
+                            class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+
+            {% if reference.id %}
+                <form method="post" action="{{ path('reference_delete', {'id': reference.id}) }}"
+                      onsubmit="return confirm('Supprimer cette référence ?');" class="contents">
+                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span
+                                class="sr-only">, {{ reference.nom }}</span></button>
+                </form>
+            {% endif %}
+
+
         </div>
-      
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-          <button type="submit" class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">Enregistrer</button>
-        </div>
-      </form>
-
-        {% if reference.id %}
-        <form method="post" action="{{ path('reference_delete', {'id': reference.id}) }}" onsubmit="return confirm('Supprimer cette référence ?');" class="contents">
-            <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ reference.nom }}</span></button>
-        </form>
-        {% endif %}
-
-
     </div>
-</div>
 
 {% endblock %}
 
@@ -165,7 +170,7 @@
         const dst = document.querySelector('select#reference_codeComptaCompte');
 
         // On change SRC => update DST with data-code
-        src.addEventListener('change', function() {
+        src.addEventListener('change', function () {
             dst.value = this.options[this.selectedIndex].dataset.code;
         });
     </script>

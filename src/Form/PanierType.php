@@ -22,13 +22,6 @@ class PanierType extends AbstractType
 
         if ($panier->type == Stock::TYPE_SORTIE) {
             $builder
-                //->add('type', ChoiceType::class, [
-                //    'required' => true,
-                //    'choices' => [
-                //        'Entrée' => Stock::TYPE_ENTREE,
-                //        'Sortie' => Stock::TYPE_SORTIE,
-                //    ],
-                //])
                 ->add('poseur', EntityType::class, [
                     'class' => User::class,
                     'required' => false,
@@ -39,19 +32,6 @@ class PanierType extends AbstractType
                             ->where('u.roles NOT LIKE :role')
                             ->setParameter('role', '%ROLE_SUPER_ADMIN%')
                             ->orderBy('u.nom', 'ASC'),
-                ])
-                ->add('chantier', EntityType::class, [
-                    'class' => Chantier::class,
-                    'required' => true,
-                    'autocomplete' => true,
-                    'placeholder' => 'Choisir un chantier',
-                    'query_builder' => fn ($er)
-                    => $er->createQueryBuilder('c')
-                        ->where('c.encours = :true')
-                        ->setParameter('true', true),
-                ])
-                ->add('commentaire', TextType::class, [
-                    'required' => false,
                 ])
             ;
         }
@@ -64,6 +44,20 @@ class PanierType extends AbstractType
                 'required' => true,
                 'widget' => 'single_text',
                 'html5' => true,
+            ])
+
+            ->add('chantier', EntityType::class, [
+                'class' => Chantier::class,
+                'required' => true,
+                'autocomplete' => true,
+                'placeholder' => 'Choisir un chantier',
+                'query_builder' => fn ($er)
+                => $er->createQueryBuilder('c')
+                    ->where('c.encours = :true')
+                    ->setParameter('true', true),
+            ])
+            ->add('commentaire', TextType::class, [
+                'required' => false,
             ])
         ;
     }

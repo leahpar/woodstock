@@ -129,7 +129,7 @@ class PanierController extends CommonController
         }
 
         $panier->brouillon = false;
-        $em->flush(); // pour avoir l'id
+        //$em->flush(); // pour avoir l'id // Pas besoin, le panier existe déjà
         $this->log('create', $panier);
         $em->flush();
 

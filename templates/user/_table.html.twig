@@ -22,7 +22,9 @@
                     <tbody>
                     {% for user in users %}
                         <tr>
-                            <td class="font-medium !text-gray-900">{{ user.nom }}</td>
+                            <td class="font-medium !text-gray-900">
+                                <a href="{{ path('user_show', {'id': user.id}) }}">{{ user.nom }}</a>
+                            </td>
                             <td>
                                 {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
                                     <a href="{{ path('dashboard', {'_switch_user': user.userIdentifier}) }}">

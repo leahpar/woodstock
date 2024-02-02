@@ -27,7 +27,7 @@
                 {% for stock in historiqueStocks %}
                 
                   <tr>
-                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ stock.panier ? stock.panier.date|date('d/m/Y H:i') }}</td>
+                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ stock.panier ? stock.panier.date|date('d/m/Y') }}</td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stock.panier ? stock.panier.user }}</td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {% if stock.panier and stock.panier.chantier %}

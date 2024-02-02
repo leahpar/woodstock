@@ -39,12 +39,17 @@ class Stock
 
     public function getDebit(): float
     {
-        return ($this->type === self::TYPE_SORTIE) ? $this->quantite * $this->prix : 0;
+        return ($this->type === self::TYPE_SORTIE) ? $this->getMontant() : 0;
     }
 
     public function getCredit(): float
     {
-        return ($this->type === self::TYPE_ENTREE) ? $this->quantite * $this->prix : 0;
+        return ($this->type === self::TYPE_ENTREE) ? $this->getMontant() : 0;
+    }
+
+    public function getMontant(): float
+    {
+        return $this->quantite * $this->prix;
     }
 
 }

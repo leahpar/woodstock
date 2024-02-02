@@ -27,7 +27,11 @@
                     {% for materiel in materiels %}
 
                         <tr>
-                            <td class="font-medium !text-gray-900">{{ materiel.nom }}</td>
+                            <td class="font-medium !text-gray-900">
+                                <a href="{{ path('materiel_show', {'id': materiel.id}) }}">
+                                    {{ materiel.nom }}
+                                </a>
+                            </td>
                             <td>{{ materiel.reference ?? '-' }}</td>
                             <td>{{ materiel.categorie ?? '-' }}</td>
                             <td>{{ materiel.proprietaire ?? '-' }}</td>

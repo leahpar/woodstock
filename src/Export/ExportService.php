@@ -30,14 +30,25 @@ class ExportService
 
     private function getWriterResponse(PS\Spreadsheet $spreadsheet, string $filename)
     {
-        $writer = PS\IOFactory::createWriter($spreadsheet, "Xlsx");
-
         // Stream du fichier dans une réponse symfony
         $response = new StreamedResponse();
-        $response->headers->set('Content-Type', 'application/vnd.ms-excel; charset=utf-8');
         $response->headers->set('Cache-Control', 'private');
 
+        switch (pathinfo($filename, PATHINFO_EXTENSION)) {
+            case 'xlsx':
+                $writer = PS\IOFactory::createWriter($spreadsheet, "Xlsx");
+                $response->headers->set('Content-Type', 'application/vnd.ms-excel; charset=utf-8');
+                break;
+            case 'csv':
+                $writer = PS\IOFactory::createWriter($spreadsheet, "Csv");
+                $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+                break;
+            default:
+                throw new \Exception("Format de fichier non supporté");
+        }
+
         $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
         $response->setCallback(function () use ($writer) {
             $writer->save("php://output");
         });
@@ -100,9 +111,9 @@ class ExportService
         $this->formatDataAndAutosize($sheet, $colonnes, $data);
 
         // TOTAL
-        //$range = "J1:J".($sheet->getHighestRow());
-        //$cell = "J".($sheet->getHighestRow()+1);
-        //$sheet->setCellValue($cell, "=SUM($range)");
+        $range = "J1:J".($sheet->getHighestRow());
+        $cell = "J".($sheet->getHighestRow()+1);
+        $sheet->setCellValue($cell, "=SUM($range)");
 
         return $this->getWriterResponse($spreadsheet, $filename);
     }
