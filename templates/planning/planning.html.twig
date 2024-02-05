@@ -3,62 +3,63 @@
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="relative">
 
-                <table class="mainTable">
+                <table class="relative planning text-sm">
 
                     <thead>
-                    <tr>
-                        <th scope="col" class="min-w-[12rem]">Equipe</th>
-                        <th scope="col" class="min-w-[12rem]">Poseurs</th>
-                        <th scope="col">Heures planifiées</th>
-                        <th scope="col">Heures passées</th>
-                        {% for date in dates %}
-                            <th scope="col">
-                                {{ date|format_datetime(pattern="eeee dd/MM", locale="fr") }}
-                            </th>
-                        {% endfor %}
-                    </tr>
+                        <tr class="divide-gray-200 divide-x ">
+                            <th scope="col" class="!text-right font-normal w-1/6 px-3 py-1">Heures<br><span class="text-xs">Passées / Planifiées</span></th>
+                            {% for date in dates %}
+                                <th scope="col" class="bg-white border-b border-gray-300 w-1/6">
+                                    {{ date|format_datetime(pattern="eeee dd/MM", locale="fr") }}
+                                </th>
+                            {% endfor %}
+                        </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody class="divide divide-gray-200 divide-y">
                     {% for poseur in poseurs %}
-                        <tr>
-                            <td class="font-medium !text-gray-900">{{ poseur.equipe }}</td>
-                            <td class="font-medium !text-gray-900">{{ poseur }}</td>
-                            <td class="font-medium !text-gray-900">
-                                {{ totalHeuresPlanifieesPoseurs[poseur.id] }}h
-                                {{ totalHeuresPlanifieesPoseurs[poseur.id] > 39 ? '⚠️' }}
-                            </td>
-                            <td class="font-medium !text-gray-900">
-                                {{ totalHeuresPasseesPoseurs[poseur.id] }}h
-                                {{ totalHeuresPasseesPoseurs[poseur.id] > 39 ? '⚠️' }}
+                        <tr class="divide-gray-200 divide-x odd:bg-gray-600/5">
+                            <td class="flex justify-between items-center gap-2 font-medium !text-gray-900 text-sm">
+                                <div>
+                                    <span class="inline-block text-xs uppercase bg-teal-500 text-white rounded px-1 mr-1">{{ poseur.equipe }}</span><br>{{ poseur }}
+                                </div>
+                                <div class="font-medium !text-gray-900 text-xs">
+                                    <span title="{{ totalHeuresPasseesPoseurs[poseur.id] }}h passée">{{ totalHeuresPasseesPoseurs[poseur.id] }}h</span>
+                                    {{ totalHeuresPasseesPoseurs[poseur.id] > 39 ? '⚠️' }}
+                                    /
+                                    <span title="{{ totalHeuresPlanifieesPoseurs[poseur.id] }}h planifiées">{{ totalHeuresPlanifieesPoseurs[poseur.id] }}h</span>
+                                    {{ totalHeuresPlanifieesPoseurs[poseur.id] > 39 ? '⚠️' }}
+                                </div>
                             </td>
                             {% for k,date in dates %}
-                                <td>
-                                    {% for intervention in interventions[poseur.id][k]??[] %}
-                                        <p class="showInterventionButton"
-                                           style="cursor:pointer; border: 1px solid black;"
-                                           data-disabled="{{ date.valide }}"
-                                           data-intervention="{{ intervention.id }}">
-                                            {% if intervention.activite == 'chantier' %}
-                                                {{ intervention.chantier }}
-                                                - {{ intervention.type }}
-                                            {% else %}
-                                                {{ intervention.activite }}
-                                            {% endif %}
-                                            - {{ intervention.heuresPlanifiees }}h
-                                        </p>
-                                    {% endfor %}
-
-                                    {% if is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe %}
-                                    {% if not date.valide %}
-                                        <button class="addInterventionButton"
-                                                data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
-                                                data-disabled="{{ date.valide }}"
-                                                data-poseur="{{ poseur.id }}">➕</button>
-                                    {% else %}
-                                        <span>✔️</span>
-                                    {% endif %}
-                                    {% endif %}
+                                <td class="bg-white/70">
+                                    <div class="w-full min-h-full flex flex-col gap-2 justify-start">
+                                        {% for intervention in interventions[poseur.id][k]??[] %}
+                                            <button class="showInterventionButton bg-gray-100 border border-gray-200 text-teal-500 px-2 py-1 rounded transition-all hover:bg-teal-500 hover:text-white hover:border-teal-500"
+                                               data-disabled="{{ date.valide }}"
+                                               data-intervention="{{ intervention.id }}">
+                                                {% if intervention.activite == 'chantier' %}
+                                                    {{ intervention.chantier }}
+                                                    - {{ intervention.type }}
+                                                {% else %}
+                                                    {{ intervention.activite }}
+                                                {% endif %}
+                                                - {{ intervention.heuresPlanifiees }}h
+                                            </button>
+                                        {% endfor %}
+    
+                                        {% if is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe %}
+                                        {% if not date.valide %}
+                                            <button
+                                                    data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
+                                                    data-disabled="{{ date.valide }}"
+                                                    data-poseur="{{ poseur.id }}"
+                                                    class="addInterventionButton rounded px-2 py-1 border border-dashed border-gray-200 text-gray-400 transition-all hover:border-gray-400 hover:text-teal-500">+ Ajouter</button>
+                                        {% else %}
+                                        
+                                        {% endif %}
+                                        {% endif %}
+                                    </div>
                                 </td>
                             {% endfor %}
                         </tr>
@@ -68,7 +69,7 @@
                     {# Valider les heures #}
                     {% if is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe %}
                     <tr>
-                        <td colspan="4">Validation planning</td>
+                        <td class="text-right"></td>
                         {% for k,date in dates %}
                             <td>
                                 <form action="{{ path('planning_valider') }}"
@@ -76,9 +77,13 @@
                                       method="post">
                                     <input type="hidden" name="date" value="{{ date|format_datetime(pattern="yyyy-MM-dd") }}">
                                     {% if date.valide %}
-                                        <button type="submit" name="valider" value="0">✔️ Dévalider</button>
+                                        <p class="text-center text-gray-500">Journée validée (<button type="submit" name="valider" value="0" class="underline">Dévalider</button>)</p>
                                     {% else %}
-                                        <button type="submit" name="valider" value="1">❌ Valider</button>
+                                        <button type="submit" name="valider" value="1" class="group px-2 py-1 bg-white rounded border border-gray-300 w-full transition-all hover:bg-teal-500 hover:text-white hover:border-teal-500">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="inline w-5 h-5 text-teal-500 transition-all group-hover:text-white">
+                                              <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
+                                            </svg>
+                                            Valider la journée</button>
                                     {% endif %}
                                 </form>
                             </td>
@@ -95,7 +100,7 @@
 </div>
 
 
-<dialog onclick="event.target===this && this.close()">
+<dialog onclick="event.target===this && this.close()" class="formWrapper w-full max-w-4xl rounded-3xl shadow-xl">
     {# planning/edit.html.twig #}
 </dialog>
 
