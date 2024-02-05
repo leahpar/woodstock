@@ -6,34 +6,9 @@
 {% set route = app.request.get('_route') %}
 {% set params = app.request.query.all %}
 
-{#<ul class="pagination">#}
-{#    <li>{{ count }} éléments</li>#}
-
-{#    {% if page > 1 %}#}
-{#        <li><a href="{{ path(route, params|merge({page: 1})) }}"><span class="icon icon-previous2"></span></a></li>#}
-{#        <li><a href="{{ path(route, params|merge({page: page-1})) }}"><span class="icon icon-arrow-left5"></span></a></li>#}
-{#    {% else %}#}
-{#        <li><a class="disable"><span class="icon icon-previous2"></span></a></li>#}
-{#        <li><a class="disable"><span class="icon icon-arrow-left5"></span></a></li>#}
-{#    {% endif %}#}
-
-{#    <li>#}
-{#        {{ (page-1)*search.limit+1 }} à {{ min(count, page*search.limit-1) }} sur {{ count }}#}
-{#    </li>#}
-
-{#    {% if page < pages %}#}
-{#        <li><a href="{{ path(route, params|merge({page: page+1})) }}"><span class="icon icon-arrow-right5"></span></a></li>#}
-{#        <li><a href="{{ path(route, params|merge({page: pages})) }}" ><span class="icon icon-next2"></span></a></li>#}
-{#    {% else %}#}
-{#        <li><a class="disable"><span class="icon icon-arrow-right5"></span></a></li>#}
-{#        <li><a class="disable"><span class="icon icon-next2"></span></a></li>#}
-{#    {% endif %}#}
-
-{#</ul>#}
-
 
 <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-    <div class="flex flex-1 justify-between sm:hidden">
+    <div class="flex flex-1 justify-between">
 
         {% if page > 1 %}
             <a href="{{ path(route, params|merge({page: page-1})) }}" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Précédent</a>
@@ -41,7 +16,7 @@
             <a href="" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Précédent</a>
         {% endif %}
 
-        <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-700">
                     <span class="font-medium">{{ (page-1)*search.limit+1 }}</span>
