@@ -7,7 +7,7 @@ use App\Entity\Stock;
 use App\Export\ExportService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/compta')]
 class ComptaController extends CommonController
