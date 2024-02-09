@@ -57,6 +57,7 @@
         {% if is_granted('ROLE_REFERENCE_STOCK') %}
             <a href="{{ path('panier_new',{type:'entree'}) }}" class="button">Ajouter du stock</a>
             <a href="{{ path('panier_new',{type:'sortie'}) }}" class="button">Sortir du stock</a>
+            <a href="{{ path('panier_new',{type:'retour'}) }}" class="button">Retour de stock</a>
         {% endif %}
 
       </div>

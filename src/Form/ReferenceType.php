@@ -61,7 +61,7 @@ class ReferenceType extends AbstractType
         // Gestion stock initial / modification du stock actuel
         $builder->add('quantite', Type\NumberType::class, [
             'required' => false,
-            //'mapped' => false,
+            'html5' => true,
         ]);
     }
 

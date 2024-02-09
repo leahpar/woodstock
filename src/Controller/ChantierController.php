@@ -96,16 +96,17 @@ class ChantierController extends CommonController
         /** @var Stock $stock */
         foreach ($stocks as $stock) {
 
-            if ($stock->type === Stock::TYPE_ENTREE) continue;
-
             $date = $stock->panier->date;
             $cat = $stock->reference->categorie;
 
             if (!isset($stats["9999-99"][$cat])) $stats["9999-99"][$cat] = 0;
             if (!isset($stats[$date->format('Y-m')][$cat])) $stats[$date->format('Y-m')][$cat] = 0;
 
-            $stats["9999-99"][$cat] += $stock->type === Stock::TYPE_SORTIE ? $stock->getDebit() : 0;
-            $stats[$date->format('Y-m')][$cat] += $stock->type === Stock::TYPE_SORTIE ? $stock->getDebit() : 0;
+            $stats["9999-99"][$cat] += $stock->isSortie() ? $stock->getDebit() : 0;
+            $stats[$date->format('Y-m')][$cat] += $stock->isSortie() ? $stock->getDebit() : 0;
+
+            $stats["9999-99"][$cat] -= $stock->isEntree() ? $stock->getCredit() : 0;
+            $stats[$date->format('Y-m')][$cat] -= $stock->isEntree() ? $stock->getCredit() : 0;
         }
         // Tri par clé (année / année-mois)
         krsort($stats);

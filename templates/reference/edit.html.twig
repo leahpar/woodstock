@@ -129,7 +129,13 @@
                                 {% set label = reference.id ? "Stock actuel" : "Stock initial" %}
                                 {{ form_label(form.quantite, label) }}
                                 <div class="mt-2">
-                                    {{ form_widget(form.quantite) }}
+                                    {# Gestion du stock initial pour tout le monde #}
+                                    {# MAJ du stock pour ceux qui ont les droits seulement #}
+                                    {% set readonly = true %}
+                                    {% if not reference.id or is_granted('ROLE_REFERENCE_STOCK') %}
+                                        {% set readonly = false %}
+                                    {% endif %}
+                                    {{ form_widget(form.quantite, {attr: {'readonly': readonly}}) }}
                                 </div>
                                 <div class="formErrors">
                                     {{ form_errors(form.quantite) }}

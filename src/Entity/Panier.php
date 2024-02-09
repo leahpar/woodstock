@@ -22,6 +22,7 @@ class Panier extends LoggableEntity
     #[ORM\Column()]
     public ?\DateTime $date = null;
 
+    // entree, sortie, retour
     #[ORM\Column(length: 255)]
     public string $type;
 
@@ -76,7 +77,11 @@ class Panier extends LoggableEntity
 
     public function __toString(): string
     {
-        return $this->type == Stock::TYPE_SORTIE ? 'Sortie' : 'Entrée'
+        return match ($this->type) {
+                'entree' => 'Entrée',
+                'sortie' => 'Sortie',
+                'retour' => 'Retour',
+            }
             . ' - ' . $this->date->format('d/m/Y H:i')
             . ' - ' . $this->user->username;
     }

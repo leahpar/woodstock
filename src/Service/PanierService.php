@@ -15,7 +15,6 @@ class PanierService
         private readonly EntityManagerInterface $em,
     ) {}
 
-
     public function getPanierBrouillon(User $user, string $type): Panier
     {
         return $this->em->getRepository(Panier::class)->findOneBy([
@@ -25,31 +24,26 @@ class PanierService
         ]) ?? $this->newPanier($user, $type);
     }
 
-    private function newPanier(User $user, string $type): Panier
+    private function newPanier(User $user, string $type, ?bool $brouillon = true): Panier
     {
         $panier = new Panier();
         $panier->user = $user;
         $panier->type = $type;
-        $panier->brouillon = true;
+        $panier->brouillon = $brouillon;
         return $panier;
     }
 
-    private function getStockForReference(Reference $reference, int $quantite): Stock
+    public function stockRegulReference(Reference $reference, int $quantite, User $user): void
     {
         $stock = new Stock();
         $stock->reference = $reference;
         $stock->type = $quantite > 0 ? Stock::TYPE_ENTREE : Stock::TYPE_SORTIE;
         $stock->prix = $reference->prix;
         $stock->quantite = abs($quantite);
-        return $stock;
-    }
 
-    public function stockRegulReference(Reference $reference, int $quantite, User $user): void
-    {
-        $stock = $this->getStockForReference($reference, $quantite);
         $reference->addStock($stock);
 
-        $panier = $this->newPanier($user, $quantite > 0 ? Stock::TYPE_ENTREE : Stock::TYPE_SORTIE);
+        $panier = $this->newPanier($user, $quantite > 0 ? Stock::TYPE_ENTREE : Stock::TYPE_SORTIE, brouillon: false);
         $panier->addStock($stock);
 
         $this->em->persist($panier);

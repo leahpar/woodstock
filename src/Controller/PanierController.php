@@ -10,14 +10,14 @@ use App\Service\PanierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/paniers')]
 class PanierController extends CommonController
 {
 
-    #[Route('/{type}', name: 'panier_new', requirements: ['type' => 'entree|sortie'])]
+    #[Route('/{type}', name: 'panier_new', requirements: ['type' => 'retour|entree|sortie'])]
     #[IsGranted('ROLE_REFERENCE_STOCK')]
     public function new(EntityManagerInterface $em, string $type, PanierService $panierService)
     {
@@ -60,7 +60,6 @@ class PanierController extends CommonController
             elseif ($reference->getQuantite() < $reference->seuil) {
                 $this->addFlash("warning", "Stock bas pour {$reference} !");
             }
-
 
             return $this->redirectToRoute('panier_edit', ['id' => $panier->id]);
         }

@@ -100,8 +100,9 @@ class Reference extends LoggableEntity
     public function getQuantite(): int
     {
         $quantite = 0;
+        /** @var Stock $stock */
         foreach ($this->stocks as $stock) {
-            if ($stock->type === Stock::TYPE_ENTREE) {
+            if ($stock->isEntree()) {
                 $quantite += $stock->quantite;
             } else {
                 $quantite -= $stock->quantite;
@@ -117,7 +118,7 @@ class Reference extends LoggableEntity
         $prix = 0.0;
         /** @var Stock $stock */
         foreach ($this->stocks as $stock) {
-            if ($stock->type === Stock::TYPE_ENTREE) {
+            if ($stock->isEntree()) {
                 $prix += $stock->quantite * $stock->prix;
             } else {
                 $prix -= $stock->quantite * $stock->prix;

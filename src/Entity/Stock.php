@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Stock
 {
 
+    const TYPE_RETOUR = 'retour';
     const TYPE_ENTREE = 'entree';
     const TYPE_SORTIE = 'sortie';
 
@@ -39,12 +40,22 @@ class Stock
 
     public function getDebit(): float
     {
-        return ($this->type === self::TYPE_SORTIE) ? $this->getMontant() : 0;
+        return $this->isSortie() ? $this->getMontant() : 0;
     }
 
     public function getCredit(): float
     {
-        return ($this->type === self::TYPE_ENTREE) ? $this->getMontant() : 0;
+        return $this->isEntree() ? $this->getMontant() : 0;
+    }
+
+    public function isEntree(): bool
+    {
+        return $this->type === self::TYPE_ENTREE || $this->type === self::TYPE_RETOUR;
+    }
+
+    public function isSortie(): bool
+    {
+        return $this->type === self::TYPE_SORTIE;
     }
 
     public function getMontant(): float

@@ -48,7 +48,7 @@ class PanierType extends AbstractType
 
             ->add('chantier', EntityType::class, [
                 'class' => Chantier::class,
-                'required' => true,
+                'required' => ($panier->type === Stock::TYPE_SORTIE || $panier->type === Stock::TYPE_RETOUR),
                 'autocomplete' => true,
                 'placeholder' => 'Choisir un chantier',
                 'query_builder' => fn ($er)

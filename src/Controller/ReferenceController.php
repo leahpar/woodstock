@@ -13,7 +13,7 @@ use App\Service\PanierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/references')]
@@ -87,14 +87,15 @@ class ReferenceController extends CommonController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($reference);
-            $em->flush(); // pour avoir l'id
 
             $data = [];
             $quantite = $form->get('quantite')->getData();
-            if ($quantite != 0) {
+            if ($quantite != 0 && $this->isGranted("ROLE_REFERENCE_STOCK")) {
                 $panierService->stockRegulReference($reference, $quantite, $user);
                 $data['stock'] = $quantite;
             }
+
+            $em->flush(); // pour avoir l'id
 
             $this->log('create', $reference, $data);
             $em->flush();
@@ -134,7 +135,7 @@ class ReferenceController extends CommonController
             // Gestion du stock
             $data = [];
             $quantite = $form->get('quantite')->getData();
-            if ($quantite != $reference->getQuantite()) {
+            if ($this->isGranted("ROLE_REFERENCE_STOCK") && $quantite != $reference->getQuantite()) {
                 $quantite = $quantite - $reference->getQuantite();
                 $panierService->stockRegulReference($reference, $quantite, $user);
                 $data['stock'] = (($quantite>0) ? '+' : '').$quantite;
@@ -172,10 +173,11 @@ class ReferenceController extends CommonController
             if (!isset($stats[$date->format('Y')])) $stats[$date->format('Y')] = ['E' => 0, 'S' => 0];
             if (!isset($stats[$date->format('Y-m')])) $stats[$date->format('Y-m')] = ['E' => 0, 'S' => 0];
 
-            $stats[$date->format('Y')]['E'] += $stock->type === Stock::TYPE_ENTREE ? $stock->quantite : 0;
-            $stats[$date->format('Y')]['S'] += $stock->type === Stock::TYPE_SORTIE ? $stock->quantite : 0;
-            $stats[$date->format('Y-m')]['E'] += $stock->type === Stock::TYPE_ENTREE ? $stock->quantite : 0;
-            $stats[$date->format('Y-m')]['S'] += $stock->type === Stock::TYPE_SORTIE ? $stock->quantite : 0;
+            $stats[$date->format('Y')]['E'] += $stock->isEntree() ? $stock->quantite : 0;
+            $stats[$date->format('Y')]['S'] += $stock->isSortie() ? $stock->quantite : 0;
+
+            $stats[$date->format('Y-m')]['E'] += $stock->isEntree() ? $stock->quantite : 0;
+            $stats[$date->format('Y-m')]['S'] += $stock->isSortie() ? $stock->quantite : 0;
         }
         // Tri par clé (année / année-mois)
         uksort(
