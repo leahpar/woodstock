@@ -74,6 +74,24 @@ class Reference extends LoggableEntity
     #[ORM\Column(nullable: true)]
     public ?int $seuil = null;
 
+    // Gestion par volume
+
+    #[ORM\Column(nullable: true)]
+    public ?float $largeur = null; // (mm)
+
+    #[ORM\Column(nullable: true)]
+    public ?float $hauteur = null; // (mm)
+
+    #[ORM\Column(nullable: true)]
+    public ?float $longueur = null; // (mm)
+
+    #[ORM\Column(nullable: true)]
+    public ?float $prixm3 = null; // (€/m3)
+
+    #[ORM\Column(nullable: true)]
+    public ?string $essence = null;
+
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
@@ -163,6 +181,14 @@ class Reference extends LoggableEntity
                 array_unique(array_values(self::CATEGORIES))
             ),
         );
+    }
+
+    public function calcPrix(): float
+    {
+        return round(($this->largeur??0)
+             * ($this->hauteur??0)
+             * ($this->longueur??0)
+             * ($this->prixm3??0) / 1_000_000.0 ,2);
     }
 
 }

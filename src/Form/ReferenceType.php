@@ -52,6 +52,36 @@ class ReferenceType extends AbstractType
             ])
         ;
 
+        // Gestion Volume
+        $builder
+            ->add('largeur', Type\NumberType::class, [
+                'required' => false,
+                'html5' => true,
+            ])
+            ->add('hauteur', Type\NumberType::class, [
+                'required' => false,
+                'html5' => true,
+            ])
+            ->add('longueur', Type\NumberType::class, [
+                'required' => false,
+                'html5' => true,
+            ])
+            ->add('prixm3', Type\NumberType::class, [
+                'required' => false,
+                'html5' => true,
+            ])
+            ->add('essence', Type\ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    "Douglas" => "Douglas",
+                    "Lamellés" => "Lamellés",
+                    "Ossature" => "Ossature",
+                    "Charpente" => "Charpente",
+                ],
+                'placeholder' => ' ',
+            ]);
+
+
         // Redirection vers la page précédente
         $builder->add('_referer', Type\HiddenType::class, [
             'required' => false,

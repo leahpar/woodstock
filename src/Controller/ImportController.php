@@ -94,6 +94,72 @@ class ImportController extends AbstractController
         return new Response('ok');
     }
 
+    #[Route('/import/stock2')]
+    public function importstock2(EntityManagerInterface $em)
+    {
+        // Import stock lamelés
+
+        // PhpSpreadsheet
+        $xlsx = \PhpOffice\PhpSpreadsheet\IOFactory::load(__DIR__.'/../../data/stock2.csv');
+        $sheet = $xlsx->getActiveSheet();
+        $content = $sheet->toArray(
+            null,  // null value
+            true,  // calculate formulas
+            false, // don't format data
+            false  // return simple array, not excel indexes
+        );
+
+        // remove header
+        array_shift($content);
+
+        // remove duplicates
+        $refs = [];
+        foreach($content as $ref) $refs[$ref[11]] = $ref;
+
+        /*
+        x
+        largeur
+        hauteur
+        longueur
+        x
+        x
+        x
+        prixm3
+        Marque / Fournisseur
+        Nom
+        Référence
+        Catégorie
+        Essence
+         */
+
+        foreach ($refs as $row) {
+
+            $reference = $em->getRepository(Reference::class)->findOneBy(['reference' => $row[11]]);
+            $reference ??= new Reference();
+            $reference->reference = $row[11];
+            $reference->marque = $row[9];
+            $reference->nom = $row[10];
+            $reference->categorie = $row[12];
+            $reference->conditionnement = "Unité";
+            $reference->codeComptaCompte = "60120000";
+            $reference->seuil = null;
+
+            $reference->largeur = (float)$row[1];
+            $reference->hauteur = (float)$row[2];
+            $reference->longueur = (float)$row[3];
+            $reference->prixm3 = (float)$row[7];
+            $reference->essence = $row[13];
+
+            $reference->prix = round($reference->calcPrix(), 2);
+
+            $em->persist($reference);
+        }
+
+        $em->flush();
+
+        return new Response('ok');
+    }
+
     #[Route('/import/users', name: 'import_users')]
     public function importusers(EntityManagerInterface $em)
     {

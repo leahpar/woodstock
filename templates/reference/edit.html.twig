@@ -27,6 +27,110 @@
                 {{ form_errors(form) }}
 
                 <div class="space-y-12">
+
+                    <div class="formSection">
+
+                        <div>
+                            <h2></h2>
+                        </div>
+
+                        <div class="formGrid">
+
+                            <div class="col-span-full">
+                                {{ form_label(form.categorie, 'Catégorie') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.categorie) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.categorie) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="formSection" id="form_volume">
+
+                        <div>
+                            <h2>Informations de volume</h2>
+                        </div>
+
+                        <div class="formGrid">
+
+                            <div class="sm:col-span-2">
+                                {{ form_label(form.largeur, 'Largeur (mm)') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.largeur) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.largeur) }}
+                                </div>
+                            </div>
+                            <div class="sm:col-span-2">
+                                {{ form_label(form.hauteur, 'Hauteur (mm)') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.hauteur) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.hauteur) }}
+                                </div>
+                            </div>
+                            <div class="sm:col-span-2">
+                                {{ form_label(form.longueur, 'Longueur (m)') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.longueur) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.longueur) }}
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                {{ form_label(form.prixm3, 'Prix (€/m3)') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.prixm3) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.prixm3) }}
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                {{ form_label(form.essence, 'Essence') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.essence) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.essence) }}
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label for="calc_volume">Volume (m3)</label>
+                                <div class="mt-2">
+                                    <input type="number" id="calc_volume" disabled>
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label for="calc_prix">prix (€)</label>
+                                <div class="mt-2">
+                                    <input type="number" id="calc_prix" disabled>
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label>&nbsp;</label>
+                                <button class="mt-2 rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
+                                        onclick="majDataFromVolume(); return false;">
+                                    Appliquer
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
                     <div class="formSection">
 
                         <div>
@@ -62,16 +166,6 @@
                                 </div>
                                 <div class="formErrors">
                                     {{ form_errors(form.marque) }}
-                                </div>
-                            </div>
-
-                            <div class="col-span-full">
-                                {{ form_label(form.categorie, 'Catégorie') }}
-                                <div class="mt-2">
-                                    {{ form_widget(form.categorie) }}
-                                </div>
-                                <div class="formErrors">
-                                    {{ form_errors(form.categorie) }}
                                 </div>
                             </div>
 
@@ -158,8 +252,7 @@
             {% if reference.id %}
                 <form method="post" action="{{ path('reference_delete', {'id': reference.id}) }}"
                       onsubmit="return confirm('Supprimer cette référence ?');" class="contents">
-                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span
-                                class="sr-only">, {{ reference.nom }}</span></button>
+                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ reference.nom }}</span></button>
                 </form>
             {% endif %}
 
@@ -171,13 +264,66 @@
 
 {% block javascripts %}
     <script>
-        // Vanilla JS
+        // Sélection automatique du code comptable en fonction de la catégorie
         const src = document.querySelector('select#reference_categorie');
         const dst = document.querySelector('select#reference_codeComptaCompte');
-
         // On change SRC => update DST with data-code
         src.addEventListener('change', function () {
             dst.value = this.options[this.selectedIndex].dataset.code;
         });
+
+
+        // Affichage section volume suivant la carégorie
+        // Catéories : charpente, charpente douglas, ossature, lamellés
+        const form_volume = document.querySelector('#form_volume');
+        const form_categorie = document.querySelector('select#reference_categorie');
+        function showVolumeForm() {
+            form_volume.style.display = ['CHARPENTE', 'CHARPENTE DOUGLAS', 'OSSATURE', 'LAMELLES'].includes(form_categorie.value) ? 'grid' : 'none';
+        }
+        form_categorie.addEventListener('change', showVolumeForm);
+        showVolumeForm.call();
+
+        // Calcul du volume et du prix
+        const largeur = document.querySelector('input#reference_largeur');
+        const hauteur = document.querySelector('input#reference_hauteur');
+        const longueur = document.querySelector('input#reference_longueur');
+        const volume = document.querySelector('input#calc_volume');
+        const prixm3 = document.querySelector('input#reference_prixm3');
+        const essence = document.querySelector('select#reference_essence');
+        const prix = document.querySelector('input#calc_prix');
+        const target_prix = document.querySelector('input#reference_prix');
+        const target_reference = document.querySelector('input#reference_reference');
+        const target_nom = document.querySelector('input#reference_nom');
+
+        function updateVolume() {
+            const l = parseFloat(largeur.value)  || 0;
+            const h = parseFloat(hauteur.value)  || 0;
+            const L = parseFloat(longueur.value) || 0;
+            const p = parseFloat(prixm3.value)   || 0;
+            const v = l * h * L / 1000000;
+            const p2 = v * p;
+            volume.value = goodRound(v, 5);
+            prix.value = goodRound(p2, 2);
+            //console.log(l, h, L, p, v, p2);
+        }
+
+        largeur.addEventListener('input', updateVolume);
+        hauteur.addEventListener('input', updateVolume);
+        longueur.addEventListener('input', updateVolume);
+        prixm3.addEventListener('input', updateVolume);
+        updateVolume();
+
+        function majDataFromVolume() {
+            target_prix.value = prix.value;
+            target_reference.value = `${essence.value.substr(0, 1)}${largeur.value}X${hauteur.value}/${longueur.value}m`;
+            target_nom.value = `${largeur.value}x${hauteur.value}mm ${longueur.value}m ${essence.value}`;
+        }
+
+        // JS cant round float numbers...
+        function goodRound(value, decimals) {
+            return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+        }
+
+
     </script>
 {% endblock %}
