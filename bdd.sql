@@ -39,3 +39,9 @@ left join stock s on s.panier_id = p.id
 WHERE p.brouillon = 1
 group by p.id
 ORDER BY p.user_id ASC, p.type asc, p.date asc;
+
+insert into materiel (nom, reference, categorie)
+select r.reference, r.nom, 'Echafaudage' from reference r
+where categorie = 'ECHAFAUDAGE';
+
+delete from reference where categorie = 'ECHAFAUDAGE';
