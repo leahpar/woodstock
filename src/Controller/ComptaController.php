@@ -25,13 +25,13 @@ class ComptaController extends CommonController
             $chantier = $stock?->panier?->chantier;
 
             dump($stock);
-            $key = ($chantier->referenceTravaux?:'7001')."-".$stock->reference->codeComptaCompte;
+            $key = ($chantier?->referenceTravaux??'7001')."-".$stock->reference->codeComptaCompte;
             if (!isset($data[$key])) {
                 $data[$key] = [
                     /* 0 Journal    */ "ANA",
                     /* 1 Date       */ $stock->panier->date->format('t/m/Y'),
                     /* 2 Cpte       */ $stock->reference->codeComptaCompte,
-                    /* 3 Analytique */ $chantier->referenceTravaux?:'7001',
+                    /* 3 Analytique */ $chantier?->referenceTravaux??'7001',
                     /* 4 Libellé    */ $stock->type . " stock du " . $stock->panier->date->format('t/m/Y'),
                     /* 5 Débit      */ $stock->getDebit()  ?: 0,
                     /* 6 Crédit     */ $stock->getCredit() ?: 0,
