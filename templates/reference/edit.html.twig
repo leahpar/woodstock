@@ -278,7 +278,10 @@
         const form_volume = document.querySelector('#form_volume');
         const form_categorie = document.querySelector('select#reference_categorie');
         function showVolumeForm() {
-            form_volume.style.display = ['CHARPENTE', 'CHARPENTE DOUGLAS', 'OSSATURE', 'LAMELLES'].includes(form_categorie.value) ? 'grid' : 'none';
+            const display = ['CHARPENTE', 'CHARPENTE DOUGLAS', 'OSSATURE', 'LAMELLES'].includes(form_categorie.value);
+            form_volume.style.display = display ? 'grid' : 'none';
+            // Champs obligatoires si affichés
+            form_volume.querySelectorAll('input, select').forEach(f => f.required = display);
         }
         form_categorie.addEventListener('change', showVolumeForm);
         showVolumeForm.call();
