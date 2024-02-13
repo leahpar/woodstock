@@ -51,9 +51,10 @@ class PanierController extends CommonController
             $stock->prix = $stock->reference->prix;
             $panier->addStock($stock);
             $em->persist($stock);
-            $em->flush();
 
             $reference = $stock->reference;
+            $em->flush();
+
             if ($reference->getQuantite() < 0) {
                 $this->addFlash("error", "Stock négatif pour {$reference} !");
             }
@@ -61,12 +62,13 @@ class PanierController extends CommonController
                 $this->addFlash("warning", "Stock bas pour {$reference} !");
             }
 
+
             return $this->redirectToRoute('panier_edit', ['id' => $panier->id]);
         }
 
         return $this->render('panier/edit.html.twig', [
             'panier' => $panier,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -108,7 +110,6 @@ class PanierController extends CommonController
     #[Route('/{id}/save', name: 'panier_save')]
     public function save(EntityManagerInterface $em, Panier $panier)
     {
-
         // Notif stock bas
         $refs = [];
         foreach ($panier->stocks as $stock) {

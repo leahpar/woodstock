@@ -95,4 +95,16 @@ class Panier extends LoggableEntity
         );
     }
 
+    /**
+     * Retourne vrai si le panier contient un stock avec une quantité négative
+     */
+    public function hasStockNegatif(): bool
+    {
+        return array_reduce(
+            $this->stocks->toArray(),
+            fn (bool $has, Stock $stock) => $has || $stock->reference->getQuantite() < 0,
+            false
+        );
+    }
+
 }
