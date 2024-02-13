@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Reference;
+use App\Service\ParamService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +11,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ReferenceType extends AbstractType
 {
+
+    public function __construct(
+        private readonly ParamService $paramService,
+    ) {}
+
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -68,13 +75,9 @@ class ReferenceType extends AbstractType
             ])
             ->add('essence', Type\ChoiceType::class, [
                 'required' => false,
-                'choices' => [
-                    "Douglas" => "Douglas",
-                    "Lamellés" => "Lamellés",
-                    "Ossature" => "Ossature",
-                    "Charpente" => "Charpente",
-                ],
                 'placeholder' => ' ',
+                'choices' => Reference::essenceChoices(),
+                'choice_attr' => fn ($essence) => ['data-prixm3' => $this->paramService->get("prixm3_$essence")??"0"],
             ]);
 
 

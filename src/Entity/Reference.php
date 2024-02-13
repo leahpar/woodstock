@@ -38,12 +38,19 @@ class Reference extends LoggableEntity
     ];
 
     public const CONDITIONNEMENTS = [
-        "Unité" => "Unité",
-        "ML" => "ML",
-        "Boîte" => "Boîte",
-        "Carton" => "Carton",
-        "Barette" => "Barette",
-        "Rouleau" => "Rouleau",
+        "Unité",
+        "ML",
+        "Boîte",
+        "Carton",
+        "Barette",
+        "Rouleau",
+    ];
+
+    public const ESSENCES = [
+        "Douglas" => "douglas",
+        "Lamellés" => "lamelles",
+        "Ossature" => "ossature",
+        "Charpente" => "charpente",
     ];
 
     #[ORM\Id]
@@ -171,9 +178,14 @@ class Reference extends LoggableEntity
     public static function conditionnementChoices(): array
     {
         return array_combine(
-            array_keys(self::CONDITIONNEMENTS),
-            array_keys(self::CONDITIONNEMENTS)
+            self::CONDITIONNEMENTS,
+            self::CONDITIONNEMENTS
         );
+    }
+
+    public static function essenceChoices(): array
+    {
+        return self::ESSENCES;
     }
 
     public static function categoriesCodeDataMapping(): array
@@ -201,12 +213,14 @@ class Reference extends LoggableEntity
         );
     }
 
+    public function getVolume(): float
+    {
+        return ($this->largeur??0) * ($this->hauteur??0) * ($this->longueur??0) / 1_000_000.0;
+    }
+
     public function calcPrix(): float
     {
-        return round(($this->largeur??0)
-             * ($this->hauteur??0)
-             * ($this->longueur??0)
-             * ($this->prixm3??0) / 1_000_000.0 ,2);
+        return round($this->prixm3 * $this->getVolume(), 2);
     }
 
 }

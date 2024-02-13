@@ -45,3 +45,9 @@ select r.reference, r.nom, 'Echafaudage' from reference r
 where categorie = 'ECHAFAUDAGE';
 
 delete from reference where categorie = 'ECHAFAUDAGE';
+
+
+update reference set essence = 'douglas' where essence = 'Douglas';
+update reference set essence = 'lamelles' where essence = 'Lamellés';
+update reference set essence = 'ossature' where essence = 'Ossature';
+update reference set essence = 'charpente' where essence = 'Charpente';

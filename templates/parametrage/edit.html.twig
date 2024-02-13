@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="max-w-2xl mx-auto">
+
+        <div class="md:flex md:items-center md:justify-between mb-8">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                    Paramétrage
+                </h2>
+            </div>
+            <div class="mt-4 flex md:ml-4 md:mt-0">
+            </div>
+        </div>
+
+        <div class="formWrapper">
+
+            <form method="post">
+
+                <div class="space-y-12">
+                    <div class="formSection">
+
+                        <div>
+                            <h2>Prix des essences</h2>
+                        </div>
+
+                        <div class="formGrid">
+
+                            <div class="col-span-full">
+                                <label for="prixm3_douglas">Douglas (€/m3)</label>
+                                <div class="mt-2">
+                                    <input type="number" step="0.01" id="prixm3_douglas" name="prixm3_douglas" value="{{ params.prixm3_douglas??null }}">
+                                </div>
+                            </div>
+                            <div class="col-span-full">
+                                <label for="prixm3_lamelles">Lamellés (€/m3)</label>
+                                <div class="mt-2">
+                                    <input type="number" step="0.01" id="prixm3_lamelles" name="prixm3_lamelles" value="{{ params.prixm3_lamelles??null }}">
+                                </div>
+                            </div>
+                            <div class="col-span-full">
+                                <label for="prixm3_ossature">Ossature (€/m3)</label>
+                                <div class="mt-2">
+                                    <input type="number" step="0.01" id="prixm3_ossature" name="prixm3_ossature" value="{{ params.prixm3_ossature??null }}">
+                                </div>
+                            </div>
+                            <div class="col-span-full">
+                                <label for="prixm3_charpente">Charpente (€/m3)</label>
+                                <div class="mt-2">
+                                    <input type="number" step="0.01" id="prixm3_charpente" name="prixm3_charpente" value="{{ params.prixm3_charpente??null }}">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <button type="submit"
+                            class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}
