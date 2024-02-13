@@ -40,11 +40,7 @@ class ReferenceType extends AbstractType
             ])
             ->add('conditionnement', Type\ChoiceType::class, [
                 'required' => true,
-                'choices' => [
-                    "Unité" => "Unité",
-                    "ML" => "ML",
-                    "Boîte" => "Boîte",
-                ],
+                'choices' => Reference::conditionnementChoices(),
             ])
             ->add('seuil', Type\NumberType::class, [
                 'required' => true,

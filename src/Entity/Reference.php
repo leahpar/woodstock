@@ -37,6 +37,15 @@ class Reference extends LoggableEntity
         "EPI" => 60631000,
     ];
 
+    public const CONDITIONNEMENTS = [
+        "Unité" => "Unité",
+        "ML" => "ML",
+        "Boîte" => "Boîte",
+        "Carton" => "Carton",
+        "Barette" => "Barette",
+        "Rouleau" => "Rouleau",
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -158,6 +167,15 @@ class Reference extends LoggableEntity
             array_keys(self::CATEGORIES)
         );
     }
+
+    public static function conditionnementChoices(): array
+    {
+        return array_combine(
+            array_keys(self::CONDITIONNEMENTS),
+            array_keys(self::CONDITIONNEMENTS)
+        );
+    }
+
     public static function categoriesCodeDataMapping(): array
     {
         // Return [categorie => ["data-code" => codeCompta]]
