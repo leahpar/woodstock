@@ -142,7 +142,7 @@ class ImportController extends AbstractController
             $reference->categorie = $row[12];
             $reference->conditionnement = "Unité";
             $reference->codeComptaCompte = "60120000";
-            $reference->seuil = null;
+            $reference->seuil = 1;
 
             $reference->largeur = (float)$row[1];
             $reference->hauteur = (float)$row[2];
