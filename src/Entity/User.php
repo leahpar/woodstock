@@ -52,6 +52,9 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[ORM\Column]
     public bool $conducteurTravaux = false;
 
+    #[ORM\Column]
+    public bool $disabled = false;
+
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Panier::class, orphanRemoval: true)]
     #[Ignore]
     private Collection $paniers;

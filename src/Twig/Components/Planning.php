@@ -52,6 +52,7 @@ class Planning
         }
         else {
             $poseurs = $this->em->getRepository(User::class)->search(
+                // NB: on prend même les poseurs désactivés ici, ils seront masqués plus tard si pas d'intervention
                 new UserSearch(['limit' => 0, 'equipe' => $search->equipe, 'tri' => 'equipe'])
             )->getIterator()->getArrayCopy();
         }
@@ -78,6 +79,19 @@ class Planning
                 );
             }
         }
+
+        // on supprime les poseurs désactivés & sans intervention
+        foreach ($this->poseurs as $id => $poseur) {
+            if ($poseur->disabled
+                && $this->totalHeuresPlanifieesPoseurs[$id] == 0
+                && $this->totalHeuresPasseesPoseurs[$id] == 0) {
+                unset($this->poseurs[$id]);
+                unset($this->interventions[$id]);
+                unset($this->totalHeuresPlanifieesPoseurs[$id]);
+                unset($this->totalHeuresPasseesPoseurs[$id]);
+            }
+        }
+
     }
 
     #[ExposeInTemplate]

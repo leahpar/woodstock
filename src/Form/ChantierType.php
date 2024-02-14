@@ -31,7 +31,8 @@ class ChantierType extends AbstractType
                 'placeholder' => 'Choisir un conducteur de travaux',
                 'query_builder' => fn ($er)
                 => $er->createQueryBuilder('u')
-                    ->where('u.roles NOT LIKE :role')
+                    ->andWhere('u.disabled = 0')
+                    ->andWhere('u.roles NOT LIKE :role')
                     ->setParameter('role', '%ROLE_SUPER_ADMIN%')
                     ->andWhere('u.conducteurTravaux = true')
                     ->orderBy('u.nom', 'ASC'),

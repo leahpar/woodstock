@@ -33,6 +33,23 @@
                     <div class="formSection">
 
                         <div>
+                        </div>
+
+                        <div class="formGrid">
+
+                            <div class="col-span-full">
+                                {{ form_label(form.disabled, 'Désactivé') }}
+                                {{ form_widget(form.disabled) }}
+                                <div class="formErrors">
+                                    {{ form_errors(form.disabled) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="formSection">
+
+                        <div>
                             <h2>Détail du chantier</h2>
                         </div>
 

@@ -23,7 +23,10 @@
                     {% for user in users %}
                         <tr>
                             <td class="font-medium !text-gray-900">
-                                <a href="{{ path('user_show', {'id': user.id}) }}">{{ user.nom }}</a>
+                                <a href="{{ path('user_show', {'id': user.id}) }}"
+                                    {% if user.disabled %}style="color: firebrick !important; text-decoration: line-through" {% endif %}>
+                                    {{ user.nom }}
+                                </a>
                             </td>
                             <td>
                                 {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}

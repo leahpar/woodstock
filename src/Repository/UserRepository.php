@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use App\Search\ReferenceSearch;
 use App\Search\SearchableEntitySearch;
 use App\Search\UserSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -68,24 +67,32 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('search', "%{$search->search}%");
         }
 
+        if ($search->disabled) {
+            $query->andWhere('u.disabled = :disabled')->setParameter('disabled', $search->disabled);
+        }
+
         if ($search->equipe) {
             $query->andWhere('u.equipe = :equipe')->setParameter('equipe', $search->equipe);
+        }
+
+        if ($search->disabled == null) {
+            $query->orderBy('u.disabled', 'ASC');
         }
 
         $order = $search->order ?? 'ASC';
         switch ($search->tri) {
             default:
             case 'nom':
-                $query->orderBy('u.nom', $order);
+                $query->addOrderBy('u.nom', $order);
                 break;
             case 'equipe':
-                $query->orderBy('u.equipe', $order);
+                $query->addOrderBy('u.equipe', $order);
                 break;
             case 'chefEquipe':
-                $query->orderBy('u.chefEquipe', $order);
+                $query->addOrderBy('u.chefEquipe', $order);
                 break;
             case 'conducteur':
-                $query->orderBy('u.conducteurTravaux', $order);
+                $query->addOrderBy('u.conducteurTravaux', $order);
                 break;
         }
 
