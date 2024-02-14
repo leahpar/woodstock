@@ -6,6 +6,7 @@ use App\Logger\LoggableEntity;
 use App\Repository\ReferenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Ignore;
@@ -13,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReferenceRepository::class)]
 #[UniqueEntity('reference')]
+#[ORM\HasLifecycleCallbacks]
 class Reference extends LoggableEntity
 {
 
@@ -93,6 +95,9 @@ class Reference extends LoggableEntity
     #[ORM\Column(nullable: true)]
     public ?int $seuil = null;
 
+    #[ORM\Column(type: 'date')]
+    public ?\DateTime $dateModifPrix = null;
+
     // Gestion par volume
 
     #[ORM\Column(nullable: true)]
@@ -114,6 +119,7 @@ class Reference extends LoggableEntity
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
+        $this->dateModifPrix = new \DateTime();
     }
 
     public function addStock(Stock $stock): self
@@ -224,6 +230,14 @@ class Reference extends LoggableEntity
     public function calcPrix(): float
     {
         return round($this->prixm3 * $this->getVolume(), 2);
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(PreUpdateEventArgs $event)
+    {
+        if ($event->hasChangedField('prix')) {
+            $this->dateModifPrix = new \DateTime();
+        }
     }
 
 }

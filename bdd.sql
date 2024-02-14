@@ -51,3 +51,7 @@ update reference set essence = 'douglas' where essence = 'Douglas';
 update reference set essence = 'lamelles' where essence = 'Lamellés';
 update reference set essence = 'ossature' where essence = 'Ossature';
 update reference set essence = 'charpente' where essence = 'Charpente';
+
+ALTER TABLE reference ADD date_modif_prix DATE NULL;
+update reference set date_modif_prix = '2000-01-01';
+

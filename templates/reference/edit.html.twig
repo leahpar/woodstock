@@ -323,7 +323,7 @@
 
         function majDataFromVolume() {
             target_prix.value = prix.value;
-            target_reference.value = `${essence.value.substr(0, 1)}${largeur.value}X${hauteur.value}/${longueur.value}m`;
+            target_reference.value = `${essence.value.substr(0, 1).toUpperCase()}${largeur.value}X${hauteur.value}/${longueur.value}m`;
             target_nom.value = `${largeur.value}x${hauteur.value}mm ${longueur.value}m ${essence.value}`;
         }
 

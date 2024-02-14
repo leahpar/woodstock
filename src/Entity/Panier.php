@@ -19,7 +19,7 @@ class Panier extends LoggableEntity
     #[ORM\Column]
     public ?int $id = null;
 
-    #[ORM\Column()]
+    #[ORM\Column]
     public ?\DateTime $date = null;
 
     // entree, sortie, retour
