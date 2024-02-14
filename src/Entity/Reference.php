@@ -44,6 +44,9 @@ class Reference extends LoggableEntity
         "Carton",
         "Barette",
         "Rouleau",
+        "Panneaux",
+        "Plaques",
+        "m2",
     ];
 
     public const ESSENCES = [
