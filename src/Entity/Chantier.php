@@ -106,34 +106,44 @@ class Chantier extends LoggableEntity
         return $this->interventions;
     }
 
-    public function getHeures(string $truc, string $type): int
+    public function getHeures(string $truc, ?string $type = 'all'): int
     {
         // $truc = 'devis', 'planifie' ou 'passe'
-        // $type = 'atelier' ou 'pose'
+        // $type = 'atelier' ou 'pose' ou 'all'
         if ($truc == 'devis') {
-            return $this->{'heuresDevis'.ucfirst($type)};
+            return $this->getHeuresDevis($type);
         }
+
         return array_reduce(
             $this->interventions->toArray(),
-            fn (int $total, Intervention $int)
-                => $total + ($type && $int->type == $type ? $int->{'heures'.ucfirst($truc).'es'} : 0),
+            fn(int $t, Intervention $int)
+                => $t + (($type=='all' || $int->type==$type) ? $int->{'heures' . ucfirst($truc) . 'es'} : 0),
             0
         );
     }
 
-    public function getMontant(string $truc, string $type): int
+    public function getMontant(string $truc, ?string $type = 'all'): int
     {
         // $truc = 'devis', 'planifie' ou 'passe'
-        // $type = 'atelier' ou 'pose'
+        // $type = 'atelier' ou 'pose' ou 'all'
         if ($truc == 'devis') {
-            return $this->{'heuresDevis'.ucfirst($type)} * $this->tauxHoraire;
+            return $this->getHeuresDevis($type) * $this->tauxHoraire;
         }
         return array_reduce(
             $this->interventions->toArray(),
-            fn (int $total, Intervention $int)
-                => $total + ($type && $int->type == $type ? $int->{'heures'.ucfirst($truc).'es'} * $int->tauxHoraire : 0),
+            fn (int $t, Intervention $int)
+                => $t + (($type=='all' || $int->type==$type) ? $int->{'heures' . ucfirst($truc) . 'es'} * $int->tauxHoraire : 0),
             0
         );
+    }
+
+    public function getHeuresDevis(?string $type = 'all'): int
+    {
+        return match ($type) {
+            'atelier' => $this->heuresDevisAtelier,
+            'pose'    => $this->heuresDevisPose,
+            default   => $this->heuresDevisAtelier + $this->heuresDevisPose,
+        };
     }
 
 }

@@ -49,34 +49,21 @@
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.prix|euro }}</dd>
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-900">heures devis - atelier</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('devis', 'atelier') }} h</dd>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('devis', 'atelier')|euro }}</dd>
+                    <dt class="text-sm font-medium text-gray-900">heures devis</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('devis') }} h</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('devis')|euro }}</dd>
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-900">heures devis - pose</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('devis', 'pose') }} h</dd>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('devis', 'pose')|euro }}</dd>
+                    <dt class="text-sm font-medium text-gray-900">heures passées</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('passe') }} h</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('passe')|euro }}</dd>
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-900">heures planifiées - atelier</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('planifie', 'atelier') }} h</dd>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('planifie', 'atelier')|euro }}</dd>
-                </div>
-                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-900">heures planifiées - pose</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('planifie', 'pose') }} h</dd>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('planifie', 'pose')|euro }}</dd>
-                </div>
-                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-900">heures passées - atelier</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('passe', 'atelier') }} h</dd>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('passe', 'atelier')|euro }}</dd>
-                </div>
-                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-900">heures passées - pose</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('passe', 'pose') }} h</dd>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('passe', 'pose')|euro }}</dd>
+                    <dt class="text-sm font-medium text-gray-900">Ecart</dt>
+                    {% set heures = chantier.heures('passe') - chantier.heures('devis') %}
+                    {% set montant = chantier.montant('passe') - chantier.montant('devis') %}
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ heures>0?'+' }}{{ heures }} h</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ montant>0?'+' }}{{ montant|euro }}</dd>
                 </div>
             </dl>
         </div>
