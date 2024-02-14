@@ -42,7 +42,7 @@ class ComptaController extends CommonController
                 $data[$key][6] += $stock->getCredit();
             }
 
-            $key .= "-CREDIT";
+            $key = "7000-".$stock->reference->codeComptaCompte;
             if (!isset($data[$key])) {
                 $data[$key] = [
                     /* 0 Journal    */ "ANA",
