@@ -94,6 +94,17 @@
                                     {{ form_errors(form.commentaire) }}
                                 </div>
                             </div>
+
+
+                            <div class="col-span-full">
+                                {{ form_label(form.budgetAchat, 'Budget achat') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.budgetAchat) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.budgetAchat) }}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -137,7 +148,6 @@
                                     {{ form_errors(form.tauxHoraire) }}
                                 </div>
                             </div>
-
 
                         </div>
                     </div>

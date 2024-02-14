@@ -54,6 +54,10 @@ class ChantierType extends AbstractType
                 'required' => false,
                 'empty_data' => 0,
             ])
+            ->add('budgetAchat', Type\NumberType::class, [
+                'required' => false,
+                'empty_data' => 0,
+            ])
         ;
 
         $builder->add('_referer', Type\HiddenType::class, [

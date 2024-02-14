@@ -50,14 +50,17 @@ class Chantier extends LoggableEntity
     #[ORM\OrderBy(['date' => 'DESC'])]
     private Collection $interventions;
 
-    #[ORM\Column()]
+    #[ORM\Column]
     public int $heuresDevisAtelier = 0;
 
-    #[ORM\Column()]
+    #[ORM\Column]
     public int $heuresDevisPose = 0;
 
-    #[ORM\Column()]
+    #[ORM\Column]
     public float $tauxHoraire = 50;
+
+    #[ORM\Column]
+    public float $budgetAchat = 0;
 
     public function __construct()
     {

@@ -44,10 +44,21 @@
                     <dt class="text-sm font-medium text-gray-900">Commentaire</dt>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.commentaire }}</dd>
                 </div>
+
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-900">Budget achat</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.budgetAchat|euro }}</dd>
+                </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">Sortie de stock</dt>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.prix|euro }}</dd>
                 </div>
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-900">Ecart</dt>
+                    {%  set montant = chantier.prix - chantier.budgetAchat %}
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ montant>0?'+' }}{{ montant|euro }}</dd>
+                </div>
+
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">heures devis</dt>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('devis') }} h</dd>
