@@ -2,8 +2,6 @@
 
 namespace App\Search;
 
-use ReflectionProperty;
-
 trait HydrateTrait
 {
     public function hydrate(array $data): void

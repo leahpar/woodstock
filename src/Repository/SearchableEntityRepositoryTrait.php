@@ -17,7 +17,7 @@ trait SearchableEntityRepositoryTrait
      * @param SearchableEntitySearch $search
      * @return Paginator<T>
      */
-    public function search(SearchableEntitySearch $search): Paginator
+    public function search(SearchableEntitySearch &$search): Paginator
     {
         // Construction de la requête
         $query = $this->getSearchQuery($search);
@@ -27,7 +27,11 @@ trait SearchableEntityRepositoryTrait
         if ($search->limit) $query->setMaxResults($search->limit);
 
         // Paginator
-        return new Paginator($query->getQuery(), $fetchJoinCollection = true);
+        $paginator = new Paginator($query->getQuery(), $fetchJoinCollection = true);
+
+        $search->count = $paginator->count();
+
+        return $paginator;
     }
 
     abstract function getSearchQuery(SearchableEntitySearch $search): QueryBuilder;

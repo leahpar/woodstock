@@ -1,0 +1,32 @@
+<div>
+
+    <form method="get">
+
+        <input type="text" name="search" placeholder="Rechercher..." value="{{ search.search }}">
+
+        {% if search.target == 'Reference' %}
+        <select name="categorie">
+            <option value="">Toutes les catégories</option>
+            {% for categorie in getCategories() %}
+                <option value="{{ categorie }}" {{ categorie == search.categorie ? "selected" }}>{{ categorie }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+
+        {% if search.target == 'Materiel' %}
+        <select name="categorie">
+            <option value="">Toutes les catégories</option>
+            {# TODO: gérer la liste en dynamique #}
+            {% for categorie in ['Electroportatif', 'Petit outillage', 'Echafaudage', 'Outillage filaire'] %}
+                <option value="{{ categorie }}" {{ categorie == search.categorie ? "selected" }}>{{ categorie }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+
+
+
+        <input type="submit" value="Go">
+
+    </form>
+
+</div>

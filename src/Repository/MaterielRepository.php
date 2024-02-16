@@ -56,6 +56,11 @@ class MaterielRepository extends ServiceEntityRepository
                 ->setParameter('search', "%{$search->search}%");
         }
 
+        if ($search->categorie) {
+            $query->andWhere('m.categorie = :categorie')
+                ->setParameter('categorie', $search->categorie);
+        }
+
         $order = $search->order ?? 'DESC';
         switch ($search->tri) {
             default:

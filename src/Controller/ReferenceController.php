@@ -27,11 +27,7 @@ class ReferenceController extends CommonController
         $references = $em->getRepository(Reference::class)->search($search);
         return $this->render('reference/index.html.twig', [
             'references' => $references,
-            'search' => [
-                'page' => $search->page,
-                'limit' => $search->limit,
-                'count' => $references->count(),
-            ],
+            'search' => $search,
         ]);
     }
 

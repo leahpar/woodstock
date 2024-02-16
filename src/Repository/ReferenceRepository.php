@@ -45,6 +45,11 @@ class ReferenceRepository extends ServiceEntityRepository
                 ->setParameter('search', "%{$search->search}%");
         }
 
+        if ($search->categorie) {
+            $query->andWhere('r.categorie = :categorie')
+                ->setParameter('categorie', $search->categorie);
+        }
+
         $order = $search->order ?? 'ASC';
         switch ($search->tri) {
             case 'nom':

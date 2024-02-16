@@ -26,11 +26,7 @@ class MaterielController extends CommonController
 
         return $this->render('materiel/index.html.twig', [
             'materiels' => $materiels,
-            'search' => [
-                'page' => $search->page,
-                'limit' => $search->limit,
-                'count' => $materiels->count(),
-            ],
+            'search' => $search,
         ]);
     }
 

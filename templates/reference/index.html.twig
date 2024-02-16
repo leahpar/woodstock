@@ -63,6 +63,7 @@
       </div>
     </div>
 
+    {{ include('parts/recherche2.html.twig', {search: search}) }}
     {{ include('reference/_table.html.twig', { references: references }) }}
     {{ include('parts/pagination.html.twig', {search: search}) }}
 
