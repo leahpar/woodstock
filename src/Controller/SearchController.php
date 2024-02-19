@@ -29,16 +29,14 @@ class SearchController extends AbstractController
 
         $chantiers = [];
         if ($this->isGranted('ROLE_CHANTIER_LIST')) {
-            $chantiers = $em->getRepository(Chantier::class)->search(
-                new ChantierSearch([...$request->query->all(), 'limit' => 0])
-            );
+            $search = new ChantierSearch([...$request->query->all(), 'limit' => 0]);
+            $chantiers = $em->getRepository(Chantier::class)->search($search);
         }
 
         $references = [];
         if ($this->isGranted('ROLE_REFERENCE_LIST')) {
-            $references = $em->getRepository(Reference::class)->search(
-                new ReferenceSearch([...$request->query->all(), 'limit' => 0])
-            );
+            $search = new ReferenceSearch([...$request->query->all(), 'limit' => 0]);
+            $references = $em->getRepository(Reference::class)->search($search);
         }
 
         $materiels = [];
