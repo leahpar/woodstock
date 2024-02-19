@@ -3,8 +3,7 @@
         <div class="sm:flex-auto">
             <h1 class="text-base font-semibold leading-6 text-gray-900">{#Historique#}</h1>
             <p class="mt-2 text-sm text-gray-700">Historique des mouvements de stock pour ce chantier.</p>
-        </div>
-        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+            <input type="search" id="tableSearch">
         </div>
     </div>
     <div class="mt-8 flow-root">
@@ -19,7 +18,8 @@
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Prix</th>
                         </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 bg-white">
+
+                        <tbody id="tableHistoriqueStock" class="divide-y divide-gray-200 bg-white">
 
                         {% for panier in chantier.paniers %}
                             <tr>
@@ -76,3 +76,37 @@
     </div>
 </div>
 
+<style>
+    #tableHistoriqueStock em {
+        background-color: yellow;
+    }
+</style>
+
+<script>
+    const table = document.getElementById('tableHistoriqueStock')
+    const search = document.getElementById('tableSearch')
+    const searchRows = Array.from(table.getElementsByTagName('tr'))
+
+    search.addEventListener('input', () => {
+        const query = search.value.toLowerCase()
+        searchRows.forEach(row => {
+            // row.style.display = ''
+            row.innerHTML = row.innerHTML.replace(/<em>(.*?)<\/em>/g, '$1')
+        })
+
+        if (query.length < 3) return
+
+        searchRows.forEach(row => {
+
+            const text = row.textContent.toLowerCase()
+            // row.style.display = text.includes(query) ? '' : 'none'
+
+            // highlight search
+            if (text.includes(query)) {
+                const regex = new RegExp(query, 'gi')
+                // add new highlights
+                row.innerHTML = row.innerHTML.replace(regex, match => `<em>${match}</em>`)
+            }
+        })
+    })
+</script>
