@@ -41,6 +41,8 @@
                                     {% endif %}
 
                                     {% if is_granted('ROLE_ADMIN') %}
+                                        <br>
+                                        <a href="{{ path('panier_edit', {'id': panier.id}) }}">Modifier</a>
                                         <form action="{{ path('panier_del', {'id': panier.id}) }}"
                                               method="POST"
                                               onsubmit="return confirm('Supprimer la sortie ?');">

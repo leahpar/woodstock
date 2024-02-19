@@ -35,7 +35,7 @@ class PanierController extends CommonController
     #[IsGranted('ROLE_REFERENCE_STOCK')]
     public function edit(Request $request, Panier $panier, EntityManagerInterface $em): Response
     {
-        if ($panier->brouillon === false) {
+        if ($panier->brouillon === false && !$this->isGranted('ROLE_ADMIN')) {
             return $this->forward('App\Controller\PanierController::show', [
                 'panier' => $panier,
             ]);

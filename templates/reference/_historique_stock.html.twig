@@ -20,6 +20,9 @@
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Chantier</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Poseur</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantité</th>
+                <th scope="col">
+                  <span class="sr-only">Actions</span>
+                </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
@@ -44,6 +47,10 @@
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {{ stock.type == 'entree' ? '+' : '-' }}
                         {{ stock.quantite }}
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {% if is_granted("ROLE_ADMIN") %}
+                      <a href="{{ path('panier_edit', {'id': stock.panier.id}) }}">Modifier</a>
                     </td>
                   </tr>
                 {% else %}
