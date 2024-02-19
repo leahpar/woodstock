@@ -37,7 +37,7 @@
                 Catalogue A4
                 <div class="xx_dropdown-content">
                     <a href="{{ path('reference_catalogue', {format: 'A4'}) }}" class="borderedButton" target="_blank">Toutes catégories</a>
-                    {% for cat in getCategories() %}
+                    {% for cat in getReferenceCategories() %}
                         <a href="{{ path('reference_catalogue', {categorie: cat, format: 'A4'}) }}" class="borderedButton" target="_blank">{{ cat }}</a>
                     {% endfor %}
                 </div>
@@ -46,7 +46,7 @@
                 Catalogue A3
                 <div class="xx_dropdown-content">
                     <a href="{{ path('reference_catalogue', {format: 'A3'}) }}" class="borderedButton" target="_blank">Toutes catégories</a>
-                    {% for cat in getCategories() %}
+                    {% for cat in getReferenceCategories() %}
                         <a href="{{ path('reference_catalogue', {categorie: cat, format: 'A3'}) }}" class="borderedButton" target="_blank">{{ cat }}</a>
                     {% endfor %}
                 </div>
