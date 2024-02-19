@@ -75,4 +75,9 @@ class Intervention extends LoggableEntity
         ]);
     }
 
+    public function getPrix(): float
+    {
+        return $this->heuresPassees * $this->tauxHoraire;
+    }
+
 }

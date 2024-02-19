@@ -66,4 +66,18 @@ class InterventionRepository extends ServiceEntityRepository
         return $query;
     }
 
+    public function findInterventionsByMois(\DateTime $date)
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->select('i')
+            ->leftJoin('i.chantier', 'c')->addSelect('c')
+            ->andWhere('i.date BETWEEN :debut AND :fin')
+            ->setParameter('debut', $date->format('Y-m-01 00:00:00'))
+            ->setParameter('fin',   $date->format('Y-m-t 23:59:59'))
+        ;
+
+        return $qb->getQuery()->getResult();
+
+    }
+
 }

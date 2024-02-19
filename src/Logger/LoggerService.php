@@ -22,6 +22,7 @@ class LoggerService
         $log->user = $user;
         $log->data = $data;
         $this->em->persist($log);
+
     }
 
 }

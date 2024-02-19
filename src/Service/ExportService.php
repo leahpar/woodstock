@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Export;
+namespace App\Service;
 
 use App\Entity\Reference;
-use \PhpOffice\PhpSpreadsheet as PS;
+use PhpOffice\PhpSpreadsheet as PS;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Component\HttpFoundation\StreamedResponse;
