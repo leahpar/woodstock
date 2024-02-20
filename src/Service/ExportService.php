@@ -41,6 +41,7 @@ class ExportService
                 break;
             case 'csv':
                 $writer = PS\IOFactory::createWriter($spreadsheet, "Csv");
+                $writer->setDelimiter(';');
                 $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
                 break;
             default:
