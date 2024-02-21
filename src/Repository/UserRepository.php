@@ -75,6 +75,10 @@ class UserRepository extends ServiceEntityRepository
             $query->andWhere('u.equipe = :equipe')->setParameter('equipe', $search->equipe);
         }
 
+        if ($search->poseur) {
+            $query->andWhere('u.id = :poseur')->setParameter('poseur', $search->poseur->id);
+        }
+
         if ($search->disabled == null) {
             $query->orderBy('u.disabled', 'ASC');
         }

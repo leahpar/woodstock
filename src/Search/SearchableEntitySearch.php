@@ -29,4 +29,9 @@ class SearchableEntitySearch
         // Ex : App\Search\ReferenceSearch -> Reference
         return substr(substr(strrchr(static::class, '\\'), 1), 0, -6);
     }
+
+    public function toArray(): array
+    {
+        return get_object_vars($this);
+    }
 }

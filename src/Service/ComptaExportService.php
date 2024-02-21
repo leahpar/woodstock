@@ -82,7 +82,7 @@ class ComptaExportService
         foreach ($stocks as $intervention) {
 
             // Ignorer les interventions non validées
-//            if (!$intervention->valide) continue;
+            if (!$intervention->valide) continue;
 
             /** @var Chantier $chantier */
             $chantier = $intervention?->chantier;

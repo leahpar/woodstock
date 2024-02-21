@@ -20,13 +20,13 @@ class InterventionType extends AbstractType
                 'html5' => true, // type="date"
                 'widget' => 'single_text',
                 'required' => true,
-                'disabled' => !$options['is_chef_equipe'],
+//                'disabled' => !$options['is_chef_equipe'],
             ])
             ->add('heuresPlanifiees', Type\NumberType::class, [
                 'html5' => true, // type="number"
                 'attr' => ['min' => 0, 'max' => $options['max_heures_planifiees']],
                 'required' => true,
-                'disabled' => !$options['is_chef_equipe'],
+//                'disabled' => !$options['is_chef_equipe'],
             ])
             ->add('heuresPassees', Type\NumberType::class, [
                 'html5' => true, // type="number"
@@ -36,19 +36,20 @@ class InterventionType extends AbstractType
             ->add('poseur', EntityType::class, [
                 'class' => User::class,
                 'required' => true,
-                'disabled' => !$options['is_chef_equipe'],
+//                'disabled' => !$options['is_chef_equipe'],
                 'autocomplete' => true,
                 'placeholder' => '',
-                'query_builder' => fn ($er)
-                    => $er->createQueryBuilder('u')
-                        ->andWhere('u.disabled = 0')
-                        ->andWhere('u.roles NOT LIKE :role')
-                        ->setParameter('role', '%ROLE_SUPER_ADMIN%')
-                        ->orderBy('u.nom', 'ASC'),
+//                'query_builder' => fn ($er)
+//                    => $er->createQueryBuilder('u')
+//                        ->andWhere('u.disabled = 0')
+//                        ->andWhere('u.roles NOT LIKE :role')
+//                        ->setParameter('role', '%ROLE_SUPER_ADMIN%')
+//                        ->orderBy('u.nom', 'ASC'),
+                'choices' => $options['poseurs'],
             ])
             ->add('activite', Type\ChoiceType::class, [
                 'required' => true,
-                'disabled' => !$options['is_chef_equipe'],
+//                'disabled' => !$options['is_chef_equipe'],
                 'choices' => [
                     'Chantier' => 'chantier',
                     'Absent' => 'absent',
@@ -64,7 +65,7 @@ class InterventionType extends AbstractType
             ->add('chantier', EntityType::class, [
                 'class' => Chantier::class,
                 'required' => true,
-                'disabled' => !$options['is_chef_equipe'],
+//                'disabled' => !$options['is_chef_equipe'],
                 'autocomplete' => true,
                 'placeholder' => '',
                 'query_builder' => fn ($er)
@@ -78,7 +79,7 @@ class InterventionType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
                 'required' => true,
-                'disabled' => !$options['is_chef_equipe'],
+//                'disabled' => !$options['is_chef_equipe'],
             ])
         ;
     }
@@ -87,7 +88,8 @@ class InterventionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Intervention::class,
-            'is_chef_equipe' => true,
+            //'is_chef_equipe' => true,
+            'poseurs' => [],
             'max_heures_planifiees' => 10,
         ]);
     }

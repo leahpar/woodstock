@@ -31,65 +31,45 @@
                                     {{ totalHeuresPlanifieesPoseurs[poseur.id] > 39 ? '⚠️' }}
                                 </div>
                             </td>
-                            {% for k,date in dates %}
+                            {% for d,date in dates %}
                                 <td class="bg-white/70">
                                     <div class="w-full min-h-full flex flex-col gap-2 justify-start">
-                                        {% for intervention in interventions[poseur.id][k]??[] %}
-                                            <button class="showInterventionButton bg-gray-100 border border-gray-200 text-teal-500 px-2 py-1 rounded transition-all hover:bg-teal-500 hover:text-white hover:border-teal-500"
-                                               data-disabled="{{ date.valide }}"
-                                               data-intervention="{{ intervention.id }}">
-                                                {% if intervention.activite == 'chantier' %}
-                                                    {{ intervention.chantier }}
-                                                    - {{ intervention.type }}
-                                                {% else %}
-                                                    {{ intervention.activite }}
-                                                {% endif %}
-                                                - {{ intervention.heuresPlanifiees }}h
-                                            </button>
+                                        {% for intervention in interventions[poseur.id][d]??[] %}
+                                            <div>
+                                                <button class="showInterventionButton bg-gray-100 border border-gray-200 text-teal-500 px-2 py-1 rounded transition-all hover:bg-teal-500 hover:text-white hover:border-teal-500"
+                                                   data-disabled="{{ intervention.valide ? 1 : 0 }}"
+                                                   data-intervention="{{ intervention.id }}">
+                                                    {% if intervention.activite == 'chantier' %}
+                                                        {{ intervention.chantier }}
+                                                        - {{ intervention.type }}
+                                                    {% else %}
+                                                        {{ intervention.activite }}
+                                                    {% endif %}
+                                                    - {{ intervention.heuresPassees }}h
+                                                    / {{ intervention.heuresPlanifiees }}h
+                                                    {% if intervention.heuresPassees != intervention.heuresPlanifiees %}
+                                                        ⚠️
+                                                    {% endif %}
+                                                </button>
+                                                <input type="checkbox"
+                                                       name="validerIntervention"
+                                                       {{ not is_granted('ROLE_PLANNING_EDIT') ? 'disabled'}}
+                                                       data-intervention="{{ intervention.id }}"
+                                                       {{ intervention.valide ? 'checked' }}>
+                                            </div>
                                         {% endfor %}
-    
-                                        {% if is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe %}
-                                        {% if not date.valide %}
-                                            <button
-                                                    data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
-                                                    data-disabled="{{ date.valide }}"
-                                                    data-poseur="{{ poseur.id }}"
-                                                    class="addInterventionButton rounded px-2 py-1 border border-dashed border-gray-200 text-gray-400 transition-all hover:border-gray-400 hover:text-teal-500">+ Ajouter</button>
-                                        {% else %}
-                                        
-                                        {% endif %}
-                                        {% endif %}
+
+                                        <button data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
+                                                data-disabled="{{ date.valide }}"
+                                                data-poseur="{{ poseur.id }}"
+                                                class="addInterventionButton rounded px-2 py-1 border border-dashed border-gray-200 text-gray-400 transition-all hover:border-gray-400 hover:text-teal-500">
+                                            + Ajouter
+                                        </button>
                                     </div>
                                 </td>
                             {% endfor %}
                         </tr>
                     {% endfor %}
-
-
-                    {# Valider les heures #}
-                    {% if is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe %}
-                    <tr>
-                        <td class="text-right"></td>
-                        {% for k,date in dates %}
-                            <td>
-                                <form action="{{ path('planning_valider') }}"
-                                      onsubmit="return confirm('{{ date.valide ? 'Dévalider' : 'Valider' }} ?')"
-                                      method="post">
-                                    <input type="hidden" name="date" value="{{ date|format_datetime(pattern="yyyy-MM-dd") }}">
-                                    {% if date.valide %}
-                                        <p class="text-center text-gray-500">Journée validée (<button type="submit" name="valider" value="0" class="underline">Dévalider</button>)</p>
-                                    {% else %}
-                                        <button type="submit" name="valider" value="1" class="group px-2 py-1 bg-white rounded border border-gray-300 w-full transition-all hover:bg-teal-500 hover:text-white hover:border-teal-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="inline w-5 h-5 text-teal-500 transition-all group-hover:text-white">
-                                              <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
-                                            </svg>
-                                            Valider la journée</button>
-                                    {% endif %}
-                                </form>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                    {% endif %}
 
                     </tbody>
                 </table>
@@ -108,6 +88,7 @@
     const modal = document.querySelector('dialog');
     const addButtons = document.querySelectorAll('.addInterventionButton:not([data-disabled="true"])');
     const showButtons = document.querySelectorAll('.showInterventionButton');
+    const validInputs = document.querySelectorAll('[name="validerIntervention"]');
 
     addButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -123,8 +104,8 @@
 
     showButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const id = button.dataset.intervention;
-            const disabled = button.dataset.disabled;
+            let id = button.dataset.intervention;
+            let disabled = button.dataset.disabled === '1' || button.dataset.disabled === 'true'; // 🤮 JS
             fetch('{{ path('planning_edit', {id:'XX'}) }}'.replace('XX', id))
                 .then(response => response.text())
                 .then(html => modal.innerHTML = html)
@@ -138,6 +119,23 @@
                 })
         });
     });
+
+    validInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            const id = input.dataset.intervention
+            const form = new FormData()
+            form.append('valider', input.checked)
+            // change cursor to waiting
+            document.body.style.cursor = 'wait'
+            fetch('{{ path('planning_valider', {id:'XX'}) }}'.replace('XX', id), {method: 'POST', body: form})
+                .then(() => {
+                        const button = document.querySelector('.showInterventionButton[data-intervention="'+id+'"]')
+                        button.dataset.disabled = input.checked
+                        // change cursor back to normal
+                        document.body.style.cursor = 'default'
+                    })
+        })
+    })
 
     function toto() {
         const activite = modal.querySelector('#intervention_activite');

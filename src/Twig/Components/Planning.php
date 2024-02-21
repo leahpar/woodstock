@@ -29,7 +29,7 @@ class Planning
         $date = new \DateTime($search->dateStart);
         $end = new \DateTime($search->dateEnd);
         while ($date <= $end) {
-            if ($date->format('N') < 6) {
+            if ($date->format('N') <= 6) {
                 $this->dates[$date->format('Y-m-d')] = clone $date;
                 // Warning: Property declared dynamically, this is deprecated starting from PHP 8.2
                 $this->dates[$date->format('Y-m-d')]->valide = false;
@@ -51,9 +51,13 @@ class Planning
             $poseurs = [$search->poseur];
         }
         else {
+            // NB: on prend même les poseurs désactivés ici, ils seront masqués plus tard si pas d'intervention
+            $uSearch = new UserSearch(array_merge(
+                $search->toArray(),
+                ['tri' => 'equipe'],
+            ));
             $poseurs = $this->em->getRepository(User::class)->search(
-                // NB: on prend même les poseurs désactivés ici, ils seront masqués plus tard si pas d'intervention
-                new UserSearch(['limit' => 0, 'equipe' => $search->equipe, 'tri' => 'equipe'])
+                $uSearch
             )->getIterator()->getArrayCopy();
         }
 
