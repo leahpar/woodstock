@@ -26,7 +26,9 @@ class ComptaExportService
             /** @var Chantier $chantier */
             $chantier = $stock?->panier?->chantier;
 
-            $key = ($chantier?->referenceTravaux??'7001')."-".$stock->reference->codeComptaCompte;
+            $key  = ($chantier?->referenceTravaux??'7001');
+            $key .= $stock->reference->codeComptaCompte;
+            $key .= ($stock->isEntree()) ? "E" : "S";
             if (!isset($data[$key])) {
                 $data[$key] = [
                     /* 0 Journal    */ "ANA",
@@ -43,7 +45,9 @@ class ComptaExportService
                 $data[$key][6] += $stock->getCredit();
             }
 
-            $key = "7000-".$stock->reference->codeComptaCompte;
+            $key  = "7000";
+            $key .= $stock->reference->codeComptaCompte;
+            $key .= ($stock->isEntree()) ? "E" : "S";
             if (!isset($data[$key])) {
                 $data[$key] = [
                     /* 0 Journal    */ "ANA",
@@ -58,8 +62,8 @@ class ComptaExportService
             }
             else {
                 // NB: colonnes inversées !
-                $data[$key][6] += $stock->getDebit();
                 $data[$key][5] += $stock->getCredit();
+                $data[$key][6] += $stock->getDebit();
             }
         }
 
@@ -68,7 +72,7 @@ class ComptaExportService
 
         $filename = "export-stock-";
         $filename .= $mois->format('Ym');
-        $filename .= ".csv";
+        $filename .= ".xlsx";
 
         return $this->exportService->exportComptable($data, $filename);
     }
@@ -110,7 +114,7 @@ class ComptaExportService
 
         $filename = "export-heures-";
         $filename .= $mois->format('Ym');
-        $filename .= ".csv";
+        $filename .= ".xlsx";
 
         return $this->exportService->exportComptable($data, $filename);
     }

@@ -25,7 +25,7 @@ class Stock
     public ?Reference $reference = null;
 
     #[ORM\Column(length: 255)]
-    public string $type;
+    public string $type; // entree, sortie, retour
 
     #[ORM\Column]
     #[Assert\Positive]
