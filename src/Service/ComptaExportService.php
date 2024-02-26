@@ -29,6 +29,8 @@ class ComptaExportService
             $key  = ($chantier?->referenceTravaux??'7001');
             $key .= $stock->reference->codeComptaCompte;
             $key .= ($stock->isEntree()) ? "E" : "S";
+            //dump('--------------');
+            //dump(key: $key, credit: $stock->getCredit(), debit: $stock->getDebit());
             if (!isset($data[$key])) {
                 $data[$key] = [
                     /* 0 Journal    */ "ANA",
@@ -47,7 +49,8 @@ class ComptaExportService
 
             $key  = "7000";
             $key .= $stock->reference->codeComptaCompte;
-            $key .= ($stock->isEntree()) ? "E" : "S";
+            $key .= ($stock->isEntree()) ? "S" : "E"; // Inversé !
+            //dump(key: $key, credit: $stock->getCredit(), debit: $stock->getDebit());
             if (!isset($data[$key])) {
                 $data[$key] = [
                     /* 0 Journal    */ "ANA",
