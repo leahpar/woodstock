@@ -7,6 +7,7 @@ use App\Repository\ChantierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Deprecated;
 use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -56,6 +57,7 @@ class Chantier extends LoggableEntity
     #[ORM\Column]
     public int $heuresDevisPose = 0;
 
+    // Uniquement pour le devis
     #[ORM\Column]
     public float $tauxHoraire = 50;
 

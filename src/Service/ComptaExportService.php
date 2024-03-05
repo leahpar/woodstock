@@ -82,7 +82,7 @@ class ComptaExportService
 
     private function exportComptableHeures(\DateTime $mois)
     {
-        $stocks = $this->em->getRepository(Intervention::class)->findInterventionsByMois($mois);
+        $stocks = $this->em->getRepository(Intervention::class)->findByMois($mois);
 
         $data = [];
         /** @var Intervention $intervention */

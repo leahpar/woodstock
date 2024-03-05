@@ -6,6 +6,7 @@ use App\Entity\Intervention;
 use App\Entity\User;
 use App\Form\InterventionType;
 use App\Search\InterventionSearch;
+use App\Service\ParamService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,6 +62,7 @@ class InterventionController extends CommonController
         string $action,
         Request $request,
         EntityManagerInterface $em,
+        ParamService $paramService,
         Intervention $intervention = null,
     ): Response
     {
@@ -77,11 +79,8 @@ class InterventionController extends CommonController
                 $intervention->poseur = $poseur;
             }
 
-            // Config manuelle
-            $intervention->tauxHoraire = 50;
-            if ($intervention->chantier) {
-                $intervention->tauxHoraire = $intervention->chantier->tauxHoraire;
-            }
+            // Taux horaire
+            $intervention->tauxHoraire = $paramService->get('taux_horaire_' . $intervention->date->format('Y')) ?? 50;
         }
 
         /* Autoremplissage des heures planifiées suivant le jour et heures disponibles */

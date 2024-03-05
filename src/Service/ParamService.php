@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Intervention;
 use App\Entity\Param;
 use App\Entity\Reference;
 use App\Logger\LoggerService;
@@ -35,6 +36,10 @@ class ParamService
             $this->majPrixm3($param);
         }
 
+        if (str_starts_with($param->nom, "taux_horaire_")) {
+            $this->majTauxHoraire($param);
+        }
+
         $this->log->log('parametrage', null, [
             $nom => $param->valeur,
         ]);
@@ -51,6 +56,18 @@ class ParamService
             if ($ref->getVolume() > 0) {
                 $ref->prix = $ref->calcPrix();
             }
+        }
+    }
+
+    private function majTauxHoraire(Param $param)
+    {
+        // taux_horaire_2024
+        $annee = substr($param->nom, 13);
+        $taux = $param->valeur;
+
+        $interventions = $this->em->getRepository(Intervention::class)->findByAnnee($annee);
+        foreach ($interventions as $intervention) {
+            $intervention->tauxHoraire = $taux;
         }
     }
 }

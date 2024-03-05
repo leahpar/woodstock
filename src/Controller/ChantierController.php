@@ -5,10 +5,9 @@ namespace App\Controller;
 use App\Entity\Chantier;
 use App\Entity\Stock;
 use App\Form\ChantierType;
-use App\Repository\ChantierRepository;
 use App\Search\ChantierSearch;
+use App\Service\ParamService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -34,56 +33,46 @@ class ChantierController extends CommonController
         ]);
     }
 
-    #[Route('/new', name: 'chantier_new', methods: ['GET', 'POST'])]
+    #[Route('/new',       name: 'chantier_new',  defaults: ['action' => 'create'])]
+    #[Route('/{id}/edit', name: 'chantier_edit', defaults: ['action' => 'update'])]
     #[IsGranted('ROLE_CHANTIER_EDIT')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $em,
+        ParamService $paramService,
+        string $action,
+        ?Chantier $chantier,
+    ): Response
     {
-        $chantier = new Chantier();
+        $chantier ??= new Chantier();
         $form = $this->createForm(ChantierType::class, $chantier);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($chantier);
-            $em->flush(); // pour avoir l'id
-            $this->log('create', $chantier);
-            $em->flush();
-
-            return $this->redirectToRoute('chantier_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('chantier/edit.html.twig', [
-            'chantier' => $chantier,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'chantier_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_CHANTIER_EDIT')]
-    public function edit(Request $request, Chantier $chantier, EntityManagerInterface $em): Response
-    {
-        $form = $this->createForm(ChantierType::class, $chantier);
-        $form->handleRequest($request);
-
-        if ($request->isMethod("GET")) {
+        if ($action == 'update' && $request->isMethod("GET")) {
             $referer = $request->headers->get('referer');
             $form->get('_referer')->setData($referer);
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($action == 'create') {
+            $form->get('tauxHoraire')->setData($paramService->get('taux_horaire_'.date('Y')));
+        }
 
-            $this->log('update', $chantier);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($chantier);
+            if ($action == 'create') $em->flush(); // pour avoir l'id
+
+            $this->log($action, $chantier);
             $em->flush();
 
             if ($form->get('_referer')->getData()) {
                 return $this->redirect($form->get('_referer')->getData());
             }
             return $this->redirectToRoute('chantier_index', [], Response::HTTP_SEE_OTHER);
-            //return $this->redirectToLastSearch(defaultRoute: 'chantier_index');
         }
 
         return $this->render('chantier/edit.html.twig', [
             'chantier' => $chantier,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 

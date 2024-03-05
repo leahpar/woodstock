@@ -66,7 +66,7 @@ class InterventionRepository extends ServiceEntityRepository
         return $query;
     }
 
-    public function findInterventionsByMois(\DateTime $date)
+    public function findByMois(\DateTime $date)
     {
         $qb = $this->createQueryBuilder('i')
             ->select('i')
@@ -77,7 +77,17 @@ class InterventionRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
 
+    public function findByAnnee(int $annee)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i')
+            ->andWhere('i.date BETWEEN :debut AND :fin')
+            ->setParameter('debut', $annee . '-01-01 00:00:00')
+            ->setParameter('fin',   $annee . '-12-31 23:59:59')
+            ->getQuery()
+            ->getResult();
     }
 
 }
