@@ -78,9 +78,6 @@ class InterventionController extends CommonController
                 $poseur = $em->getRepository(User::class)->find($request->query->getInt('poseur'));
                 $intervention->poseur = $poseur;
             }
-
-            // Taux horaire
-            $intervention->tauxHoraire = $paramService->get('taux_horaire_' . $intervention->date->format('Y')) ?? 50;
         }
 
         /* Autoremplissage des heures planifiées suivant le jour et heures disponibles */
@@ -98,7 +95,10 @@ class InterventionController extends CommonController
             if ($i->id == $intervention->id) continue;
             $heuresDispo -= $i->heuresPlanifiees;
         }
-        $intervention->heuresPlanifiees = $heuresDispo;
+        if ($action == 'create') {
+            // En modification on ne modifie pas les heures déjà planifiées
+            $intervention->heuresPlanifiees = $heuresDispo;
+        }
         /* END */
 
         // Poseurs sélectionnables
@@ -119,11 +119,48 @@ class InterventionController extends CommonController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($intervention);
-            $em->flush(); // pour avoir l'id
 
-            $this->log($action, $intervention, $intervention->toLogArray());
+            // Entités à logger
+            $interventions = [];
+
+            // Taux horaire
+            $intervention->tauxHoraire = $paramService->get('taux_horaire_' . $intervention->date->format('Y')) ?? 50;
+
+            // Poseurs concernés (1 ou toute l'équipe)
+            $poseursEquipe = [$intervention->poseur];
+            if ($request->request->getBoolean('dupliquer_equipe')) {
+                $poseursEquipe = $em->getRepository(User::class)->findBy(['equipe' => $intervention->poseur->equipe]);
+            }
+
+            // Dupliquer l'intervention pour chaque poseur
+            foreach ($poseursEquipe as $poseur) {
+
+                // Dupliquer l'intervention pour chaque jour sélectionné
+                foreach ($request->request->all('dupliquer') as $jour) {
+
+                    // $jour = 1, 2, 3... (lundi, mardi, mercredi...)
+                    $int = clone $intervention;
+                    $int->poseur = $poseur;
+                    $int->date = (clone $int->date)->modify("monday this week +" . ($jour - 1) . " days");
+
+                    $em->persist($int);
+                    $interventions[] = $int;
+                }
+            }
+
+            // Suppression de l'intervention d'origine (si modification)
+            $em->remove($intervention);
+
+            $em->flush(); // pour avoir les ids
+
+            /** @var Intervention $i */
+            foreach ($interventions as $i) {
+                $this->log($action, $i, $i->toLogArray());
+            }
             $em->flush();
+
+            $msg = count($interventions) > 1 ? (count($interventions).' interventions ajoutées') : 'Intervention ajoutée';
+            $this->addFlash('success', $msg);
 
             $referer = $request->headers->get('referer');
             return $this->redirect($referer);
@@ -134,58 +171,6 @@ class InterventionController extends CommonController
             'form' => $form,
         ]);
     }
-
-//    public function edit(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
-//    {
-//        /** @var User $user */
-//        $user = $this->getUser();
-//
-//        /* Autoremplissage des heures planifiées suivant le jour et heures disponibles */
-//        $heuresDispo = match ((int)$intervention->date?->format('N')) {
-//            1, 2, 3 => 10,
-//            4 => 9,
-//            default => 0,
-//        };
-//        $interventions = $em->getRepository(Intervention::class)->findBy([
-//            'date' => $intervention->date,
-//            'poseur' => $intervention->poseur,
-//        ]);
-//        /** @var Intervention $i */
-//        foreach ($interventions as $i) {
-//            if ($i->id == $intervention->id) continue;
-//            $heuresDispo -= $i->heuresPlanifiees;
-//        }
-//        /* END */
-//
-//        $form = $this->createForm(InterventionType::class, $intervention, [
-//            'is_chef_equipe' => $user->chefEquipe || $this->isGranted('ROLE_PLANNING_EDIT'),
-//            'max_heures_planifiees' => $heuresDispo,
-//        ]);
-//
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//
-//            $this->log('update', $intervention, $intervention->toLogArray());
-//            $em->flush();
-//
-//            $referer = $request->headers->get('referer');
-//            return $this->redirect($referer);
-//        }
-//
-//        return $this->render('planning/edit.html.twig', [
-//            'intervention' => $intervention,
-//            'form' => $form->createView(),
-//        ]);
-//    }
-
-//    #[Route('/{id}', name: 'planning_show', methods: ['GET'])]
-//    public function show(Intervention $intervention): Response
-//    {
-//        return $this->render('planning/show.html.twig', [
-//            'intervention' => $intervention,
-//        ]);
-//    }
 
     #[Route('/{id}/valider', name: 'planning_valider', methods: ['POST'])]
     public function valider(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
@@ -198,16 +183,12 @@ class InterventionController extends CommonController
 
         $valider = $request->request->getBoolean('valider');
         $intervention->valide = $valider;
-        dump($intervention, $valider);
 
         $this->log('valider', $intervention, ['date' => $intervention->date->format('d/m/Y'), 'action' => $valider ? 'valider' : 'dévalider']);
         $em->flush();
 
-        //$referer = $request->headers->get('referer');
-        //return $this->redirect($referer);
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
-
 
     #[Route('/{id}/supprimer', name: 'planning_delete', methods: ['POST'])]
     public function delete(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
@@ -224,9 +205,6 @@ class InterventionController extends CommonController
 
         $referer = $request->headers->get('referer');
         return $this->redirect($referer);
-        //return $this->redirectToRoute('planning_index', [], Response::HTTP_SEE_OTHER);
     }
-
-
 
 }

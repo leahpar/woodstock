@@ -71,7 +71,52 @@
             </div>
         </div>
 
-    </div>
+        {% if intervention.id == 0 %}
+            <div class="formSection">
+
+                <div>
+                    <h2>Planning</h2>
+                </div>
+
+                <div class="formGrid">
+
+                    <div class="col-span-full">
+                        <label>Répéter sur la semaine</label>
+                        <div class="mt-2">
+                            {% set jours = { 1:'Lundi', 2:'Mardi', 3:'Mercredi', 4:'Jeudi', 5:'Vendredi', 6:'Samedi'} %}
+
+                            {% for j,jour in jours %}
+                                <input type="checkbox"
+                                       id="dupliquer_{{ j }}"
+                                       name="dupliquer[]"
+                                        {% if intervention.date|date('N') == j %}
+                                       checked disabled
+                                        {% endif %}
+                                       value="{{ j }}">
+                                <label for="dupliquer_{{ j }}">{{ jour }}</label>
+                            {% endfor %}
+                            {# On "coche" manuellement le jour J, car le checkbox disabled n'est pas pris en compte #}
+                            <input type="hidden" name="dupliquer[]" value="{{ intervention.date|date('N') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-span-full">
+                        <label>Répéter sur l'équipe</label>
+                        <div class="mt-2">
+                            <input type="radio" id="equipe0" name="dupliquer_equipe" value="0" checked>
+                            <label for="equipe0">Poseur seulement</label>
+                            <input type="radio" id="equipe1" name="dupliquer_equipe" value="1">
+                            <label for="equipe1">Toute l'équipe</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {# En modification, on ne "duplique" que sur le jour de l'intervention #}
+            <input type="hidden" name="dupliquer[]" value="{{ intervention.date|date('N') }}">
+            {# En modification, on ne "duplique" pas sur toute l'équipe #}
+            <input type="hidden" name="dupliquer_equipe" value="0">
+        {% endif %}
 
     <div class="mt-6 flex items-center justify-end gap-x-6 bg-gray-100 p-8">
 {#        <button type="button"#}

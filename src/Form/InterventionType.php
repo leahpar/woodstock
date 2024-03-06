@@ -20,6 +20,7 @@ class InterventionType extends AbstractType
                 'html5' => true, // type="date"
                 'widget' => 'single_text',
                 'required' => true,
+                'attr' => ['readonly' => true],
 //                'disabled' => !$options['is_chef_equipe'],
             ])
             ->add('heuresPlanifiees', Type\NumberType::class, [
