@@ -58,7 +58,7 @@ class InterventionController extends CommonController
 
     #[Route('/new',       name: 'planning_new',  defaults: ['action' => 'create'])]
     #[Route('/{id}/edit', name: 'planning_edit', defaults: ['action' => 'update'])]
-    public function new(
+    public function edit(
         string $action,
         Request $request,
         EntityManagerInterface $em,
@@ -78,6 +78,12 @@ class InterventionController extends CommonController
                 $poseur = $em->getRepository(User::class)->find($request->query->getInt('poseur'));
                 $intervention->poseur = $poseur;
             }
+        }
+
+        if ($intervention->valide) {
+            return $this->render('planning/edit_ko.html.twig', [
+                "message" => "L'intervention est validée, impossible de la modifier",
+            ]);
         }
 
         /* Autoremplissage des heures planifiées suivant le jour et heures disponibles */
