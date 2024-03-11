@@ -118,24 +118,27 @@
             <input type="hidden" name="dupliquer_equipe" value="0">
         {% endif %}
 
-    <div class="mt-6 flex items-center justify-end gap-x-6 bg-gray-100 p-8">
+        <div class="mt-6 flex items-center justify-end gap-x-6 bg-gray-100 p-8">
 {#        <button type="button"#}
 {#                onclick="this.closest('dialog').close();"#}
 {#                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">#}
 {#            Annuler#}
 {#        </button>#}
-        {% if intervention.id and (is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe) %}
-        <button type="submit"
-                onclick="return confirm('Supprimer cette intervention ?');"
-                formaction="{{ path('planning_delete', {id: intervention.id}) }}"
-                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
-            Supprimer
-        </button>
-        {% endif %}
-        <button type="submit"
-                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
-            Enregistrer
-        </button>
+            <button type="submit"
+                    class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                Enregistrer
+            </button>
+        </div>
     </div>
 </form>
 
+{# Form distinct #}
+<form method="post" action="{{ path('planning_delete', {id: intervention.id}) }}">
+    {% if intervention.id and (is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe) %}
+        <button type="submit"
+                onclick="return confirm('Supprimer cette intervention ?');"
+                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+            Supprimer
+        </button>
+    {% endif %}
+</form>
