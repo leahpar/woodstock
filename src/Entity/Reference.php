@@ -23,7 +23,7 @@ class Reference extends LoggableEntity
         "CHARPENTE" => 60120000,
         "OSSATURE" => 60120000,
         "CHARPENTE DOUGLAS" => 60120000,
-        "LAMELLES"=> 60120000,
+        "LAMELLES" => 60120000,
         // "QUINCAILLERIE"
         "EQUERRES" => 60130000,
         "FIXATIONS" => 60130000,
@@ -37,6 +37,7 @@ class Reference extends LoggableEntity
         "PANNEAUX" => 60120000,
         "CONSOMMABLE & PETIT EQUIPEMENT" => 60630000,
         "EPI" => 60631000,
+        "AUTRE" => 0, // TODO
     ];
 
     public const CONDITIONNEMENTS = [
@@ -56,6 +57,9 @@ class Reference extends LoggableEntity
         "Lamellés" => "lamelles",
         "Ossature" => "ossature",
         "Charpente" => "charpente",
+        "Exo1" => "exo1",
+        "Exo2" => "exo2",
+        "Exo3" => "exo3",
     ];
 
     #[ORM\Id]
