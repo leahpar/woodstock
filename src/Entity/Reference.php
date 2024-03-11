@@ -37,7 +37,7 @@ class Reference extends LoggableEntity
         "PANNEAUX" => 60120000,
         "CONSOMMABLE & PETIT EQUIPEMENT" => 60630000,
         "EPI" => 60631000,
-        "AUTRE" => 0, // TODO
+        "AUTRE" => 60120000,
     ];
 
     public const CONDITIONNEMENTS = [
