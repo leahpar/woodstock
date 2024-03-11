@@ -28,31 +28,14 @@
 
                         <div class="formGrid">
 
+                            {% for e,k in getReferenceEssences() %}
                             <div class="col-span-full">
-                                <label for="prixm3_douglas">Douglas (€/m3)</label>
+                                <label for="prixm3_{{ k }}">{{ e }} (€/m3)</label>
                                 <div class="mt-2">
-                                    <input type="number" step="0.01" id="prixm3_douglas" name="prixm3_douglas" value="{{ params.prixm3_douglas??null }}">
+                                    <input type="number" step="0.01" id="prixm3_{{ k }}" name="prixm3_{{ k }}" value="{{ params['prixm3_'~k]??null }}">
                                 </div>
                             </div>
-                            <div class="col-span-full">
-                                <label for="prixm3_lamelles">Lamellés (€/m3)</label>
-                                <div class="mt-2">
-                                    <input type="number" step="0.01" id="prixm3_lamelles" name="prixm3_lamelles" value="{{ params.prixm3_lamelles??null }}">
-                                </div>
-                            </div>
-                            <div class="col-span-full">
-                                <label for="prixm3_ossature">Ossature (€/m3)</label>
-                                <div class="mt-2">
-                                    <input type="number" step="0.01" id="prixm3_ossature" name="prixm3_ossature" value="{{ params.prixm3_ossature??null }}">
-                                </div>
-                            </div>
-                            <div class="col-span-full">
-                                <label for="prixm3_charpente">Charpente (€/m3)</label>
-                                <div class="mt-2">
-                                    <input type="number" step="0.01" id="prixm3_charpente" name="prixm3_charpente" value="{{ params.prixm3_charpente??null }}">
-                                </div>
-                            </div>
-
+                            {% endfor %}
                         </div>
                     </div>
 

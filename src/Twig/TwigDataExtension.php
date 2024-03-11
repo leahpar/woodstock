@@ -28,6 +28,7 @@ class TwigDataExtension extends AbstractExtension
             new TwigFunction('getRoles', [$this, 'getRoles']),
             new TwigFunction('getEquipes', [$this, 'getEquipes']),
             new TwigFunction('getReferenceCategories', [$this, 'getReferenceCategories']),
+            new TwigFunction('getReferenceEssences', [$this, 'getReferenceEssences']),
             new TwigFunction('getMaterielCategories', [$this, 'getMaterielCategories']),
         ];
     }
@@ -41,6 +42,11 @@ class TwigDataExtension extends AbstractExtension
     public function getReferenceCategories(): array
     {
         return array_keys(Reference::CATEGORIES);
+    }
+
+    public function getReferenceEssences(): array
+    {
+        return Reference::ESSENCES;
     }
 
     public function getMaterielCategories()
