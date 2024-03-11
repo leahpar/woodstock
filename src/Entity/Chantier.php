@@ -8,11 +8,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Deprecated;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ChantierRepository::class)]
 #[ORM\hasLifecycleCallbacks]
+#[UniqueEntity('referenceTravaux', message: 'Référence déjà existante')]
+#[UniqueEntity('referenceEtude', message: 'Référence déjà existante')]
 class Chantier extends LoggableEntity
 {
 

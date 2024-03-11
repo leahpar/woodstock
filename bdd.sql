@@ -25,6 +25,11 @@ set s.prix = r.prix;
 update panier set chantier_id = 110 where chantier_id = 111;
 delete from chantier where id = 111;
 
+select * from chantier where reference_travaux = '1346'; -- 125 => 146
+update panier set chantier_id = 146 where chantier_id = 125;
+update intervention set chantier_id = 146 where chantier_id = 125;
+delete from chantier where id = 125;
+
 -- Check paniers brouillons
 SELECT p.user_id, p.type, count(distinct p.id), count(distinct s.id)
 FROM panier p

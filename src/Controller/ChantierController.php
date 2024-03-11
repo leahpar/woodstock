@@ -46,15 +46,16 @@ class ChantierController extends CommonController
     {
         $chantier ??= new Chantier();
         $form = $this->createForm(ChantierType::class, $chantier);
+
+        if ($action == 'create') {
+            $form->get('tauxHoraire')->setData($paramService->get('taux_horaire_'.date('Y')));
+        }
+
         $form->handleRequest($request);
 
         if ($action == 'update' && $request->isMethod("GET")) {
             $referer = $request->headers->get('referer');
             $form->get('_referer')->setData($referer);
-        }
-
-        if ($action == 'create') {
-            $form->get('tauxHoraire')->setData($paramService->get('taux_horaire_'.date('Y')));
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
