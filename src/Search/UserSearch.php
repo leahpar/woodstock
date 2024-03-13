@@ -13,6 +13,7 @@ class UserSearch extends SearchableEntitySearch
     public ?string $equipe = null;
     public ?bool $chefEquipe = null;
     public ?bool $conducteurTravaux = null;
+    public ?bool $masquerPlanning = null;
     public ?bool $disabled = null;
     public ?User $poseur = null;
 

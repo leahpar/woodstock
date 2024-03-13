@@ -35,6 +35,9 @@ class UserType extends AbstractType
             ->add('conducteurTravaux', Type\CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('masquerPlanning', Type\CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('disabled', Type\CheckboxType::class, [
                 'required' => false,
             ])

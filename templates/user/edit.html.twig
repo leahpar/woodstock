@@ -50,7 +50,7 @@
                     <div class="formSection">
 
                         <div>
-                            <h2>Détail du chantier</h2>
+                            <h2>Détail de l'utilisateur</h2>
                         </div>
 
                         <div class="formGrid">
@@ -100,6 +100,14 @@
                                 {{ form_widget(form.conducteurTravaux) }}
                                 <div class="formErrors">
                                     {{ form_errors(form.conducteurTravaux) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.masquerPlanning, 'Masquer sur planning') }}
+                                {{ form_widget(form.masquerPlanning) }}
+                                <div class="formErrors">
+                                    {{ form_errors(form.masquerPlanning) }}
                                 </div>
                             </div>
 

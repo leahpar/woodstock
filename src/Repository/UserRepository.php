@@ -79,6 +79,10 @@ class UserRepository extends ServiceEntityRepository
             $query->andWhere('u.id = :poseur')->setParameter('poseur', $search->poseur->id);
         }
 
+        if ($search->masquerPlanning !== null) {
+            $query->andWhere('u.masquerPlanning = :planning')->setParameter('planning', $search->masquerPlanning);
+        }
+
         if ($search->disabled == null) {
             $query->orderBy('u.disabled', 'ASC');
         }
