@@ -7,39 +7,70 @@ body{
     padding: 0;
     margin: 0;
 }
+
     .page{
         outline: 1px solid green;
         
         box-sizing: border-box;
         
+        break-after: page;
+        
+        display: grid;
+        
+        font-family: Arial;
+    }
+    .page .case{
+        outline: 1px solid #eee;
+        display: flex;
+        overflow: hidden;
+    }
+    .page .case h2{
+        margin: 0;
+        font-size: 12px;
+    }
+    .page .case p{
+        margin: 0;
+        font-size: 9px;
+    }
+    
+    .pageA4{
         width: 210mm;
         height: 297mm;
         
         padding: 11mm 4.5mm;
         
-        break-after: page;
-        
-        display: grid;
         grid-template-columns: repeat(5,38.1mm);
         grid-template-rows: repeat(13,21.2mm);
         column-gap: 3mm;
+    }
+    .pageA4 .case div{
+        padding: 2mm 0;
+        padding-right: 2mm;
+    }
+    
+    .pageA3{
+        width: 297mm;
+        height: 420mm;
         
-        font-family: Arial;
+        padding: 11mm 4.5mm;
+        
+        grid-template-columns: repeat(3,96mm);
+        grid-template-rows: repeat(6,66.33mm);
     }
-    .case{
-        outline: 1px solid #eee;
-        display: flex;
-        overflow: hidden;
+    .pageA3 .case{
+        align-items: center;
     }
-    .case h2{
-        margin: 0;
+    .pageA3 .case img{
+        max-width: 200px;
+        object-fit: contain;
+    }
+    .pageA3 .case h2{
+        font-size: 20px;
+    }
+    .pageA3 .case p{
         font-size: 12px;
     }
-    .case p{
-        margin: 0;
-        font-size: 9px;
-    }
-    .case div{
+    .pageA3 .case div{
         padding: 2mm 0;
         padding-right: 2mm;
     }
@@ -54,7 +85,15 @@ body{
 {% endif %}
 -->
 
-<div class="page {{ format }}">
+{% if format=="A4" %}
+{% set nbre=65 %}
+{% endif %}
+
+{% if format=="A3" %}
+{% set nbre=18 %}
+{% endif %}
+
+<div class="page page{{ format }}">
 {% for ref in references %}
     
 <div class="case">
@@ -72,9 +111,9 @@ body{
     
 </div>
 
-    {% if loop.index is divisible by(65) %}
+    {% if loop.index is divisible by(nbre) %}
     </div>
-    <div class="page">
+    <div class="page page{{ format }}">
     {% endif %}
     
 {% endfor %}

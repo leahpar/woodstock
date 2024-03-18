@@ -1,15 +1,15 @@
 <div class="mt-8 flow-root">
-    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="-mx-4 -my-2 overflow-x-auto lg:overflow-visible sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="relative">
 
                 <table class="relative planning text-sm">
 
                     <thead>
-                        <tr class="divide-gray-200 divide-x ">
+                        <tr class="divide-gray-200 divide-x sticky z-10 top-0 bg-gray-100">
                             <th scope="col" class="!text-right font-normal w-1/6 px-3 py-1">Heures<br><span class="text-xs">Passées / Planifiées</span></th>
                             {% for date in dates %}
-                                <th scope="col" class="bg-white border-b border-gray-300 w-1/6">
+                                <th scope="col" class="bg-white border-b border-gray-300 w-[14.3%]">
                                     {{ date|format_datetime(pattern="eeee dd/MM", locale="fr") }}
                                 </th>
                             {% endfor %}
@@ -17,13 +17,14 @@
                     </thead>
 
                     <tbody class="divide divide-gray-200 divide-y">
+                    {% set precedente_equipe = '' %}
                     {% for poseur in poseurs %}
-                        <tr class="divide-gray-200 divide-x odd:bg-gray-600/5">
-                            <td class="flex justify-between items-center gap-2 font-medium !text-gray-900 text-sm">
+                        <tr class=" divide-gray-200 divide-x odd:bg-gray-600/5">
+                            <td class="flex justify-between items-center gap-2 font-medium !text-gray-900 text-sm {% if poseur.equipe != precedente_equipe %}border-t border-gray-400{% endif %}">
                                 <div>
-                                    <span class="inline-block text-xs uppercase bg-teal-500 text-white rounded px-1 mr-1">{{ poseur.equipe }}</span><br>{{ poseur }}
+                                    <span class="inline-block text-xs uppercase text-white rounded px-1 mr-1 {% if poseur.equipe == 'atelier' %}bg-sky-500{% else %}bg-teal-500{% endif %}">{{ poseur.equipe }}</span><br>{{ poseur }}
                                 </div>
-                                <div class="font-medium !text-gray-900 text-xs">
+                                <div class="font-medium !text-gray-600 text-xs">
                                     <span title="{{ totalHeuresPasseesPoseurs[poseur.id] }}h passée">{{ totalHeuresPasseesPoseurs[poseur.id] }}h</span>
                                     {{ totalHeuresPasseesPoseurs[poseur.id] > 39 ? '⚠️' }}
                                     /
@@ -32,27 +33,27 @@
                                 </div>
                             </td>
                             {% for d,date in dates %}
-                                <td class="bg-white/70">
+                                <td class="bg-white/70 {% if poseur.equipe != precedente_equipe %}!border-t !border-t-gray-400{% endif %}">
                                     <div class="w-full min-h-full flex flex-col gap-2 justify-start">
                                         {% for intervention in interventions[poseur.id][d]??[] %}
-                                            <div>
-                                                <button class="showInterventionButton bg-gray-100 border border-gray-200 text-teal-500 px-2 py-1 rounded transition-all hover:bg-teal-500 hover:text-white hover:border-teal-500"
+                                            <div class="group relative z-0 flex justify-between gap-2 bg-gray-100 border border-gray-200 text-gray-700 p-1 rounded transition-all  hover:text-white {% if intervention.type == 'atelier' %}hover:bg-sky-500 hover:border-sky-500{% elseif intervention.type == 'pose' %}hover:bg-teal-500 hover:border-teal-500{% else %}hover:bg-violet-500 hover:border-violet-500{% endif %}">
+                                                <button class="showInterventionButton text-left"
                                                    data-disabled="{{ intervention.valide ? 1 : 0 }}"
                                                    data-intervention="{{ intervention.id }}">
                                                     {% if intervention.activite == 'chantier' %}
-                                                        {{ intervention.chantier }}
-                                                        - {{ intervention.type }}
+                                                        <span class="{% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %} group-hover:text-white transition-all">{{ intervention.chantier }}
+                                                        - {{ intervention.type }}</span>
                                                     {% else %}
-                                                        {{ intervention.activite }}
+                                                        <span class="{% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %} group-hover:text-white transition-all">{{ intervention.activite }}</span>
                                                     {% endif %}
-                                                    - {{ intervention.heuresPassees }}h
-                                                    / {{ intervention.heuresPlanifiees }}h
+                                                    - {{ intervention.heuresPassees }}h&nbsp;/&nbsp;{{ intervention.heuresPlanifiees }}h
                                                     {% if intervention.heuresPassees != intervention.heuresPlanifiees %}
-                                                        ⚠️
+                                                        <span class="absolute -top-2 -right-2 w-5 h-5 flex justify-center items-center rounded-full bg-white text-xs border border-gray-200 {% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %}">⚠️</span>
                                                     {% endif %}
                                                 </button>
                                                 <input type="checkbox"
                                                        name="validerIntervention"
+                                                       class="rounded"
                                                        {{ not is_granted('ROLE_PLANNING_EDIT') ? 'disabled'}}
                                                        data-intervention="{{ intervention.id }}"
                                                        {{ intervention.valide ? 'checked' }}>
@@ -69,6 +70,7 @@
                                 </td>
                             {% endfor %}
                         </tr>
+                        {% set precedente_equipe = poseur.equipe %}
                     {% endfor %}
 
                     </tbody>

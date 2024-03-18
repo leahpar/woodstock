@@ -13,46 +13,27 @@
         .xx_dropdown-content {
             display: none;
             position: absolute;
-            top: 0;
-            background-color: #f9f9f9;
+            top: 100%;
+            left: 0;
             min-width: 160px;
             border: 1px solid #ddd;
             z-index: 1;
         }
 
         .xx_dropdown:hover .xx_dropdown-content {
-            display: block;
+            display: flex;
         }
 
     </style>
-
+    
+    <div class="space-y-3">
+    
     <div class="pageHeader">
       <div class="title">
         <h2>Gestion des stocks</h2>
       </div>
       <div class="buttons">
-        <a href="{{ path('reference_export') }}" class="button">Export inventaire</a>
-        {% if is_granted('ROLE_REFERENCE_EDIT') %}
-            <div class="borderedButton xx_dropdown">
-                Catalogue A4
-                <div class="xx_dropdown-content">
-                    <a href="{{ path('reference_catalogue', {format: 'A4'}) }}" class="borderedButton" target="_blank">Toutes catégories</a>
-                    {% for cat in getReferenceCategories() %}
-                        <a href="{{ path('reference_catalogue', {categorie: cat, format: 'A4'}) }}" class="borderedButton" target="_blank">{{ cat }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="borderedButton xx_dropdown">
-                Catalogue A3
-                <div class="xx_dropdown-content">
-                    <a href="{{ path('reference_catalogue', {format: 'A3'}) }}" class="borderedButton" target="_blank">Toutes catégories</a>
-                    {% for cat in getReferenceCategories() %}
-                        <a href="{{ path('reference_catalogue', {categorie: cat, format: 'A3'}) }}" class="borderedButton" target="_blank">{{ cat }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-            <a href="{{ path('reference_new') }}" class="borderedButton">Ajouter une référence</a>
-        {% endif %}
+        
 
         {% if is_granted('ROLE_REFERENCE_STOCK') %}
             <a href="{{ path('panier_new',{type:'entree'}) }}" class="button">Ajouter du stock</a>
@@ -62,8 +43,42 @@
 
       </div>
     </div>
+    
+    <div class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 flex flex-col lg:flex-row justify-between items-center text-sm text-gray-700">
+        {{ include('parts/recherche2.html.twig', {search: search}) }}
+        
+        <div class="flex gap-2">
+            
+            <a href="{{ path('reference_export') }}" class="px-2 py-1 rounded-lg hover:bg-white hover:text-teal-500">Export inventaire</a>
+            {% if is_granted('ROLE_REFERENCE_EDIT') %}
+                <div class="borderedButton xx_dropdown px-2 py-1 rounded-lg hover:bg-white">
+                    Catalogue A4
+                    <div class="xx_dropdown-content p-2 rounded-lg flex-col space-y-2 bg-white">
+                        <a href="{{ path('reference_catalogue', {format: 'A4'}) }}" class="borderedButton hover:text-teal-500" target="_blank">Toutes catégories</a>
+                        {% for cat in getReferenceCategories() %}
+                            <a href="{{ path('reference_catalogue', {categorie: cat, format: 'A4'}) }}" class="borderedButton hover:text-teal-500" target="_blank">{{ cat }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="borderedButton xx_dropdown px-2 py-1 rounded-lg hover:bg-white">
+                    Catalogue A3
+                    <div class="xx_dropdown-content p-2 rounded-lg flex-col space-y-2 bg-white">
+                        <a href="{{ path('reference_catalogue', {format: 'A3'}) }}" class="borderedButton hover:text-teal-500" target="_blank">Toutes catégories</a>
+                        {% for cat in getReferenceCategories() %}
+                            <a href="{{ path('reference_catalogue', {categorie: cat, format: 'A3'}) }}" class="borderedButton hover:text-teal-500" target="_blank">{{ cat }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <a href="{{ path('reference_new') }}" class="px-2 py-1 rounded-lg hover:bg-white hover:text-teal-500">Ajouter une référence</a>
+            {% endif %}
+            
+        </div>
+        
+    </div>
+    
+    </div>
 
-    {{ include('parts/recherche2.html.twig', {search: search}) }}
+    
     {{ include('reference/_table.html.twig', { references: references }) }}
     {{ include('parts/pagination.html.twig', {search: search}) }}
 
