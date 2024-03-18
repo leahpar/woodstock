@@ -16,6 +16,7 @@ class Planning
 
     private array $interventions = [];
     private array $poseurs = [];
+    private array $equipes = [];
     private array $dates = [];
     private array $totalHeuresPlanifieesPoseurs = [];
     private array $totalHeuresPasseesPoseurs = [];
@@ -95,12 +96,20 @@ class Planning
             }
         }
 
+        $this->equipes = array_unique(array_map(fn(User $p) => $p->equipe, $this->poseurs));
+
     }
 
     #[ExposeInTemplate]
     public function getPoseurs(): array
     {
         return $this->poseurs;
+    }
+
+    #[ExposeInTemplate]
+    public function getEquipes(): array
+    {
+        return $this->equipes;
     }
 
     #[ExposeInTemplate]
