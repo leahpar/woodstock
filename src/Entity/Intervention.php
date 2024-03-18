@@ -28,6 +28,11 @@ class Intervention extends LoggableEntity
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     public ?User $poseur = null;
 
+    // User qui a créé l'intervention (seul lui peut la supprimer)
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    public ?User $auteur = null;
+
     #[ORM\Column]
     public ?string $activite = null;
 

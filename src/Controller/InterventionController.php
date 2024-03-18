@@ -71,8 +71,10 @@ class InterventionController extends CommonController
 
         if ($action === 'create') {
             $intervention = new Intervention();
+            $intervention->auteur = $user;
 
             if ($request->isMethod('GET')) {
+                // Infos pour préremplissage du formulaire
                 $intervention->date = new \DateTime($request->query->get('date'));
                 $intervention->heuresPlanifiees = $request->query->getInt('heures');
                 $poseur = $em->getRepository(User::class)->find($request->query->getInt('poseur'));
@@ -201,7 +203,10 @@ class InterventionController extends CommonController
     {
         /** @var User $user */
         $user = $this->getUser();
-        if (!$user->chefEquipe && !$this->isGranted('ROLE_PLANNING_EDIT')) {
+
+        // TODO: InterventionVoter
+        $canDelete = $user->chefEquipe || $this->isGranted('ROLE_PLANNING_EDIT') || $user === $intervention->auteur;
+        if (!$canDelete || $intervention->valide) {
             throw $this->createAccessDeniedException();
         }
 
