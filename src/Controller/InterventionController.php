@@ -88,13 +88,8 @@ class InterventionController extends CommonController
             ]);
         }
 
-        /* Autoremplissage des heures planifiées suivant le jour et heures disponibles */
-        //$heuresDispo = match ((int)$intervention->date?->format('N')) {
-        //    1, 2, 3 => 10,
-        //    4 => 9,
-        //    default => 0,
-        //};
-        $heuresDispo = 10; // 10h tous les jours
+        // Préremplissage des heures planifiées
+        $heuresDispo = 10;
         $interventions = $em->getRepository(Intervention::class)->findBy([
             'date' => $intervention->date,
             'poseur' => $intervention->poseur,
@@ -123,7 +118,6 @@ class InterventionController extends CommonController
 
         $form = $this->createForm(InterventionType::class, $intervention, [
             'poseurs' => $poseurs,
-            'max_heures_planifiees' => $heuresDispo,
         ]);
         $form->handleRequest($request);
 

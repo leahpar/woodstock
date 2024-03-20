@@ -25,7 +25,7 @@ class InterventionType extends AbstractType
             ])
             ->add('heuresPlanifiees', Type\NumberType::class, [
                 'html5' => true, // type="number"
-                'attr' => ['min' => 0, 'max' => $options['max_heures_planifiees']],
+                'attr' => [ 'min' => 0 ],
                 'required' => true,
 //                'disabled' => !$options['is_chef_equipe'],
             ])
@@ -91,7 +91,6 @@ class InterventionType extends AbstractType
             'data_class' => Intervention::class,
             //'is_chef_equipe' => true,
             'poseurs' => [],
-            'max_heures_planifiees' => 10,
         ]);
     }
 }
