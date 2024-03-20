@@ -1,4 +1,5 @@
 {# Sélecteur d'équipes à afficher #}
+{# TODO: Laisser masqué pour l'instant, pas prêt pour aller en prod #}
 <div id="equipeSelecteur" style="display: none">
     {% for e in equipes %}
         <label><input type="checkbox" checked value="{{ e }}">{{ e ?? "sans équipe" }}</label>
