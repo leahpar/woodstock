@@ -1,8 +1,7 @@
 {# Sélecteur d'équipes à afficher #}
-{# TODO: Laisser masqué pour l'instant, pas prêt pour aller en prod #}
 <div id="equipeSelecteur" style="display: none">
     {% for e in equipes %}
-        <label><input type="checkbox" checked value="{{ e }}">{{ e ?? "sans équipe" }}</label>
+        <label><input type="checkbox" value="{{ e }}">{{ e ?? "sans équipe" }}</label>
     {% endfor %}
 </div>
 
@@ -188,16 +187,64 @@
 </script>
 
 <script>
-    {# Sélecteur d'équipes #}
-    const equipes = document.querySelectorAll('#equipeSelecteur input');
-    const lignes = document.querySelectorAll('.planning tr[data-equipe]');
+    /**
+     * Sélecteur d'équipes
+     *
+     * Sauvegarde l'état des checkboxes dans le localStorage
+     *
+     * A chaque changement de checkbox, on sauvegarde l'état dans le localStorage
+     * et on affiche/masque les lignes correspondantes
+     *
+     * Au chargement de la page, on applique l'état sauvegardé
+     */
+    const equipes = document.querySelectorAll('#equipeSelecteur input')
+    const lignes = document.querySelectorAll('.planning tr[data-equipe]')
+    const equipeStorage = localStorage.getItem('equipeSelecteur')
+
     equipes.forEach(checkbox => {
         checkbox.addEventListener('change', () => {
+            applyState()
+            saveState()
+        })
+    })
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadState()
+        applyState()
+        saveState()
+    })
+
+    function loadState() {
+        if (equipeStorage) {
+            // apply saved state
+            const equipeSelecteur = JSON.parse(equipeStorage)
+            equipes.forEach(checkbox => {
+                checkbox.checked = equipeSelecteur.includes(checkbox.value)
+            })
+        } else {
+            // apply default state
+            equipes.forEach(checkbox => {
+                checkbox.checked = true
+            })
+        }
+    }
+
+    function saveState() {
+        // save state
+        localStorage.setItem(
+            'equipeSelecteur',
+            JSON.stringify(Array.from(equipes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value))
+        )
+    }
+
+    function applyState() {
+        // show/hide rows
+        equipes.forEach(checkbox => {
             lignes.forEach(ligne => {
                 if (ligne.dataset.equipe === checkbox.value) {
-                    ligne.style.display = checkbox.checked ? 'table-row' : 'none';
+                    ligne.style.display = checkbox.checked ? 'table-row' : 'none'
                 }
-            });
-        });
-    });
+            })
+        })
+    }
 </script>
