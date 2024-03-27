@@ -1,9 +1,4 @@
-{# Sélecteur d'équipes à afficher #}
-<div id="equipeSelecteur" style="display: none">
-    {% for e in equipes %}
-        <label><input type="checkbox" value="{{ e }}">{{ e ?? "sans équipe" }}</label>
-    {% endfor %}
-</div>
+
 
 <div class="mt-8 flow-root">
     <div class="-mx-4 -my-2 overflow-x-auto lg:overflow-visible sm:-mx-6 lg:-mx-8">
@@ -13,9 +8,26 @@
                 <table class="relative planning text-sm">
 
                     <thead>
-                        <tr class="divide-gray-200 divide-x sticky z-10 top-0 bg-gray-100">
-                            <th scope="col" class="!text-right font-normal w-1/6 px-3 py-1">
-                                Heures<br><span class="text-xs">Passées / Planifiées</span>
+                        <tr class="divide-gray-200 divide-x sticky z-10 top-14 bg-gray-100">
+                            <th scope="col" class="!text-right font-normal w-1/6 pr-3 py-1">
+                                <div class="flex justify-between items-center">
+                                    {# Sélecteur d'équipes à afficher #}
+                                    <div id="equipeSelecteur" class="relative group">
+                                        <a href='#' title="Filtrer les équipes de pose" class="flex gap-1 items-center text-xs uppercase text-gray-600 px-1 bg-white/50 group-hover:bg-white group-hover:text-teal-500 rounded border border-gray-300">Filtrer
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                            </svg>
+                                        </a>
+                                        <div class="hidden absolute top-full group-hover:flex flex-col bg-white p-2 rounded border border-gray-300 items-start text-left min-w-40 space-y-2">
+                                        {% for e in equipes %}
+                                            <label><input type="checkbox" value="{{ e }}" class="mr-2">{{ e ?? "sans équipe" }}</label>
+                                        {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        Heures<br><span class="text-xs">Passées / Planifiées</span>
+                                    </div>
+                                </div>
                             </th>
                             {% for date in dates %}
                                 <th scope="col" class="bg-white border-b border-gray-300 w-[14.3%]">
