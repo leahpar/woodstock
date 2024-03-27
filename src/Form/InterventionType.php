@@ -31,7 +31,7 @@ class InterventionType extends AbstractType
             ])
             ->add('heuresPassees', Type\NumberType::class, [
                 'html5' => true, // type="number"
-                'attr' => ['min' => 0, 'max' => 10],
+                'attr' => [ 'min' => 0 ],
                 'required' => true,
             ])
             ->add('poseur', EntityType::class, [
