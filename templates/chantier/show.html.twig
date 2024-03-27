@@ -65,9 +65,14 @@
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('devis')|euro }}</dd>
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-900">heures passées</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('passe') }} h</dd>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('passe')|euro }}</dd>
+                    <dt class="text-sm font-medium text-gray-900">heures passées - Atelier</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('passe', 'atelier') }} h</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('passe', 'atelier')|euro }}</dd>
+                </div>
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-900">heures passées - Pose</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.heures('passe', 'pose') }} h</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ chantier.montant('passe', 'pose')|euro }}</dd>
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">Ecart</dt>
