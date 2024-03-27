@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Intervention;
 use App\Entity\User;
+use App\Form\InterventionHeuresType;
 use App\Form\InterventionType;
 use App\Search\InterventionSearch;
+use App\Service\InterventionService;
 use App\Service\ParamService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,6 +65,7 @@ class InterventionController extends CommonController
         Request $request,
         EntityManagerInterface $em,
         ParamService $paramService,
+        InterventionService $interventionService,
         Intervention $intervention = null,
     ): Response
     {
@@ -75,12 +78,15 @@ class InterventionController extends CommonController
 
             if ($request->isMethod('GET')) {
                 // Infos pour préremplissage du formulaire
-                $intervention->date = new \DateTime($request->query->get('date'));
-                $intervention->heuresPlanifiees = $request->query->getInt('heures');
-                $poseur = $em->getRepository(User::class)->find($request->query->getInt('poseur'));
-                $intervention->poseur = $poseur;
+                $interventionService->preremplissage($intervention, $request->query->all());
             }
         }
+
+//        if ($intervention->hasEnfantValide()) {
+//            return $this->render('planning/edit_ko.html.twig', [
+//                "message" => "L'intervention (ou une intervention liée) est validée, impossible de la modifier",
+//            ]);
+//        }
 
         if ($intervention->valide) {
             return $this->render('planning/edit_ko.html.twig', [
@@ -88,81 +94,46 @@ class InterventionController extends CommonController
             ]);
         }
 
-        // Préremplissage des heures planifiées
-        $heuresDispo = 10;
-        $interventions = $em->getRepository(Intervention::class)->findBy([
-            'date' => $intervention->date,
-            'poseur' => $intervention->poseur,
-        ]);
-        /** @var Intervention $i */
-        foreach ($interventions as $i) {
-            if ($i->id == $intervention->id) continue;
-            $heuresDispo -= $i->heuresPlanifiees;
-        }
-        if ($action == 'create') {
-            // En modification on ne modifie pas les heures déjà planifiées
-            $intervention->heuresPlanifiees = $heuresDispo;
-        }
-        /* END */
-
-        // Poseurs sélectionnables
-        if ($this->isGranted('ROLE_PLANNING_EDIT')) {
-            $poseurs = $em->getRepository(User::class)->findBy(['disabled' => false]);
-        }
-        elseif ($user->chefEquipe) {
-            $poseurs = $em->getRepository(User::class)->findBy(['disabled' => false, 'equipe' => $user->equipe]);
-        }
-        else {
-            $poseurs = [$user];
-        }
-
-        $form = $this->createForm(InterventionType::class, $intervention, [
-            'poseurs' => $poseurs,
-        ]);
+        $form = $this->createForm(InterventionType::class, $intervention);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Entités à logger
-            $interventions = [];
+            if ($action === 'create') {
+                // Taux horaire
+                $intervention->tauxHoraire = $paramService->get('taux_horaire_' . $intervention->date->format('Y')) ?? 50;
 
-            // Taux horaire
-            $intervention->tauxHoraire = $paramService->get('taux_horaire_' . $intervention->date->format('Y')) ?? 50;
-
-            // Poseurs concernés (1 ou toute l'équipe)
-            $poseursEquipe = [$intervention->poseur];
-            if ($request->request->getBoolean('dupliquer_equipe')) {
-                $poseursEquipe = $em->getRepository(User::class)->findBy(['equipe' => $intervention->poseur->equipe]);
-            }
-
-            // Dupliquer l'intervention pour chaque poseur
-            foreach ($poseursEquipe as $poseur) {
-
-                // Dupliquer l'intervention pour chaque jour sélectionné
-                foreach ($request->request->all('dupliquer') as $jour) {
-
-                    // $jour = 1, 2, 3... (lundi, mardi, mercredi...)
-                    $int = clone $intervention;
-                    $int->poseur = $poseur;
-                    $int->date = (clone $int->date)->modify("monday this week +" . ($jour - 1) . " days");
-
-                    $em->persist($int);
-                    $interventions[] = $int;
+                // Poseurs concernés (1 ou toute l'équipe)
+                $poseursEquipe = [$intervention->poseur];
+                if ($request->request->getBoolean('dupliquer_equipe')) {
+                    $poseursEquipe = $em->getRepository(User::class)->findBy(['equipe' => $intervention->poseur->equipe]);
                 }
-            }
 
-            // Suppression de l'intervention d'origine (si modification)
-            $em->remove($intervention);
+                // Jours à dupliquer
+                $jours = $request->request->all('dupliquer');
+
+                $interventions = $interventionService->propagerCreation($intervention, $jours, $poseursEquipe);
+            }
+            elseif ($intervention->parent && $request->request->getBoolean('all')) {
+                $interventions = $interventionService->propagerModification($intervention);
+            }
+            else {
+                $interventionService->detach($intervention);
+                $interventions = [$intervention];
+            }
 
             $em->flush(); // pour avoir les ids
 
             /** @var Intervention $i */
             foreach ($interventions as $i) {
-                $this->log($action, $i, $i->toLogArray());
+                $this->log($action, $i, [...$i->toLogArray(), 'multiple' => 'oui']);
             }
             $em->flush();
 
-            $msg = count($interventions) > 1 ? (count($interventions).' interventions ajoutées') : 'Intervention ajoutée';
+
+            $s = count($interventions) > 1 ? 's' : '';
+            $msg = count($interventions)." intervention$s ";
+            $msg .= ($action == 'create') ? "ajoutée$s" : "mise$s à jour";
             $this->addFlash('success', $msg);
 
             $referer = $request->headers->get('referer');
@@ -172,6 +143,42 @@ class InterventionController extends CommonController
         return $this->render('planning/edit.html.twig', [
             'intervention' => $intervention,
             'form' => $form,
+            'formHeures' => $action == 'create' ? null : $this->createForm(InterventionHeuresType::class, $intervention),
+        ]);
+    }
+
+    #[Route('/{id}/heures', name: 'planning_edit_heures')]
+    public function editHeures(
+        Request $request,
+        EntityManagerInterface $em,
+        Intervention $intervention,
+    ): Response
+    {
+
+        if ($intervention->valide) {
+            return $this->render('planning/edit_ko.html.twig', [
+                "message" => "L'intervention est validée, impossible de la modifier",
+            ]);
+        }
+
+        $form = $this->createForm(InterventionHeuresType::class, $intervention);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em->flush(); // pour avoir les ids
+
+            $this->log("heures", $intervention, ['heures' => $intervention->heuresPassees . 'h']);
+            $em->flush();
+
+            $this->addFlash('success', "Heures enregistrées");
+
+            $referer = $request->headers->get('referer');
+            return $this->redirect($referer);
+        }
+
+        return $this->render('planning/edit_ko.html.twig', [
+            "message" => "xxxxxxxxxx",
         ]);
     }
 
@@ -194,7 +201,7 @@ class InterventionController extends CommonController
     }
 
     #[Route('/{id}/supprimer', name: 'planning_delete', methods: ['POST'])]
-    public function delete(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
+    public function delete(Request $request, Intervention $intervention, EntityManagerInterface $em, InterventionService $interventionService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -205,8 +212,37 @@ class InterventionController extends CommonController
             throw $this->createAccessDeniedException();
         }
 
+        // Détache l'intervention de son groupe
+        $interventionService->detach($intervention);
         $em->remove($intervention);
+
         $this->log('delete', $intervention, $intervention->toLogArray());
+        $em->flush();
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+    }
+
+    #[Route('/{id}/supprimerall', name: 'planning_delete_all', methods: ['POST'])]
+    public function deleteAll(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // TODO: InterventionVoter
+        $canDelete = $user->chefEquipe || $this->isGranted('ROLE_PLANNING_EDIT') || $user === $intervention->auteur;
+        if (!$canDelete) {
+            throw $this->createAccessDeniedException();
+        }
+
+        /** @var Intervention $int */
+        foreach ($intervention->getLies()??[$intervention] as $int) {
+            if ($int->valide) throw $this->createAccessDeniedException('Impossible de supprimer une intervention validée');
+            $int->parent = null; // Pour éviter les erreurs doctrine entre entités liées lors du remove
+            $this->log('delete', $intervention, [...$intervention->toLogArray(), 'multiple' => 'oui']);
+            $em->remove($int);
+        }
+
         $em->flush();
 
         $referer = $request->headers->get('referer');

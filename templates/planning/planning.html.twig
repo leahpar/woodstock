@@ -64,7 +64,8 @@
                                 <td class="bg-white/70 {{ poseur.equipe != precedente_equipe ? '!border-t !border-t-gray-400' }}">
                                     <div class="w-full min-h-full flex flex-col gap-2 justify-start">
                                         {% for intervention in interventions[poseur.id][d]??[] %}
-                                            <div class="group relative z-0 flex justify-between gap-2 bg-gray-100 border border-gray-200 text-gray-700 p-1 rounded transition-all hover:text-white {% if intervention.type == 'atelier' %}hover:bg-sky-500 hover:border-sky-500{% elseif intervention.type == 'pose' %}hover:bg-teal-500 hover:border-teal-500{% else %}hover:bg-violet-500 hover:border-violet-500{% endif %}">
+                                            <div class="group relative z-0 flex justify-between gap-2 bg-gray-100 border border-gray-200 text-gray-700 p-1 rounded transition-all hover:text-white {% if intervention.type == 'atelier' %}hover:bg-sky-500 hover:border-sky-500{% elseif intervention.type == 'pose' %}hover:bg-teal-500 hover:border-teal-500{% else %}hover:bg-violet-500 hover:border-violet-500{% endif %}"
+                                                 {% if intervention.parent %} data-group="{{ intervention.parent.id }} {% endif %}">
                                                 <button class="showInterventionButton text-left"
                                                    data-disabled="{{ intervention.valide ? 1 : 0 }}"
                                                    data-intervention="{{ intervention.id }}">
@@ -172,11 +173,11 @@
 
     function toto() {
         const activite = modal.querySelector('#intervention_activite');
-        const poseur = modal.querySelector('#intervention_poseur');
+        //const poseur = modal.querySelector('#intervention_poseur');
         const chantier = modal.querySelector('#intervention_chantier');
         const types = modal.querySelectorAll('[name="intervention[type]"]');
         chantier.tomselect.on ('change', () => chantier.tomselect.blur());
-        poseur.tomselect.on ('change', () => poseur.tomselect.blur());
+        //poseur.tomselect.on ('change', () => poseur.tomselect.blur());
         activite.addEventListener('change', function () {
             if (activite.value === 'chantier') {
                 chantier.disabled = false;

@@ -1,0 +1,28 @@
+<form method="post" action="{{ path('planning_edit_heures', {id: intervention.id}) }}">
+
+    {{ form_widget(formHeures._token) }}
+
+    <div class="p-8">
+        <div class="formSection">
+
+            <div>
+                <h2>Enregistrement des heures</h2>
+            </div>
+
+            <div class="formGrid">
+                <div class="col-span-full">
+                    {{ form_label(formHeures.heuresPassees, 'Heures passées') }}
+                    <div class="mt-2">
+                        {{ form_widget(formHeures.heuresPassees) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 flex items-center justify-end gap-x-6 bg-gray-100 p-8">
+            <button type="submit"
+                    name="all" value="0"
+                    class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                Enregistrer
+            </button>
+        </div>
+</form>

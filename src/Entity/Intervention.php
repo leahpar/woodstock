@@ -4,12 +4,18 @@ namespace App\Entity;
 
 use App\Logger\LoggableEntity;
 use App\Repository\InterventionRepository;
+use App\Search\HydrateTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: InterventionRepository::class)]
 class Intervention extends LoggableEntity
 {
+    use HydrateTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,6 +39,14 @@ class Intervention extends LoggableEntity
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     public ?User $auteur = null;
 
+    // Interventions multiples
+    #[ORM\ManyToOne(inversedBy: 'enfants')]
+    #[ORM\JoinColumn(nullable: true)]
+    public ?Intervention $parent = null;
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Intervention::class)]
+    #[Ignore]
+    public Collection $enfants;
+
     #[ORM\Column]
     public ?string $activite = null;
 
@@ -50,6 +64,10 @@ class Intervention extends LoggableEntity
     #[ORM\Column]
     public bool $valide = false;
 
+    public function __construct()
+    {
+        $this->enfants = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -83,6 +101,36 @@ class Intervention extends LoggableEntity
     public function getPrix(): float
     {
         return $this->heuresPassees * $this->tauxHoraire;
+    }
+
+    public function isParent(): bool
+    {
+        return $this->parent?->id === $this->id;
+    }
+
+    public function updateFrom(Intervention $intervention)
+    {
+        $this->hydrate([
+            'heuresPlanifiees' => $intervention->heuresPlanifiees,
+            'activite' => $intervention->activite,
+            'chantier' => $intervention->chantier,
+            'type' => $intervention->type,
+        ]);
+    }
+
+    public function getLies()
+    {
+        return $this->parent?->enfants;
+    }
+
+    public function hasEnfantValide(): bool
+    {
+        if ($this->parent) {
+            return $this->getLies()->exists(fn(int $k, Intervention $i) => $i->valide);
+        }
+        else {
+            return $this->valide;
+        }
     }
 
 }

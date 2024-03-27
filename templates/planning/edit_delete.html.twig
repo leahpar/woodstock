@@ -1,0 +1,37 @@
+{% if intervention.parent %}
+    <form method="post" action="{{ path('planning_delete_all', {id: intervention.id}) }}">
+        <button type="submit"
+                {# TODO: InterventionVoter #}
+                {% if not (
+                    is_granted('ROLE_PLANNING_EDIT')
+                    or app.user.chefEquipe
+                    or app.user.id == intervention.auteur.id??0
+                    or intervention.valide
+                    ) %}
+                    disabled style="cursor:not-allowed;"
+                {% else %}
+                    onclick="return confirm('Supprimer toutes les interventions liées ?');"
+                {% endif %}
+                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+            Supprimer ALL
+        </button>
+    </form>
+{% endif %}
+
+<form method="post" action="{{ path('planning_delete', {id: intervention.id}) }}">
+    <button type="submit"
+            {# TODO: InterventionVoter #}
+            {% if not (
+                is_granted('ROLE_PLANNING_EDIT')
+                or app.user.chefEquipe
+                or app.user.id == intervention.auteur.id??0
+                or intervention.valide
+                ) %}
+                disabled style="cursor:not-allowed;"
+            {% else %}
+                onclick="return confirm('Supprimer cette intervention ?');"
+            {% endif %}
+            class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+        Supprimer
+    </button>
+</form>
