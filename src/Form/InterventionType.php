@@ -75,6 +75,13 @@ class InterventionType extends AbstractType
                 'multiple' => false,
                 'required' => true,
             ])
+            ->add('commentaire', Type\TextareaType::class, [
+                'required' => false,
+                'attr' => [
+                    'rows' => 3,
+                    'maxlength' => 255
+                ],
+            ])
         ;
     }
 

@@ -58,6 +58,9 @@ class Intervention extends LoggableEntity
     #[ORM\Column(nullable: true)]
     public ?string $type = null;
 
+    #[ORM\Column(nullable: true)]
+    public ?string $commentaire = null;
+
     #[ORM\Column]
     public float $tauxHoraire = 0;
 
@@ -115,6 +118,7 @@ class Intervention extends LoggableEntity
             'activite' => $intervention->activite,
             'chantier' => $intervention->chantier,
             'type' => $intervention->type,
+            'commentaire' => $intervention->commentaire,
         ]);
     }
 
