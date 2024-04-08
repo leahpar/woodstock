@@ -21,13 +21,20 @@ class ComptaController extends CommonController
         ComptaExportService $comptaExportService,
     ) {
         $date = new \DateTime($request->request->get('date'));
-        $exportResponse = $comptaExportService->exportComptable($action, $date);
 
-        // Log
-        $this->log->log("export_compta_$action", null, ['mois' => $date->format('m/Y')]);
-        $em->flush();
+        try {
+            $exportResponse = $comptaExportService->exportComptable($action, $date);
 
-        return $exportResponse;
+            // Log
+            $this->log->log("export_compta_$action", null, ['mois' => $date->format('m/Y')]);
+            $em->flush();
+
+            return $exportResponse;
+        }
+        catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('dashboard');
+        }
     }
 
 }

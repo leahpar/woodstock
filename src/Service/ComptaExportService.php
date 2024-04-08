@@ -84,12 +84,18 @@ class ComptaExportService
     {
         $stocks = $this->em->getRepository(Intervention::class)->findByMois($mois);
 
+        if (count($stocks) === 0) {
+            throw new \Exception("Aucune intervention ce mois-ci");
+        }
+
         $data = [];
         /** @var Intervention $intervention */
         foreach ($stocks as $intervention) {
 
-            // Ignorer les interventions non validées
-            if (!$intervention->valide) continue;
+            // #34 : intervention non validée => on bloque l'export
+            if (!$intervention->valide) {
+                throw new \Exception("Il y a des intervention(s) non validée(s)");
+            }
 
             /** @var Chantier $chantier */
             $chantier = $intervention?->chantier;

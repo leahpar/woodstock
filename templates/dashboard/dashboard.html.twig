@@ -52,10 +52,17 @@
                     <form class="mt-5 sm:flex sm:items-center" method="post">
                         <div class="w-full sm:max-w-xs">
                             <label for="date" class="sr-only">Date</label>
-                            <input id="date" type="date" name="date"
-                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
-                                   required min="2023-01-01" max="{{ 'now'|date('Y-m-d') }}"
-                                   value="{{ 'now'|date('Y-m-01') }}">
+{#                            <input id="date" type="date" name="date"#}
+{#                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"#}
+{#                                   required min="2023-01-01" max="{{ 'now'|date('Y-m-d') }}"#}
+{#                                   value="{{ 'now'|date('Y-m-01') }}">#}
+                            <select required name="date" id="date"
+                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6">
+                                {% for mois in moisLst %}
+                                    <option value="{{ mois|date('Y-m-01') }}">{{ mois|format_datetime(pattern='MMMM yyyy', locale='fr') }}</option>
+                                {% endfor %}
+
+                            </select>
                         </div>
                         <button type="submit"
                                 formaction="{{ path('compta_export_stock') }}"

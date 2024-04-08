@@ -8,15 +8,20 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractController
 {
-    //#[Route('/', name: 'home')]
-    //public function home(): Response
-    //{
-    //    return $this->redirectToRoute('dashboard');
-    //}
 
     #[Route('/', name: 'dashboard')]
     public function index(): Response
     {
-        return $this->render('dashboard/dashboard.html.twig');
+        $start = new \DateTime('2023-01-01');
+        $date = new \DateTime();
+        $mois = [];
+        while ($date > $start) {
+            $mois[] = clone $date;
+            $date->modify('-1 month');
+        }
+
+        return $this->render('dashboard/dashboard.html.twig', [
+            'moisLst' => $mois,
+        ]);
     }
 }
