@@ -39,10 +39,12 @@ class Intervention extends LoggableEntity
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     public ?User $auteur = null;
 
-    // Interventions multiples
+    // Interventions multiples - parent
     #[ORM\ManyToOne(inversedBy: 'enfants')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     public ?Intervention $parent = null;
+
+    // Interventions multiples - enfants
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Intervention::class)]
     #[Ignore]
     public Collection $enfants;

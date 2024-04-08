@@ -235,13 +235,15 @@ class InterventionController extends CommonController
             throw $this->createAccessDeniedException();
         }
 
-        /** @var Intervention $int */
-        foreach ($intervention->getLies()??[$intervention] as $int) {
-            if ($int->valide) throw $this->createAccessDeniedException('Impossible de supprimer une intervention validée');
-            $int->parent = null; // Pour éviter les erreurs doctrine entre entités liées lors du remove
-            $this->log('delete', $intervention, [...$intervention->toLogArray(), 'multiple' => 'oui']);
-            $em->remove($int);
+        $parent = $intervention->parent ?? $intervention;
+        $enfants = $intervention->enfants??[$intervention];
+        /** @var Intervention $enfant */
+        foreach ($enfants as $enfant) {
+            if ($enfant->valide) throw $this->createAccessDeniedException('Impossible de supprimer une intervention validée');
+            $this->log('delete', $enfant, [...$enfant->toLogArray(), 'multiple' => 'oui']);
         }
+
+        $em->remove($parent); // NB: delete cascade pour les enfants
 
         $em->flush();
 
