@@ -89,25 +89,38 @@
 
                             {% for j,jour in jours %}
                                 <input type="checkbox"
-                                       id="dupliquer_{{ j }}"
-                                       name="dupliquer[]"
+                                       id="dupliquer_jours_{{ j }}"
+                                       name="dupliquer_jours[]"
                                        {% if intervention.date|date('N') == j %} checked disabled {% endif %}
                                        value="{{ j }}">
-                                <label for="dupliquer_{{ j }}">{{ jour }}</label>
+                                <label for="dupliquer_jours_{{ j }}">{{ jour }}</label>
                             {% endfor %}
                             {# On "coche" manuellement le jour J, car le checkbox disabled n'est pas pris en compte #}
-                            <input type="hidden" name="dupliquer[]" value="{{ intervention.date|date('N') }}">
+                            <input type="hidden" name="dupliquer_jours[]" value="{{ intervention.date|date('N') }}">
                         </div>
                     </div>
 
                     <div class="col-span-full">
                         <label>Répéter sur l'équipe</label>
+{#                        <div class="mt-2">#}
+{#                            <input type="radio" id="equipe0" name="dupliquer_equipe" value="0" checked>#}
+{#                            <label for="equipe0">Poseur seulement</label>#}
+{#                            <input type="radio" id="equipe1" name="dupliquer_equipe" value="1">#}
+{#                            <label for="equipe1">Toute l'équipe</label>#}
+{#                        </div>#}
                         <div class="mt-2">
-                            <input type="radio" id="equipe0" name="dupliquer_equipe" value="0" checked>
-                            <label for="equipe0">Poseur seulement</label>
-                            <input type="radio" id="equipe1" name="dupliquer_equipe" value="1">
-                            <label for="equipe1">Toute l'équipe</label>
+                            {% for p in poseursEquipe %}
+                                <input type="checkbox"
+                                       id="dupliquer_poseurs_{{ p.id }}"
+                                       name="dupliquer_poseurs[]"
+                                        {% if intervention.poseur.id == p.id %} checked disabled {% endif %}
+                                       value="{{ p.id }}">
+                                <label for="dupliquer_poseurs_{{ p.id }}">{{ p.nom }}</label>
+                            {% endfor %}
+                            {# On "coche" manuellement le jour J, car le checkbox disabled n'est pas pris en compte #}
+                            <input type="hidden" name="dupliquer_poseurs[]" value="{{ intervention.poseur.id }}">
                         </div>
+
                     </div>
                 </div>
             </div>

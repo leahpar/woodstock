@@ -103,16 +103,15 @@ class InterventionController extends CommonController
                 // Taux horaire
                 $intervention->tauxHoraire = $paramService->get('taux_horaire_' . $intervention->date->format('Y')) ?? 50;
 
-                // Poseurs concernés (1 ou toute l'équipe)
-                $poseursEquipe = [$intervention->poseur];
-                if ($request->request->getBoolean('dupliquer_equipe')) {
-                    $poseursEquipe = $em->getRepository(User::class)->findBy(['equipe' => $intervention->poseur->equipe]);
-                }
+                // Poseurs à dupliquer
+                $ids = $request->request->all('dupliquer_poseurs');
+                $poseurs = $em->getRepository(User::class)->findBy(['id' => $ids]);
 
                 // Jours à dupliquer
-                $jours = $request->request->all('dupliquer');
+                $jours = $request->request->all('dupliquer_jours');
 
-                $interventions = $interventionService->propagerCreation($intervention, $jours, $poseursEquipe);
+                // Go dupliquer !
+                $interventions = $interventionService->propagerCreation($intervention, $jours, $poseurs);
             }
             elseif ($intervention->parent && $request->request->getBoolean('all')) {
                 $interventions = $interventionService->propagerModification($intervention);
@@ -140,8 +139,12 @@ class InterventionController extends CommonController
             return $this->redirect($referer);
         }
 
+        //dump($intervention);
+        $poseursEquipe = $em->getRepository(User::class)->findBy(['equipe' => $intervention->poseur->equipe]);
+
         return $this->render('planning/edit.html.twig', [
             'intervention' => $intervention,
+            'poseursEquipe' => $poseursEquipe??[],
             'form' => $form,
             'formHeures' => $action == 'create' ? null : $this->createForm(InterventionHeuresType::class, $intervention),
         ]);
