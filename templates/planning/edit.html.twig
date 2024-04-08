@@ -118,13 +118,22 @@
             <button type="submit"
                     name="all" value="1"
                     class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
-                Enregistrer all
+                Enregistrer chaine intervention
             </button>
             {% endif %}
             <button type="submit"
                     name="all" value="0"
                     class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
-                Enregistrer
+                {% if intervention.id == 0 %}
+                    {# Création #}
+                    Enregistrer
+                {% elseif intervention.parent %}
+                    {# Modification chaine #}
+                    Enregistrer intervention unique
+                {% else %}
+                    {# Modification simple #}
+                    Enregistrer
+                {% endif %}
             </button>
         </div>
     </div>

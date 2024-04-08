@@ -13,7 +13,7 @@
                     onclick="return confirm('Supprimer toutes les interventions liées ?');"
                 {% endif %}
                 class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
-            Supprimer ALL
+            Supprimer chaine intervention
         </button>
     </form>
 {% endif %}
@@ -32,6 +32,12 @@
                 onclick="return confirm('Supprimer cette intervention ?');"
             {% endif %}
             class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
-        Supprimer
+        {% if intervention.parent %}
+            {# Modification chaine #}
+            Supprimer intervention unique
+        {% else %}
+            {# Modification simple #}
+            Supprimer
+        {% endif %}
     </button>
 </form>
