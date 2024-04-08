@@ -62,28 +62,30 @@ class InterventionService
     public function propagerCreation(Intervention $intervention, array $jours, array $poseurs): array
     {
         $interventions = [];
+        $intParente = null;
 
         // Dupliquer l'intervention pour chaque poseur
         foreach ($poseurs as $poseur) {
 
+            // Intervention parente initiale ou clone pour les suivantes
+            $intParente = $intParente ? clone $intervention : $intervention;
+            $int = null;
+
             // Dupliquer l'intervention pour chaque jour sélectionné
             foreach ($jours as $jour) {
 
+                // Intervention initiale ou clone pour les suivantes
+                $int = $int ? clone $intParente : $intParente;
+
+                // Intervention chainée
+                $int->parent = count($jours) > 1 ? $intParente : null;
+
                 // $jour = 1, 2, 3... (lundi, mardi, mercredi...)
-                $int = clone $intervention;
                 $int->poseur = $poseur;
                 $int->date = (clone $int->date)->modify("monday this week +" . ($jour - 1) . " days");
 
                 $this->em->persist($int);
                 $interventions[] = $int;
-            }
-        }
-
-        // Interventions multiples
-        if (count($interventions) > 1) {
-            /** @var Intervention $int */
-            foreach ($interventions as $int) {
-                $int->parent = $interventions[0];
             }
         }
 

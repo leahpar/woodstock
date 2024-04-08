@@ -17,7 +17,7 @@ class ExportService
 
         // Insert data
         $sheet->fromArray(array_keys($colonnes), null, "A$startRow");
-        $sheet->fromArray($data, null, "A" . ($startRow + 1));
+        $sheet->fromArray($data, null, "A" . ($startRow + 1), true);
 
         // Autosize columns
         $idx = 'A';
@@ -70,6 +70,35 @@ class ExportService
             'Libellé'     => NumberFormat::FORMAT_TEXT,
             'Débit'       => NumberFormat::FORMAT_NUMBER_00,
             'Crédit'      => NumberFormat::FORMAT_NUMBER_00,
+        ];
+        $this->formatDataAndAutosize($sheet, $colonnes, $data);
+        return $this->getWriterResponse($spreadsheet, $filename);
+    }
+
+    public function exportChantiers(array $data, string $filename)
+    {
+
+        $spreadsheet = new PS\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $colonnes = [
+            'Chantier'     => NumberFormat::FORMAT_TEXT,
+            'Code analytique'   => NumberFormat::FORMAT_TEXT,
+            'Budget achat' => NumberFormat::FORMAT_NUMBER_00,
+            'Heures devis atelier (h)' => NumberFormat::FORMAT_NUMBER,
+            'Heures devis atelier (€)' => NumberFormat::FORMAT_NUMBER_00,
+            'Heures devis pose (h)' => NumberFormat::FORMAT_NUMBER,
+            'Heures devis pose (€)' => NumberFormat::FORMAT_NUMBER_00,
+            'Heures passées atelier (h)' => NumberFormat::FORMAT_NUMBER,
+            'Heures passées atelier (€)' => NumberFormat::FORMAT_NUMBER_00,
+            'Heures passées pose (h)' => NumberFormat::FORMAT_NUMBER,
+            'Heures passées pose (€)' => NumberFormat::FORMAT_NUMBER_00,
+            'Reste budget achat' => NumberFormat::FORMAT_NUMBER_00,
+            'Reste heures atelier (h)' => NumberFormat::FORMAT_NUMBER,
+            'Reste heures atelier (€)' => NumberFormat::FORMAT_NUMBER_00,
+            'Reste heures pose (h)' => NumberFormat::FORMAT_NUMBER,
+            'Reste heures pose (€)' => NumberFormat::FORMAT_NUMBER_00,
+            'Reste total' => NumberFormat::FORMAT_NUMBER_00,
         ];
         $this->formatDataAndAutosize($sheet, $colonnes, $data);
         return $this->getWriterResponse($spreadsheet, $filename);

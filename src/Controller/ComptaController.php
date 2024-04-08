@@ -11,30 +11,21 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/compta')]
 class ComptaController extends CommonController
 {
-    #[Route('/export_stock',  name: 'compta_export_stock', defaults: ['action' => 'stock'])]
-    #[Route('/export_heures', name: 'compta_export_heures', defaults: ['action' => 'heures'])]
+    #[Route('/export_stock',     name: 'compta_export_stock',     defaults: ['action' => 'stock'],     methods: ['POST'])]
+    #[Route('/export_heures',    name: 'compta_export_heures',    defaults: ['action' => 'heures'],    methods: ['POST'])]
+    #[Route('/export_chantiers', name: 'compta_export_chantiers', defaults: ['action' => 'chantiers'], methods: ['GET'])]
     #[IsGranted('ROLE_COMPTA')]
-    public function exportStock(
-        string $action,
-        Request $request,
-        EntityManagerInterface $em,
-        ComptaExportService $comptaExportService,
-    ) {
-        $date = new \DateTime($request->request->get('date'));
-
+    public function exportStock(string $action, Request $request, ComptaExportService $comptaExportService)
+    {
         try {
-            $exportResponse = $comptaExportService->exportComptable($action, $date);
-
-            // Log
-            $this->log->log("export_compta_$action", null, ['mois' => $date->format('m/Y')]);
-            $em->flush();
-
-            return $exportResponse;
+            $date = new \DateTime($request->request->get('date'));
+            return $comptaExportService->exportComptable($action, $date);
         }
         catch (\Exception $e) {
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('dashboard');
         }
     }
+
 
 }

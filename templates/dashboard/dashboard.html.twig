@@ -82,10 +82,14 @@
         {% if is_granted('ROLE_COMPTA') %}
             <div class="bg-white shadow sm:rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-base font-semibold leading-6 text-gray-900">Export inventaire</h3>
+                    <h3 class="text-base font-semibold leading-6 text-gray-900">Exports globaux</h3>
                     <a href="{{ path('reference_export') }}"
                        class="mt-3 inline-flex ml-3 mt-0 w-auto items-center justify-center rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500">
-                        Exporter
+                        Export inventaire
+                    </a>
+                    <a href="{{ path('compta_export_chantiers') }}"
+                       class="mt-3 inline-flex ml-3 mt-0 w-auto items-center justify-center rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500">
+                        Export chantiers en cours
                     </a>
                 </div>
             </div>

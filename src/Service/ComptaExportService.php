@@ -128,6 +128,45 @@ class ComptaExportService
         return $this->exportService->exportComptable($data, $filename);
     }
 
+    private function exportChantiers()
+    {
+        $chantiers = $this->em->getRepository(Chantier::class)->findBy(['encours' => true]);
+
+        $data = [];
+        /** @var Chantier $chantier */
+        foreach ($chantiers as $chantier) {
+            $data[$chantier->referenceTravaux] = [
+                $chantier->nom,
+                $chantier->referenceTravaux,
+                $chantier->budgetAchat,
+                $chantier->getHeures('devis', 'atelier'),
+                $chantier->getMontant('devis', 'atelier'),
+                $chantier->getHeures('devis', 'pose'),
+                $chantier->getMontant('devis', 'pose'),
+                $chantier->getHeures('passe', 'atelier'),
+                $chantier->getMontant('passe', 'atelier'),
+                $chantier->getHeures('passe', 'pose'),
+                $chantier->getMontant('passe', 'pose'),
+                $chantier->getBudgetRestant(),
+                $chantier->getHeures('restant', 'atelier'),
+                $chantier->getMontant('restant', 'atelier'),
+                $chantier->getHeures('restant', 'pose'),
+                $chantier->getMontant('restant', 'pose'),
+                $chantier->getRestantTotal(),
+            ];
+        }
+
+        // Tri
+        ksort($data);
+        dump($data);
+
+        $filename = "export-chantiers-";
+        $filename .= date('Ymd-His');
+        $filename .= ".xlsx";
+
+        return $this->exportService->exportChantiers($data, $filename);
+    }
+
     public function exportComptable(string $action, \DateTime $date)
     {
         switch ($action) {
@@ -135,6 +174,8 @@ class ComptaExportService
                 return $this->exportComptableStock($date);
             case 'heures':
                 return $this->exportComptableHeures($date);
+            case 'chantiers':
+                return $this->exportChantiers();
             default:
                 throw new \Exception("Action non supportée");
         }

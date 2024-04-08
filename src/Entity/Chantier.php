@@ -97,10 +97,13 @@ class Chantier extends LoggableEntity
         return implode(' - ', [$this->referenceTravaux, $this->nom]);
     }
 
+    /**
+     * Retourne le montant total des ES de stock (hors brouillon)
+     */
     public function getPrix(): float
     {
         return array_reduce(
-            $this->paniers->toArray(),
+            $this->paniers->filter(fn (Panier $p) => !$p->brouillon)->toArray(),
             fn (float $total, Panier $panier) => $total + $panier->getPrix(),
             0
         );
@@ -116,27 +119,39 @@ class Chantier extends LoggableEntity
 
     public function getHeures(string $truc, ?string $type = 'all'): int
     {
-        // $truc = 'devis', 'planifie' ou 'passe'
+        // $truc = 'devis', 'planifie', 'passe', 'restant'
         // $type = 'atelier' ou 'pose' ou 'all'
         if ($truc == 'devis') {
             return $this->getHeuresDevis($type);
         }
 
+        if ($truc == 'restant') {
+            return $this->getHeures('devis', $type) - $this->getHeures('passe', $type);
+        }
+
         return array_reduce(
             $this->interventions->toArray(),
             fn(int $t, Intervention $int)
-                => $t + (($type=='all' || $int->type==$type) ? $int->{'heures' . ucfirst($truc) . 'es'} : 0),
+                => $t + ((($type=='all' || $int->type==$type) && $int->valide)
+                        ? $int->{'heures' . ucfirst($truc) . 'es'}
+                        : 0
+                ),
             0
         );
     }
 
     public function getMontant(string $truc, ?string $type = 'all'): int
     {
-        // $truc = 'devis', 'planifie' ou 'passe'
+        // $truc = 'devis', 'planifie', 'passe', 'restant'
         // $type = 'atelier' ou 'pose' ou 'all'
         if ($truc == 'devis') {
             return $this->getHeuresDevis($type) * $this->tauxHoraire;
         }
+
+        if ($truc == 'restant') {
+            return $this->getMontant('devis', $type) - $this->getMontant('passe', $type);
+        }
+
         return array_reduce(
             $this->interventions->toArray(),
             fn (int $t, Intervention $int)
@@ -154,4 +169,20 @@ class Chantier extends LoggableEntity
         };
     }
 
+    /**
+     * Retourne le montant restant du budget achat
+     */
+    public function getBudgetRestant(): float
+    {
+        return $this->budgetAchat - $this->getPrix();
+    }
+
+    /**
+     * Retourne le montant total restant total :
+     * budget restant + montant heures restantes
+     */
+    public function getRestantTotal(): float
+    {
+        return $this->getBudgetRestant() + $this->getMontant('restant');
+    }
 }

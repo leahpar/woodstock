@@ -90,7 +90,7 @@ class Panier extends LoggableEntity
     {
         return array_reduce(
             $this->stocks->toArray(),
-            fn (float $total, Stock $stock) => $total + $stock->getDebit(),
+            fn (float $total, Stock $stock) => $total + $stock->getDebit() - $stock->getCredit(),
             0
         );
     }
