@@ -254,4 +254,11 @@ class InterventionController extends CommonController
         return $this->redirect($referer);
     }
 
+    #[Route('planning_heures_auto', name: 'planning_heures_auto')]
+    public function heuresAuto(EntityManagerInterface $em, InterventionService $interventionService): Response
+    {
+
+        return new Response(null, Response::HTTP_NO_CONTENT);
+    }
+
 }

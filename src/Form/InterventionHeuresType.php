@@ -30,6 +30,7 @@ class InterventionHeuresType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Intervention::class,
+            'csrf_protection' => false,
         ]);
     }
 }

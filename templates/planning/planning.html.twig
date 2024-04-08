@@ -66,6 +66,8 @@
                                         {% for intervention in interventions[poseur.id][d]??[] %}
                                             <div class="group relative z-0 flex justify-between gap-2 bg-gray-100 border border-gray-200 text-gray-700 p-1 rounded transition-all hover:text-white {% if intervention.type == 'atelier' %}hover:bg-sky-500 hover:border-sky-500{% elseif intervention.type == 'pose' %}hover:bg-teal-500 hover:border-teal-500{% else %}hover:bg-violet-500 hover:border-violet-500{% endif %}"
                                                  {% if intervention.parent %} data-group="{{ intervention.parent.id }} {% endif %}">
+
+                                                {# Affichage intervention #}
                                                 <button class="showInterventionButton text-left"
                                                    data-disabled="{{ intervention.valide ? 1 : 0 }}"
                                                    data-intervention="{{ intervention.id }}">
@@ -83,12 +85,27 @@
                                                             ⚠️</span>
                                                     {% endif %}
                                                 </button>
+
+                                                {# Validation #}
                                                 <input type="checkbox"
                                                        name="validerIntervention"
                                                        class="rounded"
                                                        {{ not is_granted('ROLE_PLANNING_EDIT') ? 'disabled'}}
                                                        data-intervention="{{ intervention.id }}"
                                                        {{ intervention.valide ? 'checked' }}>
+
+                                                {# Remplissage auto des heures passées #}
+                                                {% if intervention.heuresPassees == 0 %}
+                                                <form action="{{ path('planning_edit_heures', {id: intervention.id}) }}" method="post">
+                                                <button name="intervention_heures[heuresPassees]"
+                                                        value="{{ intervention.heuresPlanifiees }}"
+                                                        title="Remplissage auto des heures passées"
+                                                        {{ intervention.heuresPassees > 0 ? 'disabled' }}>
+                                                    Heures auto
+                                                </button>
+                                                </form>
+                                                {% endif %}
+
                                             </div>
                                         {% endfor %}
 
@@ -123,6 +140,7 @@
     const addButtons = document.querySelectorAll('.addInterventionButton:not([data-disabled="true"])');
     const showButtons = document.querySelectorAll('.showInterventionButton');
     const validInputs = document.querySelectorAll('[name="validerIntervention"]');
+    const HeuresAutoButtons = document.querySelectorAll('[name="remplirHeuresPassees"]');
 
     addButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -170,6 +188,26 @@
                     })
         })
     })
+
+    {#HeuresAutoButtons.forEach(button => {#}
+    {#    button.addEventListener('click', () => {#}
+    {#        if (button.dataset.disabled) return#}
+    {#        const id = button.dataset.intervention#}
+    {#        const heures = button.dataset.heures#}
+    {#        const form = new FormData()#}
+    {#        form.append('intervention_heures[heuresPassees]', heures)#}
+    {#        // change cursor to waiting#}
+    {#        document.body.style.cursor = 'wait'#}
+    {#        fetch('{{ path('planning_edit_heures', {id:'XX'}) }}'.replace('XX', id), {method: 'POST', body: form})#}
+    {#            .then(() => {#}
+    {#                    // change cursor back to normal#}
+    {#                    document.body.style.cursor = 'default'#}
+    {#                    //window.location.reload();#}
+    {#            })#}
+    {#    })#}
+    {#})#}
+
+
 
     function toto() {
         const activite = modal.querySelector('#intervention_activite');
