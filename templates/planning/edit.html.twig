@@ -100,6 +100,7 @@
                         </div>
                     </div>
 
+                    {% if intervention.poseur.equipe %}
                     <div class="col-span-full">
                         <label>Répéter sur l'équipe</label>
                         <div class="mt-2">
@@ -107,15 +108,30 @@
                                 <input type="checkbox"
                                        id="dupliquer_poseurs_{{ p.id }}"
                                        name="dupliquer_poseurs[]"
-                                        {% if intervention.poseur.id == p.id %} checked disabled {% endif %}
+                                        {% if intervention.poseur.id == p.id %}
+                                            checked disabled
+                                        {% else %}
+                                            data-checkable="1"
+                                        {% endif %}
                                        value="{{ p.id }}">
                                 <label for="dupliquer_poseurs_{{ p.id }}">{{ p.nom }}</label>
                             {% endfor %}
                             {# On "coche" manuellement le jour J, car le checkbox disabled n'est pas pris en compte #}
                             <input type="hidden" name="dupliquer_poseurs[]" value="{{ intervention.poseur.id }}">
+                            <input type="checkbox"
+                                   id="dupliquer_poseurs_equipe"
+                                   name="dupliquer_poseurs[]"
+                                   value="equipe">
+                            <label for="dupliquer_poseurs_equipe">Tout l'équipe</label>
+                            <input type="checkbox"
+                                   id="dupliquer_poseurs_all"
+                                   name="dupliquer_poseurs[]"
+                                   value="all">
+                            <label for="dupliquer_poseurs_all">Tout le monde</label>
                         </div>
-
                     </div>
+                    {% endif %}
+
                 </div>
             </div>
         {% endif %}

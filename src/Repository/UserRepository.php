@@ -49,6 +49,16 @@ class UserRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findAllPlanning()
+    {
+        $qb = $this->createQueryBuilder('u')
+            //->andWhere('u.equipe IS NOT NULL')
+            ->andWhere('u.disabled = 0')
+            ->andWhere('u.masquerPlanning = 0');
+
+        return $qb->getQuery()->getResult();
+    }
+
 
     private function getSearchQuery(SearchableEntitySearch $search): QueryBuilder
     {

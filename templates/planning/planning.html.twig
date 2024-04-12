@@ -95,7 +95,7 @@
                                                        {{ intervention.valide ? 'checked' }}>
 
                                                 {# Remplissage auto des heures passées #}
-                                                {% if intervention.heuresPassees == 0 %}
+                                                {% if intervention.heuresPassees == 0 and not intervention.valide %}
                                                 <form action="{{ path('planning_edit_heures', {id: intervention.id}) }}" method="post">
                                                 <button name="intervention_heures[heuresPassees]"
                                                         value="{{ intervention.heuresPlanifiees }}"
@@ -150,7 +150,8 @@
                 .then(response => response.text())
                 .then(html => modal.innerHTML = html)
                 .then(() => modal.showModal())
-                .then(() => toto())
+                .then(() => gestionSelectChantier())
+                .then(() => gestionCheckboxEquipe())
         });
     });
 
@@ -208,32 +209,59 @@
     {#})#}
 
 
-
-    function toto() {
-        const activite = modal.querySelector('#intervention_activite');
-        //const poseur = modal.querySelector('#intervention_poseur');
-        const chantier = modal.querySelector('#intervention_chantier');
-        const types = modal.querySelectorAll('[name="intervention[type]"]');
-        chantier.tomselect.on ('change', () => chantier.tomselect.blur());
-        //poseur.tomselect.on ('change', () => poseur.tomselect.blur());
+    function gestionSelectChantier() {
+        const activite = modal.querySelector('#intervention_activite')
+        //const poseur = modal.querySelector('#intervention_poseur')
+        const chantier = modal.querySelector('#intervention_chantier')
+        const types = modal.querySelectorAll('[name="intervention[type]"]')
+        chantier.tomselect.on ('change', () => chantier.tomselect.blur())
+        //poseur.tomselect.on ('change', () => poseur.tomselect.blur())
         activite.addEventListener('change', function () {
             if (activite.value === 'chantier') {
-                chantier.disabled = false;
+                chantier.disabled = false
                 types.forEach(type => {
-                    type.disabled = false;
-                    type.required = true;
-                });
+                    type.disabled = false
+                    type.required = true
+                })
             } else {
-                chantier.tomselect.clear();
-                chantier.disabled = true;
+                chantier.tomselect.clear()
+                chantier.disabled = true
                 types.forEach(type => {
-                    type.checked = false;
-                    type.disabled = true;
-                    type.required = false;
-                });
+                    type.checked = false
+                    type.disabled = true
+                    type.required = false
+                })
             }
-        });
-        activite.dispatchEvent(new Event('change'));
+        })
+        activite.dispatchEvent(new Event('change'))
+    }
+
+    /**
+     * Cochage de toute l'équipe
+     */
+    function gestionCheckboxEquipe() {
+        document.querySelector('#dupliquer_poseurs_equipe')
+            .addEventListener('change', (el) => {
+                document.querySelector('#dupliquer_poseurs_all').checked = false
+                document.querySelectorAll(
+                    'input[name^="dupliquer_poseurs"][data-checkable]'
+                ).forEach((e) => {
+                    e.checked = el.target.checked
+                    e.disabled = el.target.checked
+                })
+            }
+        )
+        document.querySelector('#dupliquer_poseurs_all')
+            .addEventListener('change', (el) => {
+                document.querySelector('#dupliquer_poseurs_equipe').checked = false
+                document.querySelectorAll(
+                    'input[name^="dupliquer_poseurs"][data-checkable]'
+                ).forEach((e) => {
+                    e.checked = el.target.checked
+                    e.disabled = el.target.checked
+                })
+            }
+        )
     }
 </script>
 

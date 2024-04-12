@@ -6,7 +6,6 @@ use App\Entity\Intervention;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class InterventionService
 {
@@ -47,10 +46,10 @@ class InterventionService
         /** @var User $user */
         $user = $this->security->getUser();
         if ($this->security->isGranted('ROLE_PLANNING_EDIT')) {
-            $poseurs = $this->em->getRepository(User::class)->findBy(['disabled' => false]);
+            $poseurs = $this->em->getRepository(User::class)->findBy(['disabled' => false, 'masquerPlanning' => false]);
         }
         elseif ($user->chefEquipe) {
-            $poseurs = $this->em->getRepository(User::class)->findBy(['disabled' => false, 'equipe' => $user->equipe]);
+            $poseurs = $this->em->getRepository(User::class)->findBy(['disabled' => false, 'equipe' => $user->equipe, 'masquerPlanning' => false]);
         }
         else {
             $poseurs = [$user];
@@ -74,15 +73,28 @@ class InterventionService
             // Dupliquer l'intervention pour chaque jour sélectionné
             foreach ($jours as $jour) {
 
+                // $jour = 1, 2, 3... (lundi, mardi, mercredi...)
+                $date = (clone $intParente->date)->modify("monday this week +" . ($jour - 1) . " days");
+
+                // Check si présence d'une autre intervention != chantier pour le même poseur et la même date
+                // Pas si on est sur une création unique (1 poseur, 1 jour)
+                if (count($poseurs) > 1 || count($jours) > 1) {
+                    $intBloquante = $this->em->getRepository(Intervention::class)->findOneBy([
+                        'date' => $date,
+                        'poseur' => $poseur,
+                        'chantier' => null,
+                    ]);
+                    // Si présence d'une autre intervention, on ne la crée pas
+                    if ($intBloquante) continue;
+                }
+
                 // Intervention initiale ou clone pour les suivantes
                 $int = $int ? clone $intParente : $intParente;
+                $int->poseur = $poseur;
+                $int->date = $date;
 
                 // Intervention chainée
                 $int->parent = count($jours) > 1 ? $intParente : null;
-
-                // $jour = 1, 2, 3... (lundi, mardi, mercredi...)
-                $int->poseur = $poseur;
-                $int->date = (clone $int->date)->modify("monday this week +" . ($jour - 1) . " days");
 
                 $this->em->persist($int);
                 $interventions[] = $int;

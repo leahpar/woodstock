@@ -105,7 +105,22 @@ class InterventionController extends CommonController
 
                 // Poseurs à dupliquer
                 $ids = $request->request->all('dupliquer_poseurs');
-                $poseurs = $em->getRepository(User::class)->findBy(['id' => $ids]);
+                if (in_array('all', $ids)) {
+                    // Tout le monde non masqué planning et non désactivé
+                    $poseurs = $em->getRepository(User::class)->findAllPlanning();
+                }
+                elseif (in_array('equipe', $ids)) {
+                    // Equipe
+                    $poseurs = $em->getRepository(User::class)->findBy([
+                        'equipe' => $intervention->poseur->equipe,
+                        'disabled' => false,
+                        'masquerPlanning' => false,
+                    ]);
+                }
+                else {
+                    // Poseurs sélectionnés
+                    $poseurs = $em->getRepository(User::class)->findBy(['id' => $ids]);
+                }
 
                 // Jours à dupliquer
                 $jours = $request->request->all('dupliquer_jours');
