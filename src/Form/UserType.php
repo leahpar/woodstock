@@ -41,6 +41,9 @@ class UserType extends AbstractType
             ->add('disabled', Type\CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('materiel', Type\CheckboxType::class, [
+                'required' => false,
+            ])
         ;
 
         // Infos diverses

@@ -15,6 +15,7 @@ class UserSearch extends SearchableEntitySearch
     public ?bool $conducteurTravaux = null;
     public ?bool $masquerPlanning = null;
     public ?bool $disabled = null;
+    public ?bool $materiel = null;
     public ?User $poseur = null;
 
 }

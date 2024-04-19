@@ -33,9 +33,6 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[Assert\NotBlank]
     public ?string $nom = null;
 
-    #[ORM\Column(nullable: true)]
-    public ?string $telephone = null;
-
     #[ORM\Column]
     public array $roles = [];
 
@@ -57,6 +54,9 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
 
     #[ORM\Column]
     public bool $disabled = false;
+
+    #[ORM\Column]
+    public bool $materiel = false;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Panier::class, orphanRemoval: true)]
     #[Ignore]
@@ -108,8 +108,8 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+
+        $roles[] = $this->materiel ? 'ROLE_MATERIEL' : 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -270,56 +270,12 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
         return $this->chantiers;
     }
 
-    public function addChantier(Chantier $chantier): self
-    {
-        if (!$this->chantiers->contains($chantier)) {
-            $this->chantiers->add($chantier);
-            $chantier->setConducteurTravaux($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChantier(Chantier $chantier): self
-    {
-        if ($this->chantiers->removeElement($chantier)) {
-            // set the owning side to null (unless already changed)
-            if ($chantier->getConducteurTravaux() === $this) {
-                $chantier->setConducteurTravaux(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Certificat>
      */
     public function getCertificats(): Collection
     {
         return $this->certificats;
-    }
-
-    public function addCertificat(Certificat $certificat): self
-    {
-        if (!$this->certificats->contains($certificat)) {
-            $this->certificats->add($certificat);
-            $certificat->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCertificat(Certificat $certificat): self
-    {
-        if ($this->certificats->removeElement($certificat)) {
-            // set the owning side to null (unless already changed)
-            if ($certificat->getUser() === $this) {
-                $certificat->setUser(null);
-            }
-        }
-
-        return $this;
     }
 
 }

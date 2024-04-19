@@ -7,6 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 trait UserInfosTrait
 {
     #[ORM\Column(nullable: true)]
+    public ?string $telephone = null;
+
+    #[ORM\Column(nullable: true)]
     public ?string $taille = null;
 
     #[ORM\Column(nullable: true)]

@@ -53,12 +53,12 @@ class UserRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('u')
             //->andWhere('u.equipe IS NOT NULL')
-            ->andWhere('u.disabled = 0')
-            ->andWhere('u.masquerPlanning = 0');
+            ->andWhere('u.roles NOT LIKE :role')->setParameter('role', "%ROLE_SUPER_ADMIN%")
+            ->andWhere('u.disabled = false')
+            ->andWhere('u.masquerPlanning = false');
 
         return $qb->getQuery()->getResult();
     }
-
 
     private function getSearchQuery(SearchableEntitySearch $search): QueryBuilder
     {
@@ -77,8 +77,12 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('search', "%{$search->search}%");
         }
 
-        if ($search->disabled) {
+        if ($search->disabled !== null) {
             $query->andWhere('u.disabled = :disabled')->setParameter('disabled', $search->disabled);
+        }
+
+        if ($search->materiel !== null) {
+            $query->andWhere('u.materiel = :materiel')->setParameter('materiel', $search->materiel);
         }
 
         if ($search->equipe) {
@@ -116,6 +120,5 @@ class UserRepository extends ServiceEntityRepository
 
         return $query;
     }
-
 
 }

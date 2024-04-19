@@ -51,10 +51,11 @@ class Planning
         }
         else {
             // NB: on prend même les poseurs désactivés ici, ils seront masqués plus tard si pas d'intervention
-            $uSearch = new UserSearch(array_merge(
-                $search->toArray(),
-                ['tri' => 'equipe', 'masquerPlanning' => false],
-            ));
+            $uSearch = new UserSearch([
+                ...$search->toArray(),
+                'tri' => 'equipe',
+                'masquerPlanning' => false,
+            ]);
             $poseurs = $this->em->getRepository(User::class)->search($uSearch)
                 ->getIterator()->getArrayCopy();
         }

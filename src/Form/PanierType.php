@@ -29,7 +29,8 @@ class PanierType extends AbstractType
                     'placeholder' => 'Choisir un poseur',
                     'query_builder' => fn ($er)
                         => $er->createQueryBuilder('u')
-                            ->andWhere('u.disabled = 0')
+                            ->andWhere('u.disabled = false')
+                            ->andWhere('u.materiel = false')
                             ->andWhere('u.roles NOT LIKE :role')
                             ->setParameter('role', '%ROLE_SUPER_ADMIN%')
                             ->orderBy('u.nom', 'ASC'),

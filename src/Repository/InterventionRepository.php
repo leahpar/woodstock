@@ -70,7 +70,8 @@ class InterventionRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('i')
             ->select('i')
-            ->leftJoin('i.chantier', 'c')->addSelect('c')
+            ->join('i.chantier', 'c')->addSelect('c')
+            ->join('i.poseur', 'u')->andWhere('u.materiel = false')
             ->andWhere('i.date BETWEEN :debut AND :fin')
             ->setParameter('debut', $date->format('Y-m-01 00:00:00'))
             ->setParameter('fin',   $date->format('Y-m-t 23:59:59'))

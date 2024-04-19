@@ -12,7 +12,11 @@
 <div class="overflow-hidden bg-white shadow sm:rounded-lg max-w-4xl mx-auto mb-6">
     <div class="px-4 py-6 sm:px-6 flex justify-between items-center">
       <div class="">
-        <h3 class="text-xl font-semibold leading-7 text-gray-900">{{ user.nom }}</h3>
+        <h3 class="text-xl font-semibold leading-7 text-gray-900"
+          {% if user.disabled %}style="color: firebrick !important; text-decoration: line-through" {% endif %}>
+          {{ user.materiel ? '⚒️' }}
+          {{ user.nom }}
+        </h3>
       </div>
       <div>
           {% if is_granted('ROLE_USER_EDIT') %}

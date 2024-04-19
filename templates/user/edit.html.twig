@@ -36,12 +36,18 @@
                         </div>
 
                         <div class="formGrid">
-
                             <div class="col-span-full">
                                 {{ form_label(form.disabled, 'Désactivé') }}
                                 {{ form_widget(form.disabled) }}
                                 <div class="formErrors">
                                     {{ form_errors(form.disabled) }}
+                                </div>
+                            </div>
+                            <div class="col-span-full">
+                                {{ form_label(form.materiel, 'Matériel') }}
+                                {{ form_widget(form.materiel) }}
+                                <div class="formErrors">
+                                    {{ form_errors(form.materiel) }}
                                 </div>
                             </div>
                         </div>

@@ -112,8 +112,12 @@ class Chantier extends LoggableEntity
     /**
      * @return Collection<int, Intervention>
      */
-    public function getInterventions(): Collection
+    public function getInterventions(?bool $withMateriel = false): Collection
     {
+        if (!$withMateriel) {
+            // On filtre les interventions sur des poseurs matériel
+            return $this->interventions->filter(fn (Intervention $int) => !$int->poseur->materiel);
+        }
         return $this->interventions;
     }
 
@@ -130,7 +134,7 @@ class Chantier extends LoggableEntity
         }
 
         return array_reduce(
-            $this->interventions->toArray(),
+            $this->getInterventions()->toArray(),
             fn(int $t, Intervention $int)
                 => $t + ((($type=='all' || $int->type==$type) && $int->valide)
                         ? $int->{'heures' . ucfirst($truc) . 'es'}
@@ -153,7 +157,7 @@ class Chantier extends LoggableEntity
         }
 
         return array_reduce(
-            $this->interventions->toArray(),
+            $this->getInterventions()->toArray(),
             fn (int $t, Intervention $int)
                 => $t + (($type=='all' || $int->type==$type) ? $int->{'heures' . ucfirst($truc) . 'es'} * $int->tauxHoraire : 0),
             0
