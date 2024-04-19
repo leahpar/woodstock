@@ -46,7 +46,15 @@
                                     <span class="inline-block text-xs uppercase text-white rounded px-1 mr-1 {{ poseur.equipe == 'atelier' ? 'bg-sky-500' : 'bg-teal-500' }}">
                                         {{ poseur.equipe }}
                                     </span>
-                                    <br>{{ poseur }}
+                                    <br>
+                                    {{ poseur }}
+                                    <br>
+                                    {% if app.request.query.has('semaine') %}
+                                    <form method="post" action="{{ path('planning_delete_semaine', {id: poseur.id}) }}">
+                                        <input type="hidden" name="date" value="{{ dates|first|date('Y-m-d') }}">
+                                        <button>Supprimer la semaine</button>
+                                    </form>
+                                    {% endif %}
                                 </div>
                                 <div class="font-medium !text-gray-600 text-xs">
                                     <span title="{{ totalHeuresPasseesPoseurs[poseur.id] }}h passée">
@@ -110,7 +118,6 @@
                                         {% endfor %}
 
                                         <button data-date="{{ date|format_datetime(pattern="yyyy-MM-dd") }}"
-                                                data-disabled="{{ date.valide }}"
                                                 data-poseur="{{ poseur.id }}"
                                                 class="addInterventionButton rounded px-2 py-1 border border-dashed border-gray-200 text-gray-400 transition-all hover:border-gray-400 hover:text-teal-500">
                                             + Ajouter

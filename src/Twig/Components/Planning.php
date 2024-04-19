@@ -32,8 +32,6 @@ class Planning
         while ($date <= $end) {
             if ($date->format('N') <= 6) {
                 $this->dates[$date->format('Y-m-d')] = clone $date;
-                // Warning: Property declared dynamically, this is deprecated starting from PHP 8.2
-                $this->dates[$date->format('Y-m-d')]->valide = false;
             }
             $date->modify('+1 day');
         }

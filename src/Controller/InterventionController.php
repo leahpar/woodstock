@@ -241,7 +241,10 @@ class InterventionController extends CommonController
         return $this->redirect($referer);
     }
 
-    #[Route('/{id}/supprimerall', name: 'planning_delete_all', methods: ['POST'])]
+    /**
+     * Supprime toutes les interventions liées
+     */
+    #[Route('/{id}/supprimer-all', name: 'planning_delete_all', methods: ['POST'])]
     public function deleteAll(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
     {
         /** @var User $user */
@@ -269,11 +272,54 @@ class InterventionController extends CommonController
         return $this->redirect($referer);
     }
 
-    #[Route('planning_heures_auto', name: 'planning_heures_auto')]
-    public function heuresAuto(EntityManagerInterface $em, InterventionService $interventionService): Response
+    /**
+     * Supprime toutes les interventions (non validées) de la semaine du poseur
+     */
+    #[Route('/{id}/supprimer-poseur', name: 'planning_delete_semaine', methods: ['POST'])]
+    public function deletePoseur(Request $request, User $poseur, EntityManagerInterface $em): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
 
-        return new Response(null, Response::HTTP_NO_CONTENT);
+        // TODO: InterventionVoter
+        $canDelete = $user->chefEquipe || $this->isGranted('ROLE_PLANNING_EDIT');
+        if (!$canDelete) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $date = $request->request->get('date');
+        $interventions = $em->getRepository(Intervention::class)->findByPoseurSemaine($poseur, $date);
+
+        /** @var Intervention $intervention */
+        $cpt = 0;
+        foreach ($interventions as $intervention) {
+
+            if ($intervention->valide) {
+                // On la détache, mais on ne la supprime pas
+                $intervention->parent = null;
+                continue;
+            }
+
+            if ($intervention->activite === 'ferie') {
+                continue;
+            }
+
+            $this->log('delete', $intervention, [...$intervention->toLogArray(), 'semaine' => 'oui']);
+            $em->remove($intervention);
+            $cpt++;
+        }
+        $em->flush();
+
+        if ($cpt == 0) {
+            $this->addFlash('warning', "Aucune intervention à supprimer");
+        }
+        else {
+            $s = $cpt > 1 ? 's' : '';
+            $this->addFlash('success', "$cpt intervention$s supprimée$s");
+        }
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
     }
 
 }

@@ -90,4 +90,17 @@ class InterventionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByPoseurSemaine(\App\Entity\User $poseur, string $date)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i')
+            ->andWhere('i.poseur = :poseur')
+            ->andWhere('i.date BETWEEN :debut AND :fin')
+            ->setParameter('poseur', $poseur)
+            ->setParameter('debut', (new \DateTime($date))->modify('monday this week'))
+            ->setParameter('fin',   (new \DateTime($date))->modify('monday next week'))
+            ->getQuery()
+            ->getResult();
+    }
+
 }
