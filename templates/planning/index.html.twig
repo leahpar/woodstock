@@ -4,23 +4,23 @@
 
 {% block content %}
 
-    <div class="pageHeader sticky top-0 z-10 bg-gray-100 py-3">
+    <div class="pageHeader sticky top-0 z-10 bg-gray-100 py-3 px-3 lg:px-0 -mx-4 lg:mx-0 space-y-2">
         <div class="title">
             <h2>Planning</h2>
         </div>
 
-        <div class="buttons">
+        <div class="flex justify-around lg:justify-end lg:gap-2">
             {% set route = app.request.get('_route') %}
 {#            {% set params = app.request.query.all | filter((v,k) => (k != 'semaine' and k != 'mois')) %}#}
 
-            <a class="borderedButton" href="{{ path(route, search.moisPrecedent) }}">Mois précédent</a>
-            <a class="borderedButton" href="{{ path(route, search.semainePrecedente) }}">Semaine précédente</a>
+            <a class="borderedButton" href="{{ path(route, search.moisPrecedent) }}"><span class="lg:hidden">< M</span><span class="hidden lg:inline">Mois précédent</span></a>
+            <a class="borderedButton" href="{{ path(route, search.semainePrecedente) }}"><span class="lg:hidden">< S</span><span class="hidden lg:inline">Semaine précédente</span></a>
 
-            <a class="borderedButton" href="{{ path(route) }}">Semaine courante</a>
-            <a class="borderedButton" href="{{ path(route, {mois: 'now'|date('m')}) }}">Mois courant</a>
+            <a class="borderedButton" href="{{ path(route) }}"><span class="lg:hidden">S</span><span class="hidden lg:inline">Semaine courante</span></a>
+            <a class="borderedButton" href="{{ path(route, {mois: 'now'|date('m')}) }}"><span class="lg:hidden">M</span><span class="hidden lg:inline">Mois courant</span></a>
 
-            <a class="borderedButton" href="{{ path(route, search.semaineSuivante) }}">Semaine suivante</a>
-            <a class="borderedButton" href="{{ path(route, search.moisSuivant) }}">Mois suivant</a>
+            <a class="borderedButton" href="{{ path(route, search.semaineSuivante) }}"><span class="lg:hidden">S ></span><span class="hidden lg:inline">Semaine suivante</span></a>
+            <a class="borderedButton" href="{{ path(route, search.moisSuivant) }}"><span class="lg:hidden">M ></span><span class="hidden lg:inline">Mois suivant</span></a>
         </div>
     </div>
 

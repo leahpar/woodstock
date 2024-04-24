@@ -26,23 +26,20 @@
 
     </style>
     
-    <div class="space-y-3">
-    
-    <div class="pageHeader">
-      <div class="title">
-        <h2>Gestion des stocks</h2>
-      </div>
-      <div class="buttons">
+        <div class="pageHeader sticky top-0 z-10 bg-gray-100 py-3 px-3 lg:px-0 -mx-4 lg:mx-0 space-y-2">
+          <div class="title">
+            <h2>Gestion des stocks</h2>
+          </div>
+          <div class="buttons">
         
-
-        {% if is_granted('ROLE_REFERENCE_STOCK') %}
-            <a href="{{ path('panier_new',{type:'entree'}) }}" class="button">Ajouter du stock</a>
-            <a href="{{ path('panier_new',{type:'sortie'}) }}" class="button">Sortir du stock</a>
-            <a href="{{ path('panier_new',{type:'retour'}) }}" class="button">Retour de stock</a>
-        {% endif %}
-
-      </div>
-    </div>
+            {% if is_granted('ROLE_REFERENCE_STOCK') %}
+                <a href="{{ path('panier_new',{type:'entree'}) }}" class="button">Ajouter du stock</a>
+                <a href="{{ path('panier_new',{type:'sortie'}) }}" class="button">Sortir du stock</a>
+                <a href="{{ path('panier_new',{type:'retour'}) }}" class="button">Retour de stock</a>
+            {% endif %}
+            
+          </div>
+        </div>
     
     <div class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 flex flex-col lg:flex-row justify-between items-center text-sm text-gray-700">
         {{ include('parts/recherche2.html.twig', {search: search}) }}
@@ -74,8 +71,6 @@
             
         </div>
         
-    </div>
-    
     </div>
 
     

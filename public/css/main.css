@@ -745,8 +745,8 @@ select {
 .top-0 {
   top: 0px;
 }
-.top-14 {
-  top: 3.5rem;
+.top-\[1px\] {
+  top: 1px;
 }
 .top-full {
   top: 100%;
@@ -1031,6 +1031,9 @@ select {
 }
 .justify-between {
   justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
 }
 .gap-1 {
   gap: 0.25rem;
@@ -1902,7 +1905,6 @@ select {
   background-color: rgb(240 253 250 / var(--tw-bg-opacity));
 }
 .mainTable tbody tr td {
-  white-space: nowrap;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   padding-top: 1rem;
@@ -1917,7 +1919,7 @@ select {
   table-layout: fixed;
 }
 .planning td {
-  padding: 0.75rem;
+  padding: 0.25rem;
 }
 .placeholder\:text-gray-400::-moz-placeholder {
   --tw-text-opacity: 1;
@@ -1929,6 +1931,10 @@ select {
 }
 .odd\:bg-gray-600\/5:nth-child(odd) {
   background-color: rgb(75 85 99 / 0.05);
+}
+.hover\:rotate-180:hover {
+  --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .hover\:border-gray-400:hover {
   --tw-border-opacity: 1;
@@ -1977,6 +1983,10 @@ select {
 .hover\:text-gray-500:hover {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+.hover\:text-red-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 .hover\:text-teal-300:hover {
   --tw-text-opacity: 1;
@@ -2226,6 +2236,18 @@ select {
     bottom: 0px;
   }
 
+  .lg\:\!top-14 {
+    top: 3.5rem !important;
+  }
+
+  .lg\:top-14 {
+    top: 3.5rem;
+  }
+
+  .lg\:z-10 {
+    z-index: 10;
+  }
+
   .lg\:z-50 {
     z-index: 50;
   }
@@ -2235,8 +2257,17 @@ select {
     margin-right: -2rem;
   }
 
+  .lg\:mx-0 {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
   .lg\:block {
     display: block;
+  }
+
+  .lg\:inline {
+    display: inline;
   }
 
   .lg\:flex {
@@ -2271,6 +2302,14 @@ select {
     align-items: center;
   }
 
+  .lg\:justify-end {
+    justify-content: flex-end;
+  }
+
+  .lg\:gap-2 {
+    gap: 0.5rem;
+  }
+
   .lg\:gap-x-6 {
     -moz-column-gap: 1.5rem;
     column-gap: 1.5rem;
@@ -2282,6 +2321,11 @@ select {
 
   .lg\:bg-gray-900\/10 {
     background-color: rgb(17 24 39 / 0.1);
+  }
+
+  .lg\:px-0 {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   .lg\:px-8 {
