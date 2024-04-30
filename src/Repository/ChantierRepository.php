@@ -41,6 +41,12 @@ class ChantierRepository extends ServiceEntityRepository
                 ->orWhere('c.referenceTravaux LIKE :search')
                 ->orWhere('c.referenceEtude LIKE :search')
                 ->setParameter('search', "%{$search->search}%");
+
+//            $orSmt = $query->expr()->orX();
+//            foreach (explode(' ', (string) $search->search) as $word) {
+//                $orSmt->add($query->expr()->like('c.nom', $query->expr()->literal('%'.$word.'%')));
+//            }
+//            $query->andWhere($orSmt);
         }
 
         if ($search->nom) {

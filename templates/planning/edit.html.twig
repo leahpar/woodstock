@@ -37,16 +37,30 @@
 
                 <div class="col-span-full">
                     {{ form_label(form.activite, 'Activité') }}
-                    <div class="mt-2">
-                        {{ form_widget(form.activite) }}
-                    </div>
+                    {% if form.activite.vars.attr.readonly??false %}
+                        <div class="mt-2" style="display: none">
+                            {{ form_widget(form.activite) }}
+                        </div>
+                        <input type="text" readonly value="{{ intervention.activite }}">
+                    {% else %}
+                        <div class="mt-2">
+                            {{ form_widget(form.activite) }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="col-span-full">
                     {{ form_label(form.chantier, 'Chantier') }}
-                    <div class="mt-2">
-                        {{ form_widget(form.chantier) }}
-                    </div>
+                    {% if form.chantier.vars.attr.readonly??false %}
+                        <div class="mt-2" style="display: none">
+                            {{ form_widget(form.chantier) }}
+                        </div>
+                        <input type="text" readonly value="{{ intervention.chantier }}">
+                    {% else %}
+                        <div class="mt-2">
+                            {{ form_widget(form.chantier) }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="col-span-full">
@@ -56,12 +70,36 @@
                     </div>
                 </div>
 
-                <div class="col-span-full">
-                    {{ form_label(form.heuresPlanifiees, 'Heures planifiées') }}
-                    <div class="mt-2">
-                        {{ form_widget(form.heuresPlanifiees) }}
+                {% if is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe %}
+                    <div class="col-span-full">
+                        {{ form_label(form.heuresPlanifiees, 'Heures planifiées') }}
+                        <div class="mt-2">
+                            {{ form_widget(form.heuresPlanifiees) }}
+                        </div>
+                        {# type:'hidden' est ignoré :/ #}
+                        {{ form_widget(form.heuresPassees, {attr: {type:'hidden', style:'display:none'}}) }}
                     </div>
-                </div>
+                {% else %}
+                    <div class="col-span-full">
+                        {{ form_label(form.heuresPlanifiees, 'Heures planifiées') }}
+                        {% set attr = {readonly:true, value: intervention.id==0 ? 0 : intervention.heuresPlanifiees} %}
+                        {# <input type="hidden" name="intervention[heuresPlanifiees]" value="0">#}
+                        {{ form_widget(form.heuresPlanifiees, {attr: attr}) }}
+                    </div>
+
+                    {% if intervention.id == 0 %}
+                        <div class="col-span-full">
+                            {# Création => on gère les heures passées directement ici #}
+                            {{ form_label(form.heuresPassees, 'Heures passées') }}
+                            <div class="mt-2">
+                                {{ form_widget(form.heuresPassees) }}
+                            </div>
+                        </div>
+                    {% else %}
+                        {{ form_widget(form.heuresPassees, {attr: {type:'hidden', style:'display:none'}}) }}
+                    {% endif %}
+                {% endif %}
+
                 <div class="col-span-full">
                     {{ form_label(form.commentaire, 'Commentaire') }}
                     <div class="mt-2">
@@ -73,7 +111,8 @@
             </div>
         </div>
 
-        {% if intervention.id == 0 %}
+        {# Mode création && droit d'édition => gestion des interventions multiples #}
+        {% if intervention.id == 0 and (is_granted('ROLE_PLANNING_EDIT') or app.user.chefEquipe) %}
             <div class="formSection">
 
                 <div>
@@ -134,6 +173,10 @@
 
                 </div>
             </div>
+        {% elseif intervention.id == 0 %}
+            {# Mode création mais sans les droits => pas le choix, intervention unique #}
+{#            <input type="hidden" name="dupliquer_poseurs[]" value="{{ intervention.poseur.id }}">#}
+{#            <input type="hidden" name="dupliquer_jours[]" value="{{ intervention.date|date('N') }}">#}
         {% endif %}
 
         <div class="mt-6 flex items-center justify-end gap-x-6 bg-gray-100 p-8">

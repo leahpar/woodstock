@@ -29,14 +29,17 @@ class InterventionType extends AbstractType
             ])
             ->add('heuresPlanifiees', Type\NumberType::class, [
                 'html5' => true, // type="number"
-                'attr' => [ 'min' => 0 ],
+                'attr' => [
+                    'min' => 0,
+                    'readonly' => $options['readonly'],
+                ],
                 'required' => true,
             ])
-            //->add('heuresPassees', Type\NumberType::class, [
-            //    'html5' => true, // type="number"
-            //    'attr' => [ 'min' => 0 ],
-            //    'required' => true,
-            //])
+            ->add('heuresPassees', Type\NumberType::class, [
+                'html5' => true, // type="number"
+                'attr' => [ 'min' => 0 ],
+                'required' => false,
+            ])
             ->add('poseur', EntityType::class, [
                 'class' => User::class,
                 'required' => true,
@@ -57,6 +60,9 @@ class InterventionType extends AbstractType
                     'Scieur' => 'scieur',
                     'Entretien' => 'entretien',
                 ],
+                'attr' => [
+                    'readonly' => $options['readonly'],
+                ],
             ])
             ->add('chantier', EntityType::class, [
                 'class' => Chantier::class,
@@ -65,6 +71,9 @@ class InterventionType extends AbstractType
                 'placeholder' => '',
                 'query_builder' => fn ($er)
                     => $er->createQueryBuilder('c')->where('c.encours = true'),
+                'attr' => [
+                    'readonly' => $options['readonly'],
+                ],
             ])
             ->add('type', Type\ChoiceType::class, [
                 'choices' => [
@@ -74,12 +83,15 @@ class InterventionType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
                 'required' => true,
+                'attr' => [
+                    'readonly' => $options['readonly'],
+                ],
             ])
             ->add('commentaire', Type\TextareaType::class, [
                 'required' => false,
                 'attr' => [
                     'rows' => 3,
-                    'maxlength' => 255
+                    'maxlength' => 255,
                 ],
             ])
         ;
@@ -89,6 +101,8 @@ class InterventionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Intervention::class,
+            'readonly' => false,
+            //'allow_extra_fields' => true,
         ]);
     }
 }

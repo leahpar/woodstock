@@ -94,7 +94,15 @@ class InterventionController extends CommonController
             ]);
         }
 
-        $form = $this->createForm(InterventionType::class, $intervention);
+        // Poseur édite une intervention pas à lui => readonly
+        $readonly = false;
+        if (!$this->isGranted('ROLE_PLANNING_EDIT')
+            && !$user->chefEquipe
+            && $intervention->auteur->id != $user->id) {
+            $readonly = true;
+        }
+
+        $form = $this->createForm(InterventionType::class, $intervention, ['readonly' => $readonly]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -105,7 +113,11 @@ class InterventionController extends CommonController
 
                 // Poseurs à dupliquer
                 $ids = $request->request->all('dupliquer_poseurs');
-                if (in_array('all', $ids)) {
+                if (count($ids) == 0) {
+                    // Poseur de l'intervention par défaut
+                    $poseurs = [$intervention->poseur];
+                }
+                elseif (in_array('all', $ids)) {
                     // Tout le monde non masqué planning et non désactivé
                     $poseurs = $em->getRepository(User::class)->findAllPlanning();
                 }
@@ -124,6 +136,10 @@ class InterventionController extends CommonController
 
                 // Jours à dupliquer
                 $jours = $request->request->all('dupliquer_jours');
+                if (count($jours) == 0) {
+                    // Jour de l'intervention par défaut
+                    $jours = [$intervention->date->format('N')];
+                }
 
                 // Go dupliquer !
                 $interventions = $interventionService->propagerCreation($intervention, $jours, $poseurs);
