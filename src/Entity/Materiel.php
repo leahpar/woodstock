@@ -62,6 +62,11 @@ class Materiel extends LoggableEntity
         return $this->prets;
     }
 
+    public function getPretEnCours(): ?Pret
+    {
+        return $this->prets->filter(fn(Pret $pret) => $pret->dateRetour === null)->first() ?: null;
+    }
+
     public function addPret(Pret $pret): self
     {
         if (!$this->prets->contains($pret)) {

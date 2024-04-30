@@ -106,15 +106,26 @@ class MaterielController extends CommonController
     #[Route('/{id}/pret', name: 'materiel_pret')]
     public function pret(Request $request, Materiel $materiel, EntityManagerInterface $em): Response
     {
-        $rendu = false;
-        $pret = new Pret(materiel: $materiel);
-        if ($request->query->get('rendu')) {
-            $rendu = true;
-            $pret = $materiel->getPrets()->first();
-            if (!$pret) {
-                $this->addFlash('warning', 'Aucun prêt en cours pour ce matériel');
-                return $this->redirectToRoute('materiel_index');
-            }
+        $rendu = $request->query->getBoolean('rendu');
+        $pretEnCours = $materiel->getPretEnCours();
+
+        if ($rendu && !$pretEnCours) {
+            // Rendu sans prêt en cours => KO
+            $this->addFlash('warning', 'Aucun prêt en cours pour ce matériel');
+            $referer = $request->headers->get('referer');
+            return $this->redirect($referer);
+        }
+        elseif (!$rendu && $pretEnCours) {
+            // Nouveau prêt avec prêt déjà en cours => KO
+            $this->addFlash('warning', 'Ce matériel est déjà prêté');
+            $referer = $request->headers->get('referer');
+            return $this->redirect($referer);
+        }
+
+        $pret = $pretEnCours ?? new Pret(materiel: $materiel);
+
+        if ($rendu) {
+            // Rendu => date de retour = maintenant par défaut
             $pret->dateRetour = new \DateTime();
         }
 
@@ -127,13 +138,13 @@ class MaterielController extends CommonController
             if ($rendu) {
                 $this->log('rendu', $materiel, [
                     'date' => $pret->dateRetour->format('Y-m-d'),
-                    'user' => $pret->user->__toString(),
+                    'emprunteur' => $pret->user->__toString(),
                 ]);
             }
             else {
                 $this->log('pret', $materiel, [
                     'date' => $pret->datePret->format('Y-m-d'),
-                    'user' => $pret->user->__toString(),
+                    'emprunteur' => $pret->user->__toString(),
                 ]);
             }
             $em->flush();
