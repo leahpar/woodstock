@@ -45,6 +45,8 @@ class StockRepository extends ServiceEntityRepository
             ->leftJoin('p.chantier',  'c')->addSelect('c')
 //            ->andWhere('s.type = :type')
 //            ->setParameter('type', Stock::TYPE_SORTIE)
+            ->andWhere('s.type in (:types)')
+            ->setParameter('types', [Stock::TYPE_SORTIE, Stock::TYPE_RETOUR])
             ->andWhere('p.brouillon = false')
             ->andWhere('p.date BETWEEN :debut AND :fin')
             ->setParameter('debut', $date->format('Y-m-01 00:00:00'))

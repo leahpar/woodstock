@@ -37,7 +37,7 @@ class ComptaExportService
                     /* 1 Date       */ $stock->panier->date->format('t/m/Y'),
                     /* 2 Cpte       */ $stock->reference->codeComptaCompte,
                     /* 3 Analytique */ $chantier?->referenceTravaux??'7001',
-                    /* 4 Libellé    */ $stock->type . " stock du " . $stock->panier->date->format('t/m/Y'),
+                    /* 4 Libellé    */ /*$stock->type .*/ "Sortie stock du " . $stock->panier->date->format('t/m/Y'),
                     /* 5 Débit      */ $stock->getDebit()  ?: 0,
                     /* 6 Crédit     */ $stock->getCredit() ?: 0,
                 ];
@@ -57,7 +57,7 @@ class ComptaExportService
                     /* 1 Date       */ $stock->panier->date->format('t/m/Y'),
                     /* 2 Cpte       */ $stock->reference->codeComptaCompte,
                     /* 3 Analytique */ '7000',
-                    /* 4 Libellé    */ $stock->type . " stock du " . $stock->panier->date->format('t/m/Y'),
+                    /* 4 Libellé    */ /*$stock->type .*/ "Sortie stock du " . $stock->panier->date->format('t/m/Y'),
                     // NB: colonnes inversées !
                     /* 5 Débit      */ $stock->getCredit() ?: 0,
                     /* 6 Crédit     */ $stock->getDebit()  ?: 0,
