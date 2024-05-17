@@ -60,3 +60,18 @@ update reference set essence = 'charpente' where essence = 'Charpente';
 ALTER TABLE reference ADD date_modif_prix DATE NULL;
 update reference set date_modif_prix = '2000-01-01';
 
+-- -----------------------------
+-- Check 7001 avril
+-- -----------------------------
+
+select p.date, u.nom, s.quantite, r.marque, r.reference, r.nom
+from stock s
+left join panier p on p.id = s.panier_id
+left join reference r on r.id = s.reference_id
+left join user u on u.id = p.user_id
+where p.date between '2024-04-01' and '2024-04-30'
+and s.type in ('sortie', 'retour')
+and p.brouillon = 0
+and p.chantier_id IS NULL;
+
+select * from user where id in (3, 36, 37);

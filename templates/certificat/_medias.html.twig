@@ -1,0 +1,74 @@
+
+
+<div class="md:flex md:items-center md:justify-between mb-8">
+    <div class="min-w-0 flex-1">
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            Documents
+        </h2>
+    </div>
+    <div class="mt-4 flex md:ml-4 md:mt-0">
+    </div>
+</div>
+
+<div class="formWrapper">
+
+    <div class="space-y-12">
+        <div class="formSection">
+
+            <div>
+                <h2>Documents</h2>
+            </div>
+
+            <div class="formGrid">
+
+                <div class="col-span-full">
+                    <table>
+                        {% for media in certificat.medias %}
+                        <tr>
+                            <td>{{ media.type }}</td>
+                            <td>
+                                <a href="{{ asset('uploads/'~media.fileName) }}" target="_blank">
+                                    {{ media.originalName }}
+                                </a>
+                            </td>
+                            <td>
+                                <form method="post"
+                                      action="{{ path('media_delete', {id: media.id}) }}"
+                                      onsubmit="return confirm('Supprimer le document ?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div class="col-span-full">
+                    <label></label>
+                    <div class="mt-2">
+                        <form method="post"
+                              class="dropzone" id="myDropzone"
+                              enctype="multipart/form-data"
+                              action="{{ path('media_upload') }}">
+                            <input type="hidden" name="certificat" value="{{ certificat.id }}">
+                            <span class="dz-message">Choisissez un ou plusieurs fichiers à ajouter</span>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    //Dropzone.options.myDropzone = {
+    const myDropzone = new Dropzone("form#myDropzone", {
+    paramName: "file",
+        parallelUploads: 1,
+        acceptedFiles: "image/*, application/pdf",
+    })
+</script>

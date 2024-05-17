@@ -12,8 +12,11 @@
         <script src="{{ asset('js/pwa.js') }}"></script>
         <link rel="icon" type="image/png" href="{{ asset('img/icon.png') }}">
 
-
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+
+        <!-- Dropzone -->
+        <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+        <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css">
 
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {{ encore_entry_link_tags('app') }}

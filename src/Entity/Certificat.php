@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Logger\LoggableEntity;
 use App\Repository\CertificatRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -39,6 +41,14 @@ class Certificat extends LoggableEntity
 
     #[ORM\Column(type: 'boolean')]
     public bool $alerte = false;
+
+    #[ORM\OneToMany(mappedBy: 'certificat', targetEntity: Media::class, orphanRemoval: true)]
+    public Collection $medias;
+
+    public function __construct()
+    {
+        $this->medias = new ArrayCollection();
+    }
 
     public function __toString(): string
     {

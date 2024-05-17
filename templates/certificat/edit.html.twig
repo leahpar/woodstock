@@ -6,13 +6,13 @@
 
         <div class="md:flex md:items-center md:justify-between mb-8">
             <div class="min-w-0 flex-1">
-                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                     {% if certificat.id %}
                         {{ certificat.nom }}
                     {% else %}
                         Nouveau certificat
                     {% endif %}
-                </h2>
+                </h1>
             </div>
             <div class="mt-4 flex md:ml-4 md:mt-0">
             </div>
@@ -119,14 +119,23 @@
             </form>
 
             {% if certificat.id %}
-                <form method="post" action="{{ path('certificat_delete', {'id': certificat.id}) }}"
-                      onsubmit="return confirm('Supprimer ce certificat ?');" class="contents">
-                    <button class="text-teal-600 hover:text-teal-900">Supprimer<span
-                                class="sr-only">, {{ certificat.nom }}</span></button>
+                <form method="post"
+                      class="contents"
+                      action="{{ path('certificat_delete', {'id': certificat.id}) }}"
+                      onsubmit="return confirm('Supprimer ce certificat ?')">
+                    <button class="text-teal-600 hover:text-teal-900">
+                        Supprimer
+                        <span class="sr-only">, {{ certificat.nom }}</span>
+                    </button>
                 </form>
             {% endif %}
 
         </div>
+
+        {% if certificat.id %}
+        {{ include('certificat/_medias.html.twig') }}
+        {% endif %}
+
     </div>
 
 {% endblock %}

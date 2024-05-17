@@ -13,6 +13,7 @@
 .idea
 notes.md
 /public/planning.html
+/public/uploads
 
 /config/packages/web_profiler.yaml
 
