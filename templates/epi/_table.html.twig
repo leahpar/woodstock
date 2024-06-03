@@ -1,0 +1,54 @@
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto lg:overflow-visible sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="relative">
+
+                <table class="mainTable">
+
+                    <thead>
+                    <tr>
+                        {% from "parts/macros.html.twig" import thSort %}
+
+                        <th scope="col" class="min-w-[12rem]">{{ thSort('nom', 'Epi') }}</th>
+                        <th scope="col">{{ thSort('user', 'Utilisateur') }}</th>
+                        <th scope="col">{{ thSort('date', 'Date') }}</th>
+                        <th scope="col">
+                            <span class="sr-only">Actions</span>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for epi in epis %}
+
+                        <tr>
+                            <td class="font-medium !text-gray-900">{{ epi.nom }}</td>
+
+                            <td>
+                                <a href="{{ path('user_show', {'id': epi.user.id}) }}">{{ epi.user }}</a>
+                            </td>
+
+                            <td>{{ epi.date|date('d/m/Y') }}</td>
+
+                            <td class="text-right font-medium sm:pr-3">
+                                <a href="{{ path('epi_delete', {'id': epi.id}) }}"
+                                   class="text-teal-600 hover:text-teal-900">Supprimer
+                                    <span class="sr-only">, {{ epi.nom }}</span>
+                                </a>
+                            </td>
+                        </tr>
+
+                    {% else %}
+                        <tr>
+                            <td colspan="99">Aucun epi</td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="max-w-4xl mx-auto">
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+            <h1 class="text-base font-semibold leading-6 text-gray-900">Epis</h1>
+            <p class="mt-2 text-sm text-gray-700">
+                {% if is_granted('ROLE_USER_EPI') %}
+                    <a href="{{ path('epi_new', {_u: user.id}) }}"
+                       class="rounded-md bg-teal-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                        Ajouter
+                    </a>
+                {% endif %}
+            </p>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        </div>
+    </div>
+    <div class="mt-8 flow-root">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">epi</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Date</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+
+                        {% for epi in user.epis %}
+                            <tr>
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                    {{ epi.nom }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ epi.date|date('d/m/Y') }}
+                                </td>
+                                {% if is_granted('ROLE_USER_EPI') %}
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <a href="{{ path('epi_delete', {'id': epi.id}) }}"
+                                           onclick="return confirm('Supprimer l\'EPI ?');"
+                                           class="text-teal-600 hover:text-teal-900">
+                                            supprimer
+                                        </a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="99" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    Aucun epi
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

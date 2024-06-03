@@ -81,6 +81,12 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[ORM\OrderBy(['dateFin' => 'DESC', 'dateDebut' => 'DESC'])]
     private Collection $certificats;
 
+    /**
+     * @var Collection<int, Epi>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Epi::class, orphanRemoval: true)]
+    private Collection $epis;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -90,6 +96,7 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
         $this->pings = new ArrayCollection();
         $this->chantiers = new ArrayCollection();
         $this->certificats = new ArrayCollection();
+        $this->epis = new ArrayCollection();
     }
 
     /**
@@ -276,6 +283,14 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     public function getCertificats(): Collection
     {
         return $this->certificats;
+    }
+
+    /**
+     * @return Collection<int, Epi>
+     */
+    public function getEpis(): Collection
+    {
+        return $this->epis;
     }
 
 }

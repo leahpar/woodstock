@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Chantier;
+use App\Entity\Epi;
 use App\Entity\Materiel;
 use App\Entity\Reference;
 use App\Entity\User;
@@ -50,6 +51,12 @@ class SearchController extends AbstractController
             $search = $request->query->get('search');
             $users = $em->getRepository(User::class)->findBySearch($search);
         }
+        
+        $epis = [];
+        if ($this->isGranted('ROLE_USER_EPI')) {
+            $search = $request->query->get('search');
+            $epis = $em->getRepository(Epi::class)->findBySearch($search);
+        }
 
         return $this->render('search/index.html.twig', [
             'gsearch' => $searchStr,
@@ -57,6 +64,7 @@ class SearchController extends AbstractController
             'references' => $references,
             'materiels' => $materiels,
             'users' => $users,
+            'epis' => $epis,
         ]);
     }
 

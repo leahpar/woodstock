@@ -10,6 +10,7 @@ enum Role: string {
     // Utilisateurs
     case ROLE_USER_LIST = "ROLE_USER_LIST";
     case ROLE_USER_EDIT = "ROLE_USER_EDIT";
+    case ROLE_USER_EPI = "ROLE_USER_EPI";
     // Chantiers
     case ROLE_CHANTIER_LIST = "ROLE_CHANITER_LIST";
     case ROLE_CHANTIER_EDIT = "ROLE_CHANITER_EDIT";

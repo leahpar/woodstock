@@ -20,7 +20,10 @@
       </div>
       <div>
           {% if is_granted('ROLE_USER_EDIT') %}
-          <a href="{{ path('user_edit', {'id': user.id}) }}" class="block rounded-md bg-teal-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">Modifier</a>
+          <a href="{{ path('user_edit', {'id': user.id}) }}"
+             class="block rounded-md bg-teal-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+            Modifier
+          </a>
           {% endif %}
       </div>
   </div>
@@ -85,6 +88,7 @@
 </div>
 
   {{ include('user/_pret_materiel.html.twig') }}
+  {{ include('user/_epis.html.twig') }}
   {{ include('user/_certificats.html.twig') }}
 
 {% endblock %}

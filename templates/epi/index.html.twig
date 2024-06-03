@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}epis index{% endblock %}
+
+{% block content %}
+
+    <div class="pageHeader">
+        <div class="title">
+            <h2>Gestion des EPIs</h2>
+        </div>
+        <div class="buttons">
+            <a href="{{ path('epi_new') }}" class="borderedButton">Ajouter un EPI</a>
+        </div>
+    </div>
+
+
+    {{ include('epi/_table.html.twig', { epis: epis }) }}
+    {{ include('parts/pagination.html.twig', {'search': search}) }}
+
+
+{% endblock %}

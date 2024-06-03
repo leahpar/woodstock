@@ -7,7 +7,7 @@
         <div class="md:flex md:items-center md:justify-between mb-8">
             <div class="min-w-0 flex-1">
                 <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                     Prêt de {{ materiel.nom }}
+                    Nouvel EPI
                 </h2>
             </div>
             <div class="mt-4 flex md:ml-4 md:mt-0">
@@ -25,48 +25,38 @@
                     <div class="formSection">
 
                         <div>
-                            <h2>Détail du prêt</h2>
+                            <h2>Détails</h2>
                         </div>
 
                         <div class="formGrid">
 
                             <div class="col-span-full">
-                                {{ form_label(form.datePret, 'Date de prêt') }}
+                                {{ form_label(form.nom, 'Equipement') }}
                                 <div class="mt-2">
-                                    {{ form_widget(form.datePret) }}
+                                    {{ form_widget(form.nom) }}
                                 </div>
                                 <div class="formErrors">
-                                    {{ form_errors(form.datePret) }}
+                                    {{ form_errors(form.nom) }}
                                 </div>
                             </div>
 
                             <div class="col-span-full">
-                                {{ form_label(form.user, 'Emprunteur') }}
+                                {{ form_label(form.date, 'Date') }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.date) }}
+                                </div>
+                                <div class="formErrors">
+                                    {{ form_errors(form.date) }}
+                                </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                {{ form_label(form.user, 'Utilisateur') }}
                                 <div class="mt-2">
                                     {{ form_widget(form.user) }}
                                 </div>
                                 <div class="formErrors">
                                     {{ form_errors(form.user) }}
-                                </div>
-                            </div>
-
-                            <div class="col-span-full">
-                                {{ form_label(form.dateRetourSouhaitee, 'Date de retour souhaitée') }}
-                                <div class="mt-2">
-                                    {{ form_widget(form.dateRetourSouhaitee) }}
-                                </div>
-                                <div class="formErrors">
-                                    {{ form_errors(form.dateRetourSouhaitee) }}
-                                </div>
-                            </div>
-
-                            <div class="col-span-full">
-                                {{ form_label(form.dateRetour, 'Date de retour') }}
-                                <div class="mt-2">
-                                    {{ form_widget(form.dateRetour) }}
-                                </div>
-                                <div class="formErrors">
-                                    {{ form_errors(form.dateRetour) }}
                                 </div>
                             </div>
 

@@ -25,11 +25,11 @@ class TwigDataExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('getRoles', [$this, 'getRoles']),
-            new TwigFunction('getEquipes', [$this, 'getEquipes']),
-            new TwigFunction('getReferenceCategories', [$this, 'getReferenceCategories']),
-            new TwigFunction('getReferenceEssences', [$this, 'getReferenceEssences']),
-            new TwigFunction('getMaterielCategories', [$this, 'getMaterielCategories']),
+            new TwigFunction('getRoles', $this->getRoles(...)),
+            new TwigFunction('getEquipes', $this->getEquipes(...)),
+            new TwigFunction('getReferenceCategories', $this->getReferenceCategories(...)),
+            new TwigFunction('getReferenceEssences', $this->getReferenceEssences(...)),
+            new TwigFunction('getMaterielCategories', $this->getMaterielCategories(...)),
         ];
     }
 
@@ -69,6 +69,7 @@ class TwigDataExtension extends AbstractExtension
             'Utilisateurs' => [
                 'ROLE_USER_LIST' => 'Consulter les utilisateurs',
                 'ROLE_USER_EDIT' => 'Modifier les utilisateurs',
+                'ROLE_USER_EPI'  => 'Modifier les EPIs',
             ],
             'Chantiers' => [
                 'ROLE_CHANTIER_LIST' => 'Consulter les chantiers',

@@ -36,4 +36,10 @@
     {{ include('user/_table.html.twig', { 'users': users }) }}
     {% endif %}
 
+    {% if epis|length > 0 %}
+    <h2>{{ epis|length }} EPI{{ epis|length > 1 ? 's' }}</h2>
+    {{ include('epi/_table.html.twig', { 'epis': epis }) }}
+    {% endif %}
+
+
 {% endblock content %}
