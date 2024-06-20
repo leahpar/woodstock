@@ -100,6 +100,15 @@ class Chantier extends LoggableEntity
     /**
      * Retourne le montant total des ES de stock (hors brouillon)
      */
+    public function getBudgetStock(): float
+    {
+        return array_reduce(
+            $this->paniers->filter(fn (Panier $p) => !$p->brouillon)->toArray(),
+            fn (float $total, Panier $panier) => $total + $panier->getPrix(),
+            0
+        );
+    }
+    /** @deprecated("utiliser getBudgetStock()")  */
     public function getPrix(): float
     {
         return array_reduce(
@@ -178,7 +187,7 @@ class Chantier extends LoggableEntity
      */
     public function getBudgetRestant(): float
     {
-        return $this->budgetAchat - $this->getPrix();
+        return $this->budgetAchat - $this->getBudgetStock();
     }
 
     /**

@@ -51,13 +51,17 @@
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">Sortie de stock</dt>
-                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.prix|euro }}</dd>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.budgetStock|euro }}</dd>
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">Ecart</dt>
-                    {%  set montant = chantier.prix - chantier.budgetAchat %}
+                    {%  set montant = chantier.budgetStock - chantier.budgetAchat %}
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ montant>0?'+' }}{{ montant|euro }}</dd>
                 </div>
+
+                {# types disponibles : 'devis', 'planifie', 'passe', 'restant' #}
+                {# chantier.heures(<type>) #}
+                {# chantier.montant(<type>) #}
 
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">heures devis</dt>
@@ -91,8 +95,8 @@
                 </div>
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">Ecart</dt>
-                    {% set heures = chantier.heures('passe') - chantier.heures('devis') %}
-                    {% set montant = chantier.montant('passe') - chantier.montant('devis') %}
+                    {% set heures = 0 - chantier.heures('restant') %}
+                    {% set montant = 0 - chantier.montant('restant') %}
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ heures>0?'+' }}{{ heures }} h</dd>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ montant>0?'+' }}{{ montant|euro }}</dd>
                 </div>
