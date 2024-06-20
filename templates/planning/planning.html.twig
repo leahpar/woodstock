@@ -118,6 +118,16 @@
                                                 
                                                  </div>
 
+                                                {# Commentaire #}
+                                                {% if intervention.commentaire %}
+                                                <span>
+                                                    {# TODO: icon #}
+                                                    <pan>X</pan>
+                                                    {# TODO: hover #}
+                                                    <span>{{ intervention.commentaire }}</span>
+                                                </span>
+                                                {% endif %}
+
                                                 {# Validation #}
                                                 <input type="checkbox"
                                                        name="validerIntervention"
@@ -126,7 +136,6 @@
                                                        data-intervention="{{ intervention.id }}"
                                                        {{ intervention.valide ? 'checked' }}>
 
-                                                
 
                                             </div>
                                         {% endfor %}
@@ -211,32 +220,11 @@
         })
     })
 
-    {#HeuresAutoButtons.forEach(button => {#}
-    {#    button.addEventListener('click', () => {#}
-    {#        if (button.dataset.disabled) return#}
-    {#        const id = button.dataset.intervention#}
-    {#        const heures = button.dataset.heures#}
-    {#        const form = new FormData()#}
-    {#        form.append('intervention_heures[heuresPassees]', heures)#}
-    {#        // change cursor to waiting#}
-    {#        document.body.style.cursor = 'wait'#}
-    {#        fetch('{{ path('planning_edit_heures', {id:'XX'}) }}'.replace('XX', id), {method: 'POST', body: form})#}
-    {#            .then(() => {#}
-    {#                    // change cursor back to normal#}
-    {#                    document.body.style.cursor = 'default'#}
-    {#                    //window.location.reload();#}
-    {#            })#}
-    {#    })#}
-    {#})#}
-
-
     function gestionSelectChantier() {
         const activite = modal.querySelector('#intervention_activite')
-        //const poseur = modal.querySelector('#intervention_poseur')
         const chantier = modal.querySelector('#intervention_chantier')
         const types = modal.querySelectorAll('[name="intervention[type]"]')
         chantier.tomselect.on ('change', () => chantier.tomselect.blur())
-        //poseur.tomselect.on ('change', () => poseur.tomselect.blur())
         activite.addEventListener('change', function () {
             if (activite.value === 'chantier') {
                 chantier.disabled = false
