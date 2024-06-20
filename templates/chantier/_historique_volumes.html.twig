@@ -16,12 +16,14 @@
                         <thead class="bg-gray-50">
                         <tr>
                             <th scope="col"
-                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Période
+                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                Période
                             </th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                 Catégorie
                             </th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Sortie
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Sortie
                             </th>
                         </tr>
                         </thead>
@@ -29,22 +31,24 @@
 
                         {% for periode,data in stats %}
                             {% for categorie,stat in data %}
+                            <tr>
                                 {% if loop.first %}
-                                    <tr>
-                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-                                            rowspan="{{ data|length }}">
-                                            {{ periode == '9999-99' ? 'TOTAL' : periode }}
-                                        </td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ categorie??'--' }}</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stat|euro }}</td>
-                                    </tr>
+                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                        rowspan="{{ data|length }}">
+                                        {{ periode == '9999-99' ? 'TOTAL' : periode }}
+                                    </td>
                                 {% else %}
-                                    <tr>
-                                        {# <td></td> #}
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ categorie??'--' }}</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stat|euro }}</td>
-                                    </tr>
+                                    {# <td></td> #}
                                 {% endif %}
+
+                                {% if categorie == '_heures' %}
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Heures passées</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stat }} h</td>
+                                {% else %}
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ categorie??'--' }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stat|euro }}</td>
+                                {% endif %}
+                            </tr>
                             {% endfor %}
                         {% else %}
                             <tr>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Chantier;
+use App\Entity\Intervention;
 use App\Entity\Stock;
 use App\Form\ChantierType;
 use App\Search\ChantierSearch;
@@ -91,6 +92,8 @@ class ChantierController extends CommonController
 
             if (!isset($stats["9999-99"][$cat])) $stats["9999-99"][$cat] = 0;
             if (!isset($stats[$date->format('Y-m')][$cat])) $stats[$date->format('Y-m')][$cat] = 0;
+            if (!isset($stats["9999-99"]['_heures'])) $stats["9999-99"]['_heures'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_heures'])) $stats[$date->format('Y-m')]['_heures'] = 0;
 
             $stats["9999-99"][$cat] += $stock->isSortie() ? $stock->getDebit() : 0;
             $stats[$date->format('Y-m')][$cat] += $stock->isSortie() ? $stock->getDebit() : 0;
@@ -98,11 +101,32 @@ class ChantierController extends CommonController
             $stats["9999-99"][$cat] -= $stock->isEntree() ? $stock->getCredit() : 0;
             $stats[$date->format('Y-m')][$cat] -= $stock->isEntree() ? $stock->getCredit() : 0;
         }
-        // Tri par clé (année / année-mois)
+
+        /** @var Intervention $intervention */
+        foreach ($chantier->getInterventions() as $intervention) {
+
+            if (!$intervention->valide) continue;
+
+            $date = $intervention->date;
+
+            if (!isset($stats["9999-99"][$cat])) $stats["9999-99"][$cat] = 0;
+            if (!isset($stats[$date->format('Y-m')][$cat])) $stats[$date->format('Y-m')][$cat] = 0;
+            if (!isset($stats["9999-99"]['_heures'])) $stats["9999-99"]['_heures'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_heures'])) $stats[$date->format('Y-m')]['_heures'] = 0;
+
+            $stats["9999-99"]['_heures'] += $intervention->heuresPassees;
+            $stats[$date->format('Y-m')]['_heures'] += $intervention->heuresPassees;
+        }
+
+        // Tri niveau 1 - tri par clé (année / année-mois)
         krsort($stats);
 
-        // TODO: ChartJS : https://ux.symfony.com/chartjs
+        // Tri niveau 2 - tri par catégorie
+        foreach ($stats as &$stat) {
+            ksort($stat);
+        }
 
+        // TODO: ChartJS : https://ux.symfony.com/chartjs
 
         return $this->render('chantier/show.html.twig', [
             'chantier' => $chantier,
