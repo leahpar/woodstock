@@ -37,7 +37,9 @@ class EpiController extends CommonController
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $epi = new Epi();
-        $epi->user = $em->getRepository(User::class)->find($request->query->get('_u'));
+        if ($request->query->has('_u')) {
+            $epi->user = $em->getRepository(User::class)->find($request->query->get('_u'));
+        }
         $epi->date = new \DateTime();
 
         $form = $this->createForm(EpiType::class, $epi);
