@@ -42,14 +42,14 @@
                     {% for poseur in poseurs %}
                         <tr class="divide-gray-200 divide-x odd:bg-gray-600/5" data-equipe="{{ poseur.equipe }}">
                             <td class="flex justify-between items-center gap-2 font-medium !text-gray-900 text-sm {{ poseur.equipe != precedente_equipe ? 'border-t border-gray-400'}}">
-                                <div>
+                                <a href="{{ path('user_show', {id: poseur.id}) }}">
                                     <span class="inline-block text-xs uppercase text-white rounded px-1 mr-1 {{ poseur.equipe == 'atelier' ? 'bg-sky-500' : 'bg-teal-500' }}">
                                         {{ poseur.equipe }}
                                     </span>
                                     {{ poseur.materiel ? '⚒️' }}
                                     <br>
                                     {{ poseur }}
-                                </div>
+                                </a>
                                 <div class="font-medium !text-gray-600 text-xs">
                                     <span title="{{ totalHeuresPasseesPoseurs[poseur.id] }}h passée">
                                         {{ totalHeuresPasseesPoseurs[poseur.id] }}h
@@ -61,7 +61,7 @@
                                     </span>
                                     {{ totalHeuresPlanifieesPoseurs[poseur.id] > 39 ? '⚠️' }}
                                     
-                                    {% if app.request.query.has('semaine') %}
+                                    {% if app.request.query.has('semaine') and is_granted('ROLE_PLANNING_EDIT') %}
                                     <form method="post" action="{{ path('planning_delete_semaine', {id: poseur.id}) }}" class="contents">
                                         <input type="hidden" name="date" value="{{ dates|first|date('Y-m-d') }}">
                                         <button class="inline-block hover:text-red-500 relative top-[1px]" title="Supprimer la semaine">
@@ -101,16 +101,15 @@
                                                         - {{ intervention.heuresPassees }}h&nbsp;/&nbsp;{{ intervention.heuresPlanifiees }}h
                                                         {% endif %}
                                                         
-                                                        
-                                                        
+
                                                         {% if intervention.heuresPassees != intervention.heuresPlanifiees or intervention.commentaire %}
                                                         
                                                             <div class="absolute -top-3 -right-3 flex gap-1">
                                                         
-                                                            {% if intervention.heuresPassees != intervention.heuresPlanifiees %}
-                                                                <span class="w-5 h-5 flex justify-center items-center rounded-full bg-white text-xs border border-gray-200 {% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %}">
-                                                                    ⚠️</span>
-                                                            {% endif %}
+{#                                                            {% if intervention.heuresPassees != intervention.heuresPlanifiees %}#}
+{#                                                                <span class="w-5 h-5 flex justify-center items-center rounded-full bg-white text-xs border border-gray-200 {% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %}">#}
+{#                                                                    ⚠️</span>#}
+{#                                                            {% endif %}#}
                                                             
                                                             {# Commentaire #}
                                                             {% if intervention.commentaire %}
@@ -215,7 +214,7 @@
                 .then(response => response.text())
                 .then(html => modal.innerHTML = html)
                 .then(() => modal.showModal())
-                .then(() => toto())
+                .then(() => gestionSelectChantier())
                 .then(() => {
                     if (disabled) {
                         modal.querySelector('form').querySelectorAll('input,select,textarea,button').forEach(input => input.disabled = true);
@@ -271,28 +270,33 @@
      * Cochage de toute l'équipe
      */
     function gestionCheckboxEquipe() {
-        document.querySelector('#dupliquer_poseurs_equipe')
-            .addEventListener('change', (el) => {
-                document.querySelector('#dupliquer_poseurs_all').checked = false
-                document.querySelectorAll(
-                    'input[name^="dupliquer_poseurs"][data-checkable]'
-                ).forEach((e) => {
-                    e.checked = el.target.checked
-                    e.disabled = el.target.checked
-                })
-            }
-        )
-        document.querySelector('#dupliquer_poseurs_all')
-            .addEventListener('change', (el) => {
-                document.querySelector('#dupliquer_poseurs_equipe').checked = false
-                document.querySelectorAll(
-                    'input[name^="dupliquer_poseurs"][data-checkable]'
-                ).forEach((e) => {
-                    e.checked = el.target.checked
-                    e.disabled = el.target.checked
-                })
-            }
-        )
+        const equipe = modal.querySelector('#dupliquer_poseurs_equipe')
+        const all = modal.querySelector('#dupliquer_poseurs_all')
+
+        if (equipe) {
+            equipe.addEventListener('change', (el) => {
+                    document.querySelector('#dupliquer_poseurs_all').checked = false
+                    document.querySelectorAll(
+                        'input[name^="dupliquer_poseurs"][data-checkable]'
+                    ).forEach((e) => {
+                        e.checked = el.target.checked
+                        e.disabled = el.target.checked
+                    })
+                }
+            )
+        }
+        if (all) {
+            all.addEventListener('change', (el) => {
+                    document.querySelector('#dupliquer_poseurs_equipe').checked = false
+                    document.querySelectorAll(
+                        'input[name^="dupliquer_poseurs"][data-checkable]'
+                    ).forEach((e) => {
+                        e.checked = el.target.checked
+                        e.disabled = el.target.checked
+                    })
+                }
+            )
+        }
     }
 </script>
 
