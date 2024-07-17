@@ -1,3 +1,5 @@
+{% if search.limit > 0 %} {# Pas de pagination si on affiche explicitement tout #}
+
 {% set page  = search.page %}
 {% set limit = search.limit %}
 {% set count = search.count %}
@@ -5,7 +7,6 @@
 
 {% set route = app.request.get('_route') %}
 {% set params = app.request.query.all %}
-
 
 <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
     <div class="flex flex-1 justify-between">
@@ -16,7 +17,7 @@
             <a href="" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Précédent</a>
         {% endif %}
 
-        <div class="flex items-center justify-between">
+        <div>
             <div>
                 <p class="text-sm text-gray-700">
                     <span class="font-medium">{{ (page-1)*search.limit+1 }}</span>
@@ -25,6 +26,12 @@
                     sur
                     <span class="font-medium">{{ count }}</span>
                 </p>
+            </div>
+            <div>
+                <a href="{{ path(route, params|merge({page: 1, limit:0})) }}"
+                   class="text-teal-600 hover:text-teal-900">
+                    Tout afficher
+                </a>
             </div>
         </div>
 
@@ -37,3 +44,4 @@
 
     </div>
 </div>
+{% endif %}
