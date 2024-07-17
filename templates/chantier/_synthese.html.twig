@@ -1,0 +1,160 @@
+
+{# types disponibles : 'devis', 'planifie', 'passe', 'restant' #}
+{# types2 disponibles : 'pose', 'atelier' (les 2 si non renseigné) #}
+    {# chantier.heures(<type>, [<type2>]) #}
+    {# chantier.montant(<type>, [<type2>]) #}
+
+
+<div class="max-w-4xl mx-auto mb-8">
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+            <h1 class="text-base font-semibold leading-6 text-gray-900">Synthèse</h1>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+
+        </div>
+    </div>
+    <div class="mt-8 flow-root">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-gray-900 sm:pl-6 uppercase">
+                                Achats
+                            </th>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 text-right">
+                                Budget
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Dépenses
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Reste
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.budgetAchat|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.budgetStock|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">
+                                {{ chantier.budgetRestant|euro }}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-gray-900 sm:pl-6 uppercase">
+                                Heures
+                            </th>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 text-right">
+                                Prévues
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Passées
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Reste
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                <strong>Heures pose</strong><br>
+                                Valorisées (€)
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.heures('devis', 'pose') }} h<br>{{ chantier.montant('devis', 'pose')|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.heures('passe', 'pose') }} h<br>{{ chantier.montant('passe', 'pose')|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">
+                                {{ chantier.heures('restant', 'pose') }} h<br>{{ chantier.montant('restant', 'pose')|euro }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                <strong>Heures atelier</strong><br>
+                                Valorisées (€)
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.heures('devis', 'atelier') }} h<br>{{ chantier.montant('devis', 'atelier')|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.heures('passe', 'atelier') }} h<br>{{ chantier.montant('passe', 'atelier')|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">
+                                {{ chantier.heures('restant', 'atelier') }} h<br>{{ chantier.montant('restant', 'atelier')|euro }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                <strong>Heures globale</strong><br>
+                                Valorisées (€)
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.heures('devis') }} h<br>{{ chantier.montant('devis')|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.heures('passe') }} h<br>{{ chantier.montant('passe')|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">
+                                {{ chantier.heures('restant') }} h<br>{{ chantier.montant('restant')|euro }}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-gray-900 sm:pl-6 uppercase">
+                                Résultat affaire
+                            </th>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 text-right">
+                                Achat
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Heures
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Résultat
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                <strong>Marge</strong>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.budgetRestant>0?'+' }}{{ chantier.budgetRestant|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ chantier.montant('restant')>0?'+' }}{{ chantier.montant('restant')|euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">
+                                {{ chantier.restantTotal>0?'+' }}{{ chantier.restantTotal|euro }}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
