@@ -95,11 +95,41 @@
                                                             <span class="{% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %} group-hover:text-white transition-all">
                                                                 {{ intervention.activite }}</span>
                                                         {% endif %}
+                                                        {% if intervention.heuresPassees > intervention.heuresPlanifiees %}
+                                                        - <strong>{{ intervention.heuresPassees }}h</strong>&nbsp;/&nbsp;{{ intervention.heuresPlanifiees }}h
+                                                        {% else %}
                                                         - {{ intervention.heuresPassees }}h&nbsp;/&nbsp;{{ intervention.heuresPlanifiees }}h
-                                                        {% if intervention.heuresPassees != intervention.heuresPlanifiees %}
-                                                            <span class="absolute -top-2 -right-2 w-5 h-5 flex justify-center items-center rounded-full bg-white text-xs border border-gray-200 {% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %}">
-                                                                ⚠️</span>
                                                         {% endif %}
+                                                        
+                                                        
+                                                        
+                                                        {% if intervention.heuresPassees != intervention.heuresPlanifiees or intervention.commentaire %}
+                                                        
+                                                            <div class="absolute -top-3 -right-3 flex gap-1">
+                                                        
+                                                            {% if intervention.heuresPassees != intervention.heuresPlanifiees %}
+                                                                <span class="w-5 h-5 flex justify-center items-center rounded-full bg-white text-xs border border-gray-200 {% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %}">
+                                                                    ⚠️</span>
+                                                            {% endif %}
+                                                            
+                                                            {# Commentaire #}
+                                                            {% if intervention.commentaire %}
+                                                            <span class="relative group/comment w-5 h-5 flex justify-center items-center rounded-full bg-white text-xs border border-gray-200 {% if intervention.type == 'atelier' %}text-sky-500{% elseif intervention.type == 'pose' %}text-teal-500{% else %}text-violet-500{% endif %}">
+                                                                {# TODO: icon #}
+                                                                <span>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                                                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+                                                                    </svg>
+                                                                </span>
+                                                                {# TODO: hover #}
+                                                                <span class="absolute top-full bg-white p-2 rounded shadow hidden group-hover/comment:block">{{ intervention.commentaire }}</span>
+                                                            </span>
+                                                            {% endif %}
+                                                            
+                                                            </div>
+                                                        
+                                                        {% endif %}
+                                                        
                                                     </button>
                                                     
                                                     {# Remplissage auto des heures passées #}
@@ -118,15 +148,7 @@
                                                 
                                                  </div>
 
-                                                {# Commentaire #}
-                                                {% if intervention.commentaire %}
-                                                <span>
-                                                    {# TODO: icon #}
-                                                    <pan>X</pan>
-                                                    {# TODO: hover #}
-                                                    <span>{{ intervention.commentaire }}</span>
-                                                </span>
-                                                {% endif %}
+                                                
 
                                                 {# Validation #}
                                                 <input type="checkbox"

@@ -44,7 +44,7 @@
                     <dt class="text-sm font-medium text-gray-900">Commentaire</dt>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.commentaire }}</dd>
                 </div>
-
+{#
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">Budget achat</dt>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ chantier.budgetAchat|euro }}</dd>
@@ -58,10 +58,8 @@
                     {%  set montant = chantier.budgetStock - chantier.budgetAchat %}
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ montant>0?'+' }}{{ montant|euro }}</dd>
                 </div>
-
-                {# types disponibles : 'devis', 'planifie', 'passe', 'restant' #}
-                {# chantier.heures(<type>) #}
-                {# chantier.montant(<type>) #}
+                
+                
 
                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm font-medium text-gray-900">heures devis</dt>
@@ -100,9 +98,151 @@
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ heures>0?'+' }}{{ heures }} h</dd>
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span sm:mt-0">{{ montant>0?'+' }}{{ montant|euro }}</dd>
                 </div>
+                
+                #}
+                
             </dl>
         </div>
     </div>
+    
+    
+    {# types disponibles : 'devis', 'planifie', 'passe', 'restant' #}
+    {# chantier.heures(<type>) #}
+    {# chantier.montant(<type>) #}
+        
+    
+    <div class="max-w-4xl mx-auto mb-8">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <h1 class="text-base font-semibold leading-6 text-gray-900">Synthèse</h1>
+            </div>
+            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+    
+            </div>
+        </div>
+        <div class="mt-8 flow-root">
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-300">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-gray-900 sm:pl-6 uppercase">Achats</th>
+                                <th scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 text-right">
+                                    Budget achat
+                                </th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                    Sortie de stock
+                                </th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                    Reste achat
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                            
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ chantier.budgetAchat|euro }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ chantier.budgetStock|euro }}</td>
+                                        {%  set montant = - (chantier.budgetStock - chantier.budgetAchat) %}
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">{{ montant>0?'+' }}{{ montant|euro }}</td>
+                                </tr>
+                            
+                            </tbody>
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-gray-900 sm:pl-6 uppercase">Heures</th>
+                                <th scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 text-right">
+                                    Prévues
+                                </th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                    Passées
+                                </th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                    Reste
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                            <strong>Heures pose</strong><br>
+                                            Valorisées (€)
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ chantier.heures('devis') }} h<br>{{ chantier.montant('devis')|euro }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ chantier.heures('passe', 'pose') }} h<br>{{ chantier.montant('passe', 'pose')|euro }}</td>
+                                        {% set resteH = chantier.heures('devis') - chantier.heures('passe', 'pose') %}
+                                        {% set resteE = chantier.montant('devis') - chantier.montant('passe', 'pose') %}
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">{{ resteH }} h<br>{{ resteE|euro }}</td>
+                                </tr>
+                                
+                                <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                            <strong>Heures atelier</strong><br>
+                                            Valorisées (€)
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ chantier.heures('devis', 'atelier') }} h<br>{{ chantier.montant('devis', 'atelier')|euro }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ chantier.heures('passe', 'atelier') }} h<br>{{ chantier.montant('passe', 'atelier')|euro }}</td>
+                                        {% set resteH = chantier.heures('devis', 'atelier') - chantier.heures('passe', 'atelier') %}
+                                        {% set resteE = chantier.montant('devis', 'atelier') - chantier.montant('passe', 'atelier') %}
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">{{ resteH }} h<br>{{ resteE|euro }}</td>
+                                </tr>
+                                
+                                <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                            <strong>Heures globale</strong><br>
+                                            Valorisées (€)
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ chantier.heures('devis') }} h<br>{{ chantier.montant('devis')|euro }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ chantier.heures('passe') }} h<br>{{ chantier.montant('passe')|euro }}</td>
+                                        {% set heures = -(0 - chantier.heures('restant')) %}
+                                        {% set montant = -(0 - chantier.montant('restant')) %}
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">{{ heures>0?'+' }}{{ heures }} h<br>{{ montant>0?'+' }}{{ montant|euro }}</td>
+                                </tr>
+    
+                            </tbody>
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-gray-900 sm:pl-6 uppercase">Résultat affaire</th>
+                                <th scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 text-right">
+                                    Achat
+                                </th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                    Heures
+                                </th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                    Résultat
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm  text-gray-900 sm:pl-6">
+                                            <strong>Global (reste)</strong>
+                                        </td>
+                                        {%  set montantAchat = - (chantier.budgetStock - chantier.budgetAchat) %}
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ montantAchat>0?'+' }}{{ montantAchat|euro }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ montant>0?'+' }}{{ montant|euro }}</td>
+                                        {% set total = montantAchat +  montant %}
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right font-medium">{{ total>0?'+' }}{{ total|euro }}</td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     {{ include('chantier/_historique_volumes.html.twig') }}
     {{ include('chantier/_historique_stock.html.twig') }}

@@ -1,9 +1,13 @@
 <div class="max-w-4xl mx-auto">
     <div class="sm:flex sm:items-center">
-        <div class="sm:flex-auto">
-            <h1 class="text-base font-semibold leading-6 text-gray-900">{#Historique#}</h1>
-            <p class="mt-2 text-sm text-gray-700">Historique des mouvements de stock pour ce chantier.</p>
-            <input type="search" id="tableSearch">
+        <div class="sm:flex-auto flex justify-between">
+            <div>
+                {#<h1 class="text-base font-semibold leading-6 text-gray-900">Historique</h1>#}
+                <p class="mt-2 text-sm text-gray-700">Historique des mouvements de stock pour ce chantier.</p>
+            </div>
+            <div>
+                <input type="search" id="tableSearch" class="rounded shadow border border-gray-200 text-sm" placeholder="Rechercher dans l'historique">
+            </div>
         </div>
     </div>
     <div class="mt-8 flow-root">

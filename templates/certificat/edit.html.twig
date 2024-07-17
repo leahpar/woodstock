@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-2xl mx-auto mb-8">
 
         <div class="md:flex md:items-center md:justify-between mb-8">
             <div class="min-w-0 flex-1">
@@ -110,25 +110,31 @@
                     </div>
 
                 </div>
-                <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="submit"
-                            class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
-                        Enregistrer
-                    </button>
+                <div class="mt-6 flex items-center justify-between gap-x-6">
+                    <div>
+                        {% if certificat.id %}
+                            <form method="post"
+                                  class="contents"
+                                  action="{{ path('certificat_delete', {'id': certificat.id}) }}"
+                                  onsubmit="return confirm('Supprimer ce certificat ?')">
+                                <button class="text-teal-600 hover:text-teal-900">
+                                    Supprimer
+                                    <span class="sr-only">, {{ certificat.nom }}</span>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <button type="submit"
+                                class="rounded-md bg-teal-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            Enregistrer
+                        </button>
+                    </div>
+                    
                 </div>
             </form>
 
-            {% if certificat.id %}
-                <form method="post"
-                      class="contents"
-                      action="{{ path('certificat_delete', {'id': certificat.id}) }}"
-                      onsubmit="return confirm('Supprimer ce certificat ?')">
-                    <button class="text-teal-600 hover:text-teal-900">
-                        Supprimer
-                        <span class="sr-only">, {{ certificat.nom }}</span>
-                    </button>
-                </form>
-            {% endif %}
+            
 
         </div>
 

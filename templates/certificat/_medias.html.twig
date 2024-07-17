@@ -1,6 +1,6 @@
 
 
-<div class="md:flex md:items-center md:justify-between mb-8">
+<div class="md:flex md:items-center md:justify-between my-8">
     <div class="min-w-0 flex-1">
         <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
             Documents
@@ -22,7 +22,7 @@
             <div class="formGrid">
 
                 <div class="col-span-full">
-                    <table>
+                    <table class="w-full">
                         {% for media in certificat.medias %}
                         <tr>
                             <td>{{ media.type }}</td>
@@ -31,12 +31,12 @@
                                     {{ media.originalName }}
                                 </a>
                             </td>
-                            <td>
+                            <td class="text-right">
                                 <form method="post"
                                       action="{{ path('media_delete', {id: media.id}) }}"
                                       onsubmit="return confirm('Supprimer le document ?')">
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit">Supprimer</button>
+                                    <button type="submit" class="text-red-500">Supprimer</button>
                                 </form>
                             </td>
                         </tr>
@@ -48,7 +48,7 @@
                     <label></label>
                     <div class="mt-2">
                         <form method="post"
-                              class="dropzone" id="myDropzone"
+                              class=" bg-gray-50 border border-gray-200 min-h-[150px] rounded p-6 text-gray-600" id="myDropzone"
                               enctype="multipart/form-data"
                               action="{{ path('media_upload') }}">
                             <input type="hidden" name="certificat" value="{{ certificat.id }}">
