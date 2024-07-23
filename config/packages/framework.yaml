@@ -13,6 +13,19 @@ framework:
         cookie_samesite: lax
         storage_factory_id: session.storage.factory.native
 
+        # Solution 1: On laisse Debian gérer ça :
+        # 0. Paramétrer le 'session.gc_maxlifetime' dans le php.ini <== !!!!!!!
+        # 1. on ne change pas le save_path
+        # save_path: ~
+        # 2. on ne change pas le gc_probability
+        # gc_probability: null
+
+        # Solution 2: On gère ça nous-même :
+        # 0. Symfony override le gc_maxlifetime
+        # 1. sessions en local
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        # 2. TODO: vérifier que ça fonctionne
+
     #esi: true
     #fragments: true
     php_errors:
