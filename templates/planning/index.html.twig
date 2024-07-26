@@ -11,16 +11,35 @@
 
         <div class="flex justify-around lg:justify-end lg:gap-2">
             {% set route = app.request.get('_route') %}
-{#            {% set params = app.request.query.all | filter((v,k) => (k != 'semaine' and k != 'mois')) %}#}
+            {% set params = app.request.query.all %}
 
-            <a class="borderedButton" href="{{ path(route, search.moisPrecedent) }}"><span class="lg:hidden">< M</span><span class="hidden lg:inline">Mois précédent</span></a>
-            <a class="borderedButton" href="{{ path(route, search.semainePrecedente) }}"><span class="lg:hidden">< S</span><span class="hidden lg:inline">Semaine précédente</span></a>
+            <a class="borderedButton" href="{{ path(route, search.semainePrecedente) }}">
+                <span class="lg:hidden">&lt; S</span>
+                <span class="hidden lg:inline">Semaine précédente</span>
+            </a>
 
-            <a class="borderedButton" href="{{ path(route) }}"><span class="lg:hidden">S</span><span class="hidden lg:inline">Semaine courante</span></a>
-            <a class="borderedButton" href="{{ path(route, {mois: 'now'|date('m')}) }}"><span class="lg:hidden">M</span><span class="hidden lg:inline">Mois courant</span></a>
+            <a class="borderedButton" href="{{ path(route, search.semaineCourante) }}">
+                <span class="lg:hidden">S</span>
+                <span class="hidden lg:inline">Semaine courante</span>
+            </a>
+            <a class="borderedButton" href="{{ path(route, search.semaineSuivante) }}">
+                <span class="lg:hidden">S &gt;</span>
+                <span class="hidden lg:inline">Semaine suivante</span>
+            </a>
 
-            <a class="borderedButton" href="{{ path(route, search.semaineSuivante) }}"><span class="lg:hidden">S ></span><span class="hidden lg:inline">Semaine suivante</span></a>
-            <a class="borderedButton" href="{{ path(route, search.moisSuivant) }}"><span class="lg:hidden">M ></span><span class="hidden lg:inline">Mois suivant</span></a>
+            |
+            {% if search.plage == 1 %}
+            <a class="borderedButton" href="{{ path(route, params|merge({plage:2})) }}">
+                <span class="lg:hidden">2S</span>
+                <span class="hidden lg:inline">2 semaines</span>
+            </a>
+                {% else %}
+            <a class="borderedButton" href="{{ path(route, params|merge({plage:1})) }}">
+                <span class="lg:hidden">1S</span>
+                <span class="hidden lg:inline">1 semaine</span>
+            </a>
+            {% endif %}
+
         </div>
     </div>
 

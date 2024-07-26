@@ -8,7 +8,7 @@ class InterventionSearch extends SearchableEntitySearch
 {
     public ?int $annee = null;
     public ?int $semaine = null;
-    public ?int $mois = null;
+    public int $plage = 1; // Nombre de semaines à afficher
     public ?string $dateStart = null;
     public ?string $dateEnd = null;
 
@@ -21,17 +21,19 @@ class InterventionSearch extends SearchableEntitySearch
         if ($s == 0) return;
         $y = $this->annee ?? date('Y');
         // NB: Utilisation du setISODate() pour gérer correctement les semaines
-        $this->dateStart = (new \DateTime())->setISODate($y, $s)->modify('monday this week')->format('Y-m-d');
-        $this->dateEnd   = (new \DateTime())->setISODate($y, $s)->modify('sunday this week')->format('Y-m-d');
+        $this->dateStart = (new \DateTime())->setISODate($y, $s)->modify("monday this week")->format('Y-m-d');
+        $plage = $this->plage - 1;
+        $this->dateEnd   = (new \DateTime())->setISODate($y, $s)->modify("sunday +$plage week")->format('Y-m-d');
     }
 
-    public function setMois(int $m)
+    public function getSemaineCourante(): array
     {
-        $this->mois = $m;
-        if ($m == 0) return;
-        $y = $this->annee ?? date('Y');
-        $this->dateStart = (new \DateTime("$y-$m-01"))->format('Y-m-01'); // 1er jour du mois
-        $this->dateEnd   = (new \DateTime("$y-$m-01"))->format('Y-m-t');  // dernier jour du mois
+        $date = (new \DateTime());
+        return [
+            'semaine' => $date->format('W'),
+            'annee' => $date->format('Y'),
+            'plage' => $this->plage,
+        ];
     }
 
     public function getSemaineSuivante(): array
@@ -40,6 +42,7 @@ class InterventionSearch extends SearchableEntitySearch
         return [
             'semaine' => $date->format('W'),
             'annee' => $date->format('Y'),
+            'plage' => $this->plage,
         ];
     }
 
@@ -49,24 +52,25 @@ class InterventionSearch extends SearchableEntitySearch
         return [
             'semaine' => $date->format('W'),
             'annee' => $date->format('Y'),
+            'plage' => $this->plage,
         ];
     }
 
-    public function getMoisSuivant(): array
-    {
-        $date = (new \DateTime($this->dateStart))->modify('+1 month');
-        return [
-            'mois' => $date->format('m'),
-            'annee' => $date->format('Y'),
-        ];
-    }
-
-    public function getMoisPrecedent(): array
-    {
-        $date = (new \DateTime($this->dateStart))->modify('-1 month');
-        return [
-            'mois' => $date->format('m'),
-            'annee' => $date->format('Y'),
-        ];
-    }
+//    public function getMoisSuivant(): array
+//    {
+//        $date = (new \DateTime($this->dateStart))->modify('+1 month');
+//        return [
+//            'mois' => $date->format('m'),
+//            'annee' => $date->format('Y'),
+//        ];
+//    }
+//
+//    public function getMoisPrecedent(): array
+//    {
+//        $date = (new \DateTime($this->dateStart))->modify('-1 month');
+//        return [
+//            'mois' => $date->format('m'),
+//            'annee' => $date->format('Y'),
+//        ];
+//    }
 }

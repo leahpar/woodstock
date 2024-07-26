@@ -26,8 +26,9 @@ class InterventionController extends CommonController
 
         $search = new InterventionSearch([
             'annee'     => $request->query->getInt('annee', date('Y')),
+            'plage'     => $request->query->getInt('plage', 1),
             'semaine'   => (int)$request->query->get('semaine'),
-            'mois'      => (int)$request->query->get('mois'),
+//            'mois'      => (int)$request->query->get('mois'),
             'page'      => 1,
             'limit'     => 0,
             ...$request->query->all(),
