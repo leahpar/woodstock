@@ -76,8 +76,6 @@
                         <div class="mt-2">
                             {{ form_widget(form.heuresPlanifiees) }}
                         </div>
-                        {# type:'hidden' est ignoré :/ #}
-                        {{ form_widget(form.heuresPassees, {attr: {type:'hidden', style:'display:none'}}) }}
                     </div>
                 {% else %}
                     <div class="col-span-full">
@@ -86,18 +84,18 @@
                         {# <input type="hidden" name="intervention[heuresPlanifiees]" value="0">#}
                         {{ form_widget(form.heuresPlanifiees, {attr: attr}) }}
                     </div>
+                {% endif %}
 
-                    {% if intervention.id == 0 %}
-                        <div class="col-span-full">
-                            {# Création => on gère les heures passées directement ici #}
-                            {{ form_label(form.heuresPassees, 'Heures passées') }}
-                            <div class="mt-2">
-                                {{ form_widget(form.heuresPassees) }}
-                            </div>
+                {% if intervention.id == 0 %}
+                    <div class="col-span-full">
+                        {# Création => on gère les heures passées directement ici #}
+                        {{ form_label(form.heuresPassees, 'Heures passées') }}
+                        <div class="mt-2">
+                            {{ form_widget(form.heuresPassees) }}
                         </div>
-                    {% else %}
-                        {{ form_widget(form.heuresPassees, {attr: {type:'hidden', style:'display:none'}}) }}
-                    {% endif %}
+                    </div>
+                {% else %}
+                    {{ form_widget(form.heuresPassees, {attr: {type:'hidden', style:'display:none'}}) }}
                 {% endif %}
 
                 <div class="col-span-full">
