@@ -22,7 +22,7 @@
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                 Catégorie
                             </th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
                                 Sortie
                             </th>
                         </tr>
@@ -34,6 +34,7 @@
                             <tr>
                                 {% if loop.first %}
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                        id="{{ periode }}"
                                         rowspan="{{ data|length }}">
                                         {{ periode == '9999-99' ? 'TOTAL' : periode }}
                                     </td>
@@ -41,12 +42,16 @@
                                     {# <td></td> #}
                                 {% endif %}
 
-                                {% if categorie == '_heures' %}
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Heures passées</td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stat }} h</td>
+                                {% if categorie starts with '_heures' %}
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        Heures {{ categorie == '_heures_atelier' ? 'atelier' : 'chantier' }}
+                                    </td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ stat }} h</td>
+                                {% elseif categorie starts with '_euros' %}
+                                    {#  #}
                                 {% else %}
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ categorie??'--' }}</td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ stat|euro }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">{{ stat|euro }}</td>
                                 {% endif %}
                             </tr>
                             {% endfor %}

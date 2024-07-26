@@ -92,8 +92,15 @@ class ChantierController extends CommonController
 
             if (!isset($stats["9999-99"][$cat])) $stats["9999-99"][$cat] = 0;
             if (!isset($stats[$date->format('Y-m')][$cat])) $stats[$date->format('Y-m')][$cat] = 0;
-            if (!isset($stats["9999-99"]['_heures'])) $stats["9999-99"]['_heures'] = 0;
-            if (!isset($stats[$date->format('Y-m')]['_heures'])) $stats[$date->format('Y-m')]['_heures'] = 0;
+
+            if (!isset($stats["9999-99"]['_heures_atelier']))  $stats["9999-99"]['_heures_atelier'] = 0;
+            if (!isset($stats["9999-99"]['_heures_chantier'])) $stats["9999-99"]['_heures_chantier'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_heures_atelier']))  $stats[$date->format('Y-m')]['_heures_atelier'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_heures_chantier'])) $stats[$date->format('Y-m')]['_heures_chantier'] = 0;
+            if (!isset($stats["9999-99"]['_euros_atelier']))  $stats["9999-99"]['_euros_atelier'] = 0;
+            if (!isset($stats["9999-99"]['_euros_chantier'])) $stats["9999-99"]['_euros_chantier'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_euros_atelier']))  $stats[$date->format('Y-m')]['_euros_atelier'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_euros_chantier'])) $stats[$date->format('Y-m')]['_euros_chantier'] = 0;
 
             $stats["9999-99"][$cat] += $stock->isSortie() ? $stock->getDebit() : 0;
             $stats[$date->format('Y-m')][$cat] += $stock->isSortie() ? $stock->getDebit() : 0;
@@ -105,17 +112,35 @@ class ChantierController extends CommonController
         /** @var Intervention $intervention */
         foreach ($chantier->getInterventions() as $intervention) {
 
-            if (!$intervention->valide) continue;
+            if ($intervention->isPassee() && !$intervention->valide) continue;
 
             $date = $intervention->date;
 
-            if (!isset($stats["9999-99"][$cat])) $stats["9999-99"][$cat] = 0;
-            if (!isset($stats[$date->format('Y-m')][$cat])) $stats[$date->format('Y-m')][$cat] = 0;
-            if (!isset($stats["9999-99"]['_heures'])) $stats["9999-99"]['_heures'] = 0;
-            if (!isset($stats[$date->format('Y-m')]['_heures'])) $stats[$date->format('Y-m')]['_heures'] = 0;
+            if (!isset($stats["9999-99"]['_heures_atelier']))  $stats["9999-99"]['_heures_atelier'] = 0;
+            if (!isset($stats["9999-99"]['_heures_chantier'])) $stats["9999-99"]['_heures_chantier'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_heures_atelier']))  $stats[$date->format('Y-m')]['_heures_atelier'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_heures_chantier'])) $stats[$date->format('Y-m')]['_heures_chantier'] = 0;
+            if (!isset($stats["9999-99"]['_euros_atelier']))  $stats["9999-99"]['_euros_atelier'] = 0;
+            if (!isset($stats["9999-99"]['_euros_chantier'])) $stats["9999-99"]['_euros_chantier'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_euros_atelier']))  $stats[$date->format('Y-m')]['_euros_atelier'] = 0;
+            if (!isset($stats[$date->format('Y-m')]['_euros_chantier'])) $stats[$date->format('Y-m')]['_euros_chantier'] = 0;
 
-            $stats["9999-99"]['_heures'] += $intervention->heuresPassees;
-            $stats[$date->format('Y-m')]['_heures'] += $intervention->heuresPassees;
+            if ($intervention->isPassee(new \Datetime("first day of this month"))) {
+                $heures = $intervention->heuresPassees;
+            }
+            else {
+                $heures = $intervention->heuresPlanifiees;
+            }
+            $euros = $heures * $intervention->tauxHoraire;
+            
+            $stats["9999-99"]['_heures_atelier']  += ($intervention->type == 'atelier') ? $heures : 0;
+            $stats["9999-99"]['_heures_chantier'] += ($intervention->type == 'pose')    ? $heures : 0;
+            $stats[$date->format('Y-m')]['_heures_atelier']  += ($intervention->type == 'atelier') ? $heures : 0;
+            $stats[$date->format('Y-m')]['_heures_chantier'] += ($intervention->type == 'pose')    ? $heures : 0;
+            $stats["9999-99"]['_euros_atelier']  += ($intervention->type == 'atelier') ? $euros : 0;
+            $stats["9999-99"]['_euros_chantier'] += ($intervention->type == 'pose')    ? $euros : 0;
+            $stats[$date->format('Y-m')]['_euros_atelier']  += ($intervention->type == 'atelier') ? $euros : 0;
+            $stats[$date->format('Y-m')]['_euros_chantier'] += ($intervention->type == 'pose')    ? $euros : 0;
         }
 
         // Tri niveau 1 - tri par clé (année / année-mois)

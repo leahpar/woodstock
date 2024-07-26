@@ -139,4 +139,9 @@ class Intervention extends LoggableEntity
         }
     }
 
+    public function isPassee(?\Datetime $date = null): bool
+    {
+        return $this->date < ($date ?? new \DateTime());
+    }
+
 }

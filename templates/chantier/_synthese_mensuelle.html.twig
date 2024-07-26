@@ -1,0 +1,108 @@
+
+<div class="max-w-4xl mx-auto mb-8">
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+            <h1 class="text-base font-semibold leading-6 text-gray-900">Synthèse mensuelle</h1>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+
+        </div>
+    </div>
+    <div class="mt-8 flow-root">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Achat
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Heures atelier
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Heures chantier
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                Total
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                        {% for periode,data in stats|filter((d,p) => p != '9999-99') %}
+                        <tr>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 font-medium text-right">
+                                <a href="#{{ periode }}">{{ periode }}</a>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ data
+                                    |filter((v,k) => not (k starts with '_euros' or k starts with '_heures'))
+                                    |reduce((acc,v) => acc + v, 0)
+                                    |euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ data
+                                    |filter((v,k) => k == '_euros_atelier')
+                                    |reduce((acc,v) => acc + v, 0)
+                                    |euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ data
+                                    |filter((v,k) => k == '_euros_chantier')
+                                    |reduce((acc,v) => acc + v, 0)
+                                    |euro }}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-right">
+                                {{ data
+                                    |filter((v,k) => not (k starts with '_heures'))
+                                    |reduce((acc,v) => acc + v, 0)
+                                    |euro }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+
+                        <tfoot class="bg-gray-50">
+                        {% for periode,data in stats|filter((d,p) => p == '9999-99') %}
+                        <tr>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                {{ data
+                                    |filter((v,k) => not (k starts with '_euros' or k starts with '_heures'))
+                                    |reduce((acc,v) => acc + v, 0)
+                                    |euro }}
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                {{ data
+                                    |filter((v,k) => k == '_euros_atelier')
+                                    |reduce((acc,v) => acc + v, 0)
+                                    |euro }}
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                {{ data
+                                    |filter((v,k) => k == '_euros_chantier')
+                                    |reduce((acc,v) => acc + v, 0)
+                                    |euro }}
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                                {{ data
+                                    |filter((v,k) => not (k starts with '_heures'))
+                                    |reduce((acc,v) => acc + v, 0)
+                                    |euro }}
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        </tfoot>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
