@@ -112,8 +112,6 @@ class ChantierController extends CommonController
         /** @var Intervention $intervention */
         foreach ($chantier->getInterventions() as $intervention) {
 
-            if ($intervention->isPassee() && !$intervention->valide) continue;
-
             $date = $intervention->date;
 
             if (!isset($stats["9999-99"]['_heures_atelier']))  $stats["9999-99"]['_heures_atelier'] = 0;
@@ -125,12 +123,9 @@ class ChantierController extends CommonController
             if (!isset($stats[$date->format('Y-m')]['_euros_atelier']))  $stats[$date->format('Y-m')]['_euros_atelier'] = 0;
             if (!isset($stats[$date->format('Y-m')]['_euros_chantier'])) $stats[$date->format('Y-m')]['_euros_chantier'] = 0;
 
-            if ($intervention->isPassee(new \Datetime("first day of this month"))) {
-                $heures = $intervention->heuresPassees;
-            }
-            else {
-                $heures = $intervention->heuresPlanifiees;
-            }
+            // #56 : heures synthèse = heures planifiées ou passées selon validation
+            $heures = $intervention->getHeuresSynthese();
+
             $euros = $heures * $intervention->tauxHoraire;
             
             $stats["9999-99"]['_heures_atelier']  += ($intervention->type == 'atelier') ? $heures : 0;

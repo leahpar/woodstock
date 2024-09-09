@@ -144,4 +144,16 @@ class Intervention extends LoggableEntity
         return $this->date < ($date ?? new \DateTime());
     }
 
+    /**
+     * (#56) Pour la synthèse :
+     * - si l'intervention est validée, on prend les heures passées
+     * - sinon, on prend les heures planifiées
+     */
+    public function getHeuresSynthese(): float
+    {
+        return $this->valide
+            ? $this->heuresPassees
+            : $this->heuresPlanifiees;
+    }
+
 }

@@ -121,7 +121,7 @@ class Chantier extends LoggableEntity
 
     public function getHeures(string $truc, ?string $type = 'all'): int
     {
-        // $truc = 'devis', 'planifie', 'passe', 'restant'
+        // $truc = 'devis', 'planifie', 'passe', 'restant', 'synthese'
         // $type = 'atelier' ou 'pose' ou 'all'
         if ($truc == 'devis') {
             return $this->getHeuresDevis($type);
@@ -129,6 +129,15 @@ class Chantier extends LoggableEntity
 
         if ($truc == 'restant') {
             return $this->getHeures('devis', $type) - $this->getHeures('passe', $type);
+        }
+
+        if ($truc == 'synthese') {
+            return array_reduce(
+                $this->getInterventions()->toArray(),
+                fn (int $t, Intervention $int)
+                => $t + $int->getHeuresSynthese(),
+                0
+            );
         }
 
         return array_reduce(
@@ -144,7 +153,7 @@ class Chantier extends LoggableEntity
 
     public function getMontant(string $truc, ?string $type = 'all'): int
     {
-        // $truc = 'devis', 'planifie', 'passe', 'restant'
+        // $truc = 'devis', 'planifie', 'passe', 'restant', 'synthese'
         // $type = 'atelier' ou 'pose' ou 'all'
         if ($truc == 'devis') {
             return $this->getHeuresDevis($type) * $this->tauxHoraire;
@@ -152,6 +161,15 @@ class Chantier extends LoggableEntity
 
         if ($truc == 'restant') {
             return $this->getMontant('devis', $type) - $this->getMontant('passe', $type);
+        }
+
+        if ($truc == 'synthese') {
+            return array_reduce(
+                $this->getInterventions()->toArray(),
+                fn (int $t, Intervention $int)
+                => $t + $int->getHeuresSynthese() * $int->tauxHoraire,
+                0
+            );
         }
 
         return array_reduce(
