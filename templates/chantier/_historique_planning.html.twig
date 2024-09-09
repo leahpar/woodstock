@@ -37,6 +37,7 @@
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ intervention.heuresPassees }} h
+                                    {{ not intervention.valide ? '(non validé)' : '' }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ intervention.type }}
