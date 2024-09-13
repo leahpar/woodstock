@@ -135,7 +135,7 @@ class Chantier extends LoggableEntity
             return array_reduce(
                 $this->getInterventions()->toArray(),
                 fn (int $t, Intervention $int)
-                => $t + $int->getHeuresSynthese(),
+                =>  $t + (($type=='all' || $int->type==$type) ? $int->getHeuresSynthese() : 0),
                 0
             );
         }
