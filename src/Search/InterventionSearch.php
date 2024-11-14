@@ -39,9 +39,12 @@ class InterventionSearch extends SearchableEntitySearch
     public function getSemaineSuivante(): array
     {
         $date = (new \DateTime($this->dateStart))->modify('+1 week');
+        $s = $date->format('W');
+        $y = $date->format('Y');
+        if ($s == 1) $y++; // Passage à l'année suivante
         return [
-            'semaine' => $date->format('W'),
-            'annee' => $date->format('Y'),
+            'semaine' => $s,
+            'annee' => $y,
             'plage' => $this->plage,
         ];
     }
