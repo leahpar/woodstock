@@ -40,8 +40,7 @@ class InterventionSearch extends SearchableEntitySearch
     {
         $date = (new \DateTime($this->dateStart))->modify('+1 week');
         $s = $date->format('W');
-        $y = $date->format('Y');
-        if ($s == 1) $y++; // Passage à l'année suivante
+        $y = (clone $date)->modify('sunday this week')->format('Y');
         return [
             'semaine' => $s,
             'annee' => $y,
@@ -52,9 +51,11 @@ class InterventionSearch extends SearchableEntitySearch
     public function getSemainePrecedente(): array
     {
         $date = (new \DateTime($this->dateStart))->modify('-1 week');
+        $s = $date->format('W');
+        $y = (clone $date)->modify('monday this week')->format('Y');
         return [
-            'semaine' => $date->format('W'),
-            'annee' => $date->format('Y'),
+            'semaine' => $s,
+            'annee' => $y,
             'plage' => $this->plage,
         ];
     }
