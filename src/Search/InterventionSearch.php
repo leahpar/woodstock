@@ -29,10 +29,12 @@ class InterventionSearch extends SearchableEntitySearch
     public function getSemaineCourante(): array
     {
         $date = (new \DateTime());
+        $s = $date->format('W');
+        $y = (clone $date)->modify('sunday this week')->format('Y');
         return [
-            'semaine' => $date->format('W'),
-            'annee' => $date->format('Y'),
-            'plage' => $this->plage,
+            'semaine' => $s,
+            'annee'   => $y,
+            'plage'   => $this->plage,
         ];
     }
 
@@ -43,8 +45,8 @@ class InterventionSearch extends SearchableEntitySearch
         $y = (clone $date)->modify('sunday this week')->format('Y');
         return [
             'semaine' => $s,
-            'annee' => $y,
-            'plage' => $this->plage,
+            'annee'   => $y,
+            'plage'   => $this->plage,
         ];
     }
 
@@ -52,11 +54,11 @@ class InterventionSearch extends SearchableEntitySearch
     {
         $date = (new \DateTime($this->dateStart))->modify('-1 week');
         $s = $date->format('W');
-        $y = (clone $date)->modify('monday this week')->format('Y');
+        $y = (clone $date)->modify('sunday this week')->format('Y');
         return [
             'semaine' => $s,
-            'annee' => $y,
-            'plage' => $this->plage,
+            'annee'   => $y,
+            'plage'   => $this->plage,
         ];
     }
 
