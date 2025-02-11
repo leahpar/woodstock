@@ -99,7 +99,7 @@ class InterventionRepository extends ServiceEntityRepository
             ->andWhere('i.date BETWEEN :debut AND :fin')
             ->setParameter('poseur', $poseur)
             ->setParameter('debut', (new \DateTime($date))->modify('monday this week'))
-            ->setParameter('fin',   (new \DateTime($date))->modify('monday next week'))
+            ->setParameter('fin',   (new \DateTime($date))->modify('sunday this week'))
             ->getQuery()
             ->getResult();
     }
