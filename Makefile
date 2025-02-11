@@ -31,7 +31,7 @@ TARGET_PHP		= 8.2
 ## ----------------------------------------------------------
 
 sfstart: sfstop ## Start local Symfony werserver
-	symfony server:start -d --port=$(PORT) --allow-http
+	symfony server:start -d --port=$(PORT) --allow-http --allow-all-ip
 
 sfstop: ## Stop local Symfony werserver
 	symfony server:stop
