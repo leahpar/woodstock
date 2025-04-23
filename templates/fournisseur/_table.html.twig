@@ -1,0 +1,48 @@
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto lg:overflow-visible sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="">
+                <table class="mainTable ">
+                    <thead class="">
+                    <tr class="lg:!top-14">
+                        {% from "parts/macros.html.twig" import thSort %}
+
+                        <th scope="col" class="min-w-[12rem]">{{ thSort('nom', 'Nom') }}</th>
+                        <th scope="col">{{ thSort('codeComptable', 'Code Comptable') }}</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Téléphone</th>
+                        <th scope="col">Compte Général</th>
+                        <th scope="col">Compte Charge</th>
+                        <th scope="col">
+                            <span class="sr-only">Actions</span>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for fournisseur in fournisseurs %}
+                        <tr>
+                            <td class="font-medium !text-gray-900">
+                                <a href="{{ path('fournisseur_show', {'id': fournisseur.id}) }}">{{ fournisseur.nom }}</a>
+                            </td>
+                            <td>{{ fournisseur.codeComptable }}</td>
+                            <td>{{ fournisseur.email ?? '-' }}</td>
+                            <td>{{ fournisseur.telephone ?? '-' }}</td>
+                            <td>{{ fournisseur.compteGeneral }}</td>
+                            <td>{{ fournisseur.compteCharge }}</td>
+                            <td class="text-right font-medium sm:pr-3">
+                                <a href="{{ path('fournisseur_show', {'id': fournisseur.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ fournisseur.nom }}</span></a>
+                                <a href="{{ path('fournisseur_edit', {'id': fournisseur.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ fournisseur.nom }}</span></a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="99">Aucun fournisseur</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

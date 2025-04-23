@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if fournisseur.id %}Modifier{% else %}Ajouter{% endif %} un fournisseur{% endblock %}
+
+{% block content %}
+    <div class="pageHeader sticky top-0 z-10 bg-gray-100 py-3 px-3 lg:px-0 -mx-4 lg:mx-0 space-y-2">
+        <div class="title">
+            <h2>{% if fournisseur.id %}Modifier{% else %}Ajouter{% endif %} un fournisseur</h2>
+        </div>
+    </div>
+
+    <div class="block-form rounded-xl -mt-6 max-w-5xl mx-auto">
+        {{ form_start(form, {'attr': {'class': 'pageForm'}}) }}
+        <div class="block-form__fields">
+            <div class="block-form__title">Informations générales</div>
+            <div class="block-form__content">
+                {{ form_row(form.nom) }}
+                {{ form_row(form.adresse) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.telephone) }}
+            </div>
+            
+            <div class="block-form__title">Informations comptables</div>
+            <div class="block-form__content">
+                {{ form_row(form.codeComptable) }}
+                {{ form_row(form.compteGeneral) }}
+                {{ form_row(form.compteCharge) }}
+                {{ form_row(form.compteTva) }}
+                {{ form_row(form.journalAchat) }}
+            </div>
+        </div>
+
+        <div class="block-form__actions">
+            <a href="{{ form._referer.vars.data ?? path('fournisseur_index') }}" class="button button--light">Annuler</a>
+            <button type="submit" class="button">Enregistrer</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

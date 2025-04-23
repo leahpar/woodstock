@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des fournisseurs{% endblock %}
+
+{% block content %}
+    <div class="pageHeader sticky top-0 z-10 bg-gray-100 py-3 px-3 lg:px-0 -mx-4 lg:mx-0 space-y-2">
+      <div class="title">
+        <h2>Gestion des fournisseurs</h2>
+      </div>
+      <div class="buttons">
+        <a href="{{ path('fournisseur_new') }}" class="button">Ajouter un fournisseur</a>
+      </div>
+    </div>
+
+    <div class="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 flex flex-col lg:flex-row justify-between items-center text-sm text-gray-700">
+        {{ include('parts/recherche2.html.twig', {search: search}) }}
+    </div>
+
+    {{ include('fournisseur/_table.html.twig', { fournisseurs: fournisseurs }) }}
+    {{ include('parts/pagination.html.twig', {search: search}) }}
+{% endblock %}

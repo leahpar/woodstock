@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail du fournisseur{% endblock %}
+
+{% block content %}
+    <div class="pageHeader sticky top-0 z-10 bg-gray-100 py-3 px-3 lg:px-0 -mx-4 lg:mx-0 space-y-2">
+        <div class="title">
+            <h2>{{ fournisseur.nom }}</h2>
+        </div>
+        <div class="buttons">
+            <a href="{{ path('fournisseur_edit', {'id': fournisseur.id}) }}" class="button">Modifier</a>
+            <form method="post" action="{{ path('fournisseur_delete', {'id': fournisseur.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');" class="inline-block">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ fournisseur.id) }}">
+                <button class="button button--danger">Supprimer</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="space-y-4">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:px-6 bg-gray-50">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Informations générales</h3>
+            </div>
+            <div class="border-t border-gray-200">
+                <dl>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Nom</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.nom }}</dd>
+                    </div>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
+                        <dt class="text-sm font-medium text-gray-500">Adresse</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.adresse ?? '-' }}</dd>
+                    </div>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Email</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.email ?? '-' }}</dd>
+                    </div>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
+                        <dt class="text-sm font-medium text-gray-500">Téléphone</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.telephone ?? '-' }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:px-6 bg-gray-50">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Informations comptables</h3>
+            </div>
+            <div class="border-t border-gray-200">
+                <dl>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Code Comptable</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.codeComptable }}</dd>
+                    </div>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
+                        <dt class="text-sm font-medium text-gray-500">Compte Général</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.compteGeneral }}</dd>
+                    </div>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Compte Charge</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.compteCharge }}</dd>
+                    </div>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
+                        <dt class="text-sm font-medium text-gray-500">Compte TVA</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.compteTva }}</dd>
+                    </div>
+                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Journal Achat</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fournisseur.journalAchat ?? '-' }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %}
