@@ -88,6 +88,10 @@ class TwigDataExtension extends AbstractExtension
                 'ROLE_REFERENCE_EDIT' => 'Modifier les références',
                 'ROLE_REFERENCE_STOCK' => 'Modifier les stocks',
             ],
+            'Fournisseurs' => [
+                'ROLE_FOURNISSEUR_LIST' => 'Consulter les fournisseurs',
+                'ROLE_FOURNISSEUR_EDIT' => 'Modifier les fournisseurs',
+            ],
             'Planning' => [
 //                'ROLE_PLANNING_LIST' => 'Consulter le planning',
                 'ROLE_PLANNING_EDIT' => 'Modifier le planning',

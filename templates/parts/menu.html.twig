@@ -247,6 +247,7 @@
               </li>
               {% endif %}
               
+              {% if is_granted('ROLE_FOURNISSEUR_LIST') %}
               <li>
                 {% set class = (route starts with 'fournisseur') ? current : default %}
                 <a href="{{ path('fournisseur_index') }}" class="{{ class }}">
@@ -256,6 +257,7 @@
                   Fournisseurs
                 </a>
               </li>
+              {% endif %}
 
               <li>
                 {% set class = (route starts with 'planning') ? current : default %}

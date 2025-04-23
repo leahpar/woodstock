@@ -32,7 +32,9 @@
                             <td>{{ fournisseur.compteCharge }}</td>
                             <td class="text-right font-medium sm:pr-3">
                                 <a href="{{ path('fournisseur_show', {'id': fournisseur.id}) }}" class="text-teal-600 hover:text-teal-900">Afficher<span class="sr-only">, {{ fournisseur.nom }}</span></a>
+                                {% if is_granted('ROLE_FOURNISSEUR_EDIT') %}
                                 <a href="{{ path('fournisseur_edit', {'id': fournisseur.id}) }}" class="text-teal-600 hover:text-teal-900">Modifier<span class="sr-only">, {{ fournisseur.nom }}</span></a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% else %}

@@ -8,7 +8,9 @@
         <h2>Gestion des fournisseurs</h2>
       </div>
       <div class="buttons">
+        {% if is_granted('ROLE_FOURNISSEUR_EDIT') %}
         <a href="{{ path('fournisseur_new') }}" class="button">Ajouter un fournisseur</a>
+        {% endif %}
       </div>
     </div>
 

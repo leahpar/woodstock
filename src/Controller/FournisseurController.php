@@ -16,6 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class FournisseurController extends CommonController
 {
     #[Route('/', name: 'fournisseur_index', methods: ['GET'])]
+    #[IsGranted('ROLE_FOURNISSEUR_LIST')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         $search = new FournisseurSearch($request->query->all());
@@ -27,6 +28,7 @@ class FournisseurController extends CommonController
     }
 
     #[Route('/new', name: 'fournisseur_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_FOURNISSEUR_EDIT')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $fournisseur = new Fournisseur();
@@ -51,6 +53,7 @@ class FournisseurController extends CommonController
     }
 
     #[Route('/{id:fournisseur}/edit', name: 'fournisseur_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_FOURNISSEUR_EDIT')]
     public function edit(Request $request, Fournisseur $fournisseur, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(FournisseurType::class, $fournisseur);
@@ -78,6 +81,7 @@ class FournisseurController extends CommonController
     }
 
     #[Route('/{id:fournisseur}', name: 'fournisseur_show', methods: ['GET'])]
+    #[IsGranted('ROLE_FOURNISSEUR_LIST')]
     public function show(Fournisseur $fournisseur): Response
     {
         return $this->render('fournisseur/show.html.twig', [
@@ -86,6 +90,7 @@ class FournisseurController extends CommonController
     }
 
     #[Route('/{id:fournisseur}', name: 'fournisseur_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_FOURNISSEUR_EDIT')]
     public function delete(Request $request, Fournisseur $fournisseur, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$fournisseur->id, $request->request->get('_token'))) {

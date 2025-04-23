@@ -14,7 +14,9 @@
                 <h3 class="text-xl font-semibold leading-7 text-gray-900">{{ fournisseur.nom }}</h3>
             </div>
             <div>
+                {% if is_granted('ROLE_FOURNISSEUR_EDIT') %}
                 <a href="{{ path('fournisseur_edit', {'id': fournisseur.id}) }}" class="block rounded-md bg-teal-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">Modifier</a>
+                {% endif %}
             </div>
         </div>
         <div class="border-t border-gray-100">
@@ -56,10 +58,12 @@
                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ fournisseur.journalAchat ?? '-' }}</dd>
                 </div>
                 <div class="px-4 py-6 text-right">
+                    {% if is_granted('ROLE_FOURNISSEUR_EDIT') %}
                     <form method="post" action="{{ path('fournisseur_delete', {'id': fournisseur.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');" class="inline-block">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ fournisseur.id) }}">
                         <button class="text-teal-600 hover:text-teal-900">Supprimer<span class="sr-only">, {{ fournisseur.nom }}</span></button>
                     </form>
+                    {% endif %}
                 </div>
             </dl>
         </div>
