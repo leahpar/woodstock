@@ -35,3 +35,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Search/**: Classes for search functionality
 - **Service/**: Business logic and application services
 - **Twig/**: Custom Twig extensions and components
+
+## Git
+
+- Les messages de commits doivent être en français.
+- Les messages de commits doivent commencer par le picto 🤖 et garder un message concernant les modifications seulement.
