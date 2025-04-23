@@ -1,5 +1,5 @@
-# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
-
+# https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+# https://github.com/dustin10/VichUploaderBundle/blob/master/docs/storage/flysystem.md
 services:
 #    Aws\S3\S3Client:
 #        arguments:
