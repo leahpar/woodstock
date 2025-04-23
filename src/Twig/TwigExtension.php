@@ -38,7 +38,7 @@ class TwigExtension extends AbstractExtension
         ];
     }
 
-    public function number(?string $value = null, ?string $format = null, ?string $symbol = null): ?string
+    public function number(?string $value = null, ?int $format = null, ?string $symbol = null): ?string
     {
         // https://www.php.net/manual/fr/class.numberformatter.php
 
@@ -63,7 +63,8 @@ class TwigExtension extends AbstractExtension
 
     public function pourcent(?string $value = null): ?string
     {
-        return $this->number($value * 100, 2, "%");
+
+        return $this->number(strval(((float)$value) * 100), 2, "%");
     }
 
     public function qrCode(?string $value = null): ?string
@@ -82,7 +83,7 @@ class TwigExtension extends AbstractExtension
         return $qrcode->render($value);
     }
 
-    public function getSearchOrder($search, $field): ?string
+    public function getSearchOrder(array $search, string $field): ?string
     {
         // $search = route.params
         if (($search['tri']??null) == $field) {

@@ -49,7 +49,7 @@ class TwigDataExtension extends AbstractExtension
         return Reference::ESSENCES;
     }
 
-    public function getMaterielCategories()
+    public function getMaterielCategories(): array
     {
         return Materiel::CATEGORIES;
     }
