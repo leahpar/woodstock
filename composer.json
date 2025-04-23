@@ -37,7 +37,9 @@
         "vich/uploader-bundle": "^2.6"
     },
     "require-dev": {
-        "phpstan/phpdoc-parser": "^1.29",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
         "symfony/debug-bundle": "7.2.*",
         "symfony/maker-bundle": "^1.59",
         "symfony/stopwatch": "7.2.*",

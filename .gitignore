@@ -15,3 +15,7 @@ notes.md
 /public/uploads
 
 /config/packages/web_profiler.yaml
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###

@@ -40,6 +40,26 @@ sfstop: ## Stop local Symfony werserver
 
 
 ## ----------------------------------------------------------
+## -- Code quality ------------------------------------------
+## ----------------------------------------------------------
+
+lt: ## Lint twig files
+	$(SYMFONY) lint:twig templates
+
+ly: ## Lint yaml files
+	$(SYMFONY) lint:yaml config
+
+security: ## Check security of your dependencies (https://security.sensiolabs.org/)
+security:
+	$(PHP) vendor/bin/security-checker security:check
+
+stan: ## PHPStan
+	$(PHP) vendor/bin/phpstan analyse -c phpstan.neon -l 6
+
+.PHONY: lt ly security stan
+
+
+## ----------------------------------------------------------
 ## -- Help --------------------------------------------------
 ## ----------------------------------------------------------
 
