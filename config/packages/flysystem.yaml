@@ -1,22 +1,22 @@
 # https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
 # https://github.com/dustin10/VichUploaderBundle/blob/master/docs/storage/flysystem.md
 services:
-#    Aws\S3\S3Client:
-#        arguments:
-#            - version: '2006-03-01'
-#              region: 'fr-par'
-#              credentials:
-#                  key: '%env(S3_STORAGE_KEY)%'
-#                  secret: '%env(S3_STORAGE_SECRET)%'
+    Aws\S3\S3Client:
+        arguments:
+            - version: 'latest'
+              region: 'eu-west-3'
+              credentials:
+                  key: '%env(S3_STORAGE_KEY)%'
+                  secret: '%env(S3_STORAGE_SECRET)%'
 
 flysystem:
     storages:
-#        uploads.storage.aws:
-#            adapter: 'aws'
-#            options:
-#                client: 'Aws\S3\S3Client'
-#                bucket: 'my-bucket'
-#                prefix: '%env(S3_STORAGE_PREFIX)%'
+        uploads.storage.aws:
+            adapter: 'aws'
+            options:
+                client: 'Aws\S3\S3Client'
+                bucket: 'mybucketwithanuniquename'
+                #prefix: '%env(S3_STORAGE_PREFIX)%'
 
         uploads.storage.local:
             adapter: 'local'
