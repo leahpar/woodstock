@@ -58,33 +58,33 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     #[ORM\Column]
     public bool $materiel = false;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Panier::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'user', orphanRemoval: true)]
     #[Ignore]
     private Collection $paniers;
 
-    #[ORM\OneToMany(mappedBy: 'proprietaire', targetEntity: Materiel::class)]
+    #[ORM\OneToMany(targetEntity: Materiel::class, mappedBy: 'proprietaire')]
     private Collection $materiels;
 
     #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private \DateTime $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Pret::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Pret::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $prets;
 
     #[ORM\ManyToMany(targetEntity: Notification::class, mappedBy: 'pings')]
     private Collection $pings;
 
-    #[ORM\OneToMany(mappedBy: 'conducteurTravaux', targetEntity: Chantier::class)]
+    #[ORM\OneToMany(targetEntity: Chantier::class, mappedBy: 'conducteurTravaux')]
     private Collection $chantiers;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Certificat::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Certificat::class, mappedBy: 'user', orphanRemoval: true)]
     #[ORM\OrderBy(['dateFin' => 'DESC', 'dateDebut' => 'DESC'])]
     private Collection $certificats;
 
     /**
      * @var Collection<int, Epi>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Epi::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Epi::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $epis;
 
     public function __construct()
@@ -142,7 +142,7 @@ class User  extends LoggableEntity implements UserInterface, PasswordAuthenticat
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
