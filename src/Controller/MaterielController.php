@@ -53,7 +53,7 @@ class MaterielController extends CommonController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'materiel_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id:materiel}/edit', name: 'materiel_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MATERIEL_EDIT')]
     public function edit(Request $request, Materiel $materiel, EntityManagerInterface $em): Response
     {
@@ -83,7 +83,7 @@ class MaterielController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'materiel_show', methods: ['GET'])]
+    #[Route('/{id:materiel}', name: 'materiel_show', methods: ['GET'])]
     #[IsGranted('ROLE_MATERIEL_LIST')]
     public function show(Materiel $materiel): Response
     {
@@ -92,7 +92,7 @@ class MaterielController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'materiel_delete', methods: ['POST'])]
+    #[Route('/{id:materiel}', name: 'materiel_delete', methods: ['POST'])]
     #[IsGranted('ROLE_MATERIEL_EDIT')]
     public function delete(Materiel $materiel, EntityManagerInterface $em): Response
     {
@@ -103,7 +103,7 @@ class MaterielController extends CommonController
         return $this->redirectToRoute('materiel_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/pret', name: 'materiel_pret')]
+    #[Route('/{id:materiel}/pret', name: 'materiel_pret')]
     public function pret(Request $request, Materiel $materiel, EntityManagerInterface $em): Response
     {
         $rendu = $request->query->getBoolean('rendu');

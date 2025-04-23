@@ -59,8 +59,8 @@ class InterventionController extends CommonController
         ]);
     }
 
-    #[Route('/new',       name: 'planning_new',  defaults: ['action' => 'create'])]
-    #[Route('/{id}/edit', name: 'planning_edit', defaults: ['action' => 'update'])]
+    #[Route('/new',                    name: 'planning_new',  defaults: ['action' => 'create'])]
+    #[Route('/{id:intervention}/edit', name: 'planning_edit', defaults: ['action' => 'update'])]
     public function edit(
         string $action,
         Request $request,
@@ -182,7 +182,7 @@ class InterventionController extends CommonController
         ]);
     }
 
-    #[Route('/{id}/heures', name: 'planning_edit_heures')]
+    #[Route('/{id:intervention}/heures', name: 'planning_edit_heures')]
     public function editHeures(
         Request $request,
         EntityManagerInterface $em,
@@ -217,7 +217,7 @@ class InterventionController extends CommonController
         ]);
     }
 
-    #[Route('/{id}/valider', name: 'planning_valider', methods: ['POST'])]
+    #[Route('/{id:intervention}/valider', name: 'planning_valider', methods: ['POST'])]
     public function valider(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
     {
         /** @var User $user */
@@ -235,7 +235,7 @@ class InterventionController extends CommonController
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
-    #[Route('/{id}/supprimer', name: 'planning_delete', methods: ['POST'])]
+    #[Route('/{id:intervention}/supprimer', name: 'planning_delete', methods: ['POST'])]
     public function delete(Request $request, Intervention $intervention, EntityManagerInterface $em, InterventionService $interventionService): Response
     {
         /** @var User $user */
@@ -261,7 +261,7 @@ class InterventionController extends CommonController
     /**
      * Supprime toutes les interventions liées
      */
-    #[Route('/{id}/supprimer-all', name: 'planning_delete_all', methods: ['POST'])]
+    #[Route('/{id:intervention}/supprimer-all', name: 'planning_delete_all', methods: ['POST'])]
     public function deleteAll(Request $request, Intervention $intervention, EntityManagerInterface $em): Response
     {
         /** @var User $user */
@@ -292,7 +292,7 @@ class InterventionController extends CommonController
     /**
      * Supprime toutes les interventions (non validées) de la semaine du poseur
      */
-    #[Route('/{id}/supprimer-poseur', name: 'planning_delete_semaine', methods: ['POST'])]
+    #[Route('/{id:intervention}/supprimer-poseur', name: 'planning_delete_semaine', methods: ['POST'])]
     public function deletePoseur(Request $request, User $poseur, EntityManagerInterface $em): Response
     {
         /** @var User $user */

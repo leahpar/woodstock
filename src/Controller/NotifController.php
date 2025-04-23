@@ -48,7 +48,7 @@ class NotifController extends CommonController
         ]);
     }
 
-    #[Route('/notifications/{id}/traiter', name: 'notif_traiter', methods: ['POST'])]
+    #[Route('/notifications/{id:notif}/traiter', name: 'notif_traiter', methods: ['POST'])]
     public function traiter(Request $request, EntityManagerInterface $em, Notification $notif)
     {
         /** @var User $user */
@@ -64,7 +64,7 @@ class NotifController extends CommonController
         return $this->redirect($referer);
     }
 
-    #[Route('/notifications/{id}/ping', name: 'notif_ping', methods: ['POST'])]
+    #[Route('/notifications/{id:notif}/ping', name: 'notif_ping', methods: ['POST'])]
     public function ping(EntityManagerInterface $em, Notification $notif)
     {
         // ajax only

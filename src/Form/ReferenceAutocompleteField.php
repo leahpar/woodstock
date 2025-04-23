@@ -10,7 +10,7 @@ use Symfony\UX\Autocomplete\Form\ParentEntityAutocompleteType;
 #[AsEntityAutocompleteField]
 class ReferenceAutocompleteField extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'class' => \App\Entity\Reference::class,

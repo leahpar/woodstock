@@ -54,7 +54,7 @@ class CertificatController extends CommonController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'certificat_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id:certificat}/edit', name: 'certificat_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_CERTIFICAT_EDIT')]
     public function edit(Request $request, Certificat $certificat, EntityManagerInterface $em): Response
     {
@@ -84,16 +84,7 @@ class CertificatController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'certificat_show', methods: ['GET'])]
-    #[IsGranted('ROLE_CERTIFICAT_LIST')]
-    public function show(Certificat $certificat): Response
-    {
-        return $this->render('certificat/show.html.twig', [
-            'certificat' => $certificat,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'certificat_delete', methods: ['POST'])]
+    #[Route('/{id:certificat}', name: 'certificat_delete', methods: ['POST'])]
     #[IsGranted('ROLE_CERTIFICAT_EDIT')]
     public function delete(Certificat $certificat, EntityManagerInterface $em): Response
     {

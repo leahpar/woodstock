@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Search\UserSearch;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -55,7 +56,7 @@ class UserController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'user_show', methods: ['GET'])]
+    #[Route('/{id:user}', name: 'user_show', methods: ['GET'])]
     #[IsGranted('ROLE_USER_LIST')]
     public function show(User $user): Response
     {
@@ -64,7 +65,7 @@ class UserController extends CommonController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id:user}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER_EDIT')]
     public function edit(Request $request, User $user, EntityManagerInterface $em): Response
     {
@@ -94,7 +95,7 @@ class UserController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
+    #[Route('/{id:user}', name: 'user_delete', methods: ['POST'])]
     #[IsGranted('ROLE_USER_EDIT')]
     public function delete(User $user, EntityManagerInterface $em): Response
     {

@@ -49,7 +49,7 @@ class MediaController extends CommonController
         return new Response(null, 201);
     }
 
-    #[Route('/medias/{id}', name: 'media_delete', methods: ['DELETE'])]
+    #[Route('/medias/{id:media}', name: 'media_delete', methods: ['DELETE'])]
     public function delete(Request $request, Media $media, EntityManagerInterface $em): Response
     {
         $em->remove($media);

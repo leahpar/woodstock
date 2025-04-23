@@ -35,7 +35,7 @@ class ChantierController extends CommonController
     }
 
     #[Route('/new',       name: 'chantier_new',  defaults: ['action' => 'create'])]
-    #[Route('/{id}/edit', name: 'chantier_edit', defaults: ['action' => 'update'])]
+    #[Route('/{id:chantier}/edit', name: 'chantier_edit', defaults: ['action' => 'update'])]
     #[IsGranted('ROLE_CHANTIER_EDIT')]
     public function new(
         Request $request,
@@ -78,7 +78,7 @@ class ChantierController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'chantier_show', methods: ['GET'])]
+    #[Route('/{id:chantier}', name: 'chantier_show', methods: ['GET'])]
     #[IsGranted('ROLE_CHANTIER_LIST')]
     public function show(Chantier $chantier, EntityManagerInterface $em): Response
     {
@@ -154,7 +154,7 @@ class ChantierController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'chantier_delete', methods: ['POST'])]
+    #[Route('/{id:chantier}', name: 'chantier_delete', methods: ['POST'])]
     #[IsGranted('ROLE_CHANTIER_EDIT')]
     public function delete(Chantier $chantier, EntityManagerInterface $em): Response
     {

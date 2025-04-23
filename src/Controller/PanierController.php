@@ -31,7 +31,7 @@ class PanierController extends CommonController
         return $this->redirectToRoute('panier_edit', ['id' => $panier->id]);
     }
 
-    #[Route('/{id}', name: 'panier_edit')]
+    #[Route('/{id:panier}', name: 'panier_edit')]
     #[IsGranted('ROLE_REFERENCE_STOCK')]
     public function edit(Request $request, Panier $panier, EntityManagerInterface $em): Response
     {
@@ -72,7 +72,7 @@ class PanierController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'panier_show', methods: ['GET'])]
+    #[Route('/{id:panier}', name: 'panier_show', methods: ['GET'])]
     public function show(Panier $panier): Response
     {
         return $this->render('panier/show.html.twig', [
@@ -80,7 +80,7 @@ class PanierController extends CommonController
         ]);
     }
 
-    #[Route('/{id}/del', name: 'panier_del', methods: ['DELETE'])]
+    #[Route('/{id:panier}/del', name: 'panier_del', methods: ['DELETE'])]
     public function del(Request $request, EntityManagerInterface $em, Panier $panier)
     {
         $em->remove($panier);
@@ -98,7 +98,7 @@ class PanierController extends CommonController
         }
     }
 
-    #[Route('/{id}/del/{stock}', name: 'panier_stock_del')]
+    #[Route('/{panier}/del/{stock}', name: 'panier_stock_del')]
     public function delStock(EntityManagerInterface $em, Panier $panier, Stock $stock)
     {
         $em->remove($stock);
@@ -107,7 +107,7 @@ class PanierController extends CommonController
         return $this->redirectToRoute('panier_edit', ['id' => $panier->id]);
     }
 
-    #[Route('/{id}/save', name: 'panier_save')]
+    #[Route('/{id:panier}/save', name: 'panier_save')]
     public function save(EntityManagerInterface $em, Panier $panier)
     {
         // Notif stock bas

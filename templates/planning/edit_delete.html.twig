@@ -5,7 +5,7 @@
                 {% if not (
                     is_granted('ROLE_PLANNING_EDIT')
                     or app.user.chefEquipe
-                    or app.user.id == intervention.auteur.id??0
+                    or app.user.id == (intervention.auteur.id??0)
                     or intervention.valide
                     ) %}
                     disabled style="cursor:not-allowed;"
@@ -24,7 +24,7 @@
             {% if not (
                 is_granted('ROLE_PLANNING_EDIT')
                 or app.user.chefEquipe
-                or app.user.id == intervention.auteur.id??0
+                or app.user.id == (intervention.auteur.id??0)
                 or intervention.valide
                 ) %}
                 disabled style="cursor:not-allowed;"

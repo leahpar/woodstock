@@ -60,13 +60,13 @@ class EpiController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'epi_show', methods: ['GET', 'POST'])]
+    #[Route('/{id:epi}', name: 'epi_show', methods: ['GET', 'POST'])]
     public function show(Epi $epi)
     {
         return $this->redirectToRoute('user_show', ['id' => $epi->user->id], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/delete', name: 'epi_delete', methods: ['GET', 'POST'])]
+    #[Route('/{id:epi}/delete', name: 'epi_delete', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER_EPI')]
     public function delete(Request $request, Epi $epi, EntityManagerInterface $em): Response
     {

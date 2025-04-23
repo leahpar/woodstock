@@ -105,7 +105,7 @@ class ReferenceController extends CommonController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'reference_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id:reference}/edit', name: 'reference_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_REFERENCE_EDIT')]
     public function edit(Request $request, Reference $reference, EntityManagerInterface $em, PanierService $panierService): Response
     {
@@ -152,7 +152,7 @@ class ReferenceController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'reference_show', methods: ['GET'])]
+    #[Route('/{id:reference}', name: 'reference_show', methods: ['GET'])]
     #[IsGranted('ROLE_REFERENCE_LIST')]
     public function show(Reference $reference, EntityManagerInterface $em): Response
     {
@@ -190,7 +190,7 @@ class ReferenceController extends CommonController
         ]);
     }
 
-    #[Route('/{id}', name: 'reference_delete', methods: ['POST'])]
+    #[Route('/{id:reference}', name: 'reference_delete', methods: ['POST'])]
     #[IsGranted('ROLE_REFERENCE_EDIT')]
     public function delete(Reference $reference, EntityManagerInterface $em): Response
     {
