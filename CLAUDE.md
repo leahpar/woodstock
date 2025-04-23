@@ -9,8 +9,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Javascript**: vanilla, ES6+
 
 ## Lint & Testing
-- `make lt`: Lint Twig templates
-- `make ly`: Lint YAML files
+- `php bin/console lint:twig /templates/xxx`: Lint Twig templates
+- `php bin/console lint:yaml /config/xxx`: Lint YAML files
+- `make lt`: Lint ALL templates files
+- `make ly`: Lint ALL YAML files
 - `make stan`: PhpStan static analysis
 
 ## Code Style Guidelines
