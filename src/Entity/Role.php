@@ -27,5 +27,8 @@ enum Role: string {
     // Planning
     //case ROLE_PLANNING_LIST = "ROLE_PLANNING_LIST";
     case ROLE_PLANNING_EDIT = "ROLE_PLANNING_EDIT";
+    // FOUrnisseurs
+    case ROLE_FOURNISSEUR_LIST = "ROLE_FOURNISSEUR_LIST";
+    case ROLE_FOURNISSEUR_EDIT = "ROLE_FOURNISSEUR_EDIT";
 
 }
