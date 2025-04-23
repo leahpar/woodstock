@@ -40,6 +40,17 @@ sfstop: ## Stop local Symfony werserver
 
 
 ## ----------------------------------------------------------
+## -- Deploiement -------------------------------------------
+## ----------------------------------------------------------
+
+deploy: ## Deploy
+	$(GIT) pull
+	$(COMPOSER) install
+	$(SYMFONY) doctrine:schema:update --dump-sql --force
+	#TODO prod : $(SYMFONY) asset-map:compile
+	$(SYMFONY) cache:clear
+
+## ----------------------------------------------------------
 ## -- Code quality ------------------------------------------
 ## ----------------------------------------------------------
 
