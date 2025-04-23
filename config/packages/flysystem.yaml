@@ -1,0 +1,30 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+
+services:
+#    Aws\S3\S3Client:
+#        arguments:
+#            - version: '2006-03-01'
+#              region: 'fr-par'
+#              credentials:
+#                  key: '%env(S3_STORAGE_KEY)%'
+#                  secret: '%env(S3_STORAGE_SECRET)%'
+
+flysystem:
+    storages:
+#        uploads.storage.aws:
+#            adapter: 'aws'
+#            options:
+#                client: 'Aws\S3\S3Client'
+#                bucket: 'my-bucket'
+#                prefix: '%env(S3_STORAGE_PREFIX)%'
+
+        uploads.storage.local:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/uploads'
+
+        # https://github.com/thephpleague/flysystem-bundle/blob/3.x/docs/4-using-lazy-adapter-to-switch-at-runtime.md
+        uploads.storage:
+            adapter: 'lazy'
+            options:
+                source: '%env(APP_UPLOADS_SOURCE)%'

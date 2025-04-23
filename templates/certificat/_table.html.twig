@@ -29,9 +29,9 @@
                             <td class="font-medium !text-gray-900">{{ certificat.nom }}</td>
                             <td>{{ certificat.user }}</td>
                             <td>
-                                {% for media in certificat.medias %}
-                                    <a href="{{ asset('uploads/'~media.fileName) }}" target="_blank">
-                                        [{{ media.type }}]
+                                {% for document in certificat.documents %}
+                                    <a href="{{ vich_uploader_asset(document) }}" target="_blank">
+                                        [{{ document.type }}]
                                     </a>
                                 {% else %}
                                     -

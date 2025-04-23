@@ -23,17 +23,17 @@
 
                 <div class="col-span-full">
                     <table class="w-full">
-                        {% for media in certificat.medias %}
+                        {% for document in certificat.documents %}
                         <tr>
-                            <td>{{ media.type }}</td>
+                            <td>{{ document.type }}</td>
                             <td>
-                                <a href="{{ asset('uploads/'~media.fileName) }}" target="_blank">
-                                    {{ media.originalName }}
+                                <a href="{{ vich_uploader_asset(document) }}" target="_blank">
+                                    {{ document.originalName }}
                                 </a>
                             </td>
                             <td class="text-right">
                                 <form method="post"
-                                      action="{{ path('media_delete', {id: media.id}) }}"
+                                      action="{{ path('document_delete', {id: document.id}) }}"
                                       onsubmit="return confirm('Supprimer le document ?')">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" class="text-red-500">Supprimer</button>
@@ -50,7 +50,7 @@
                         <form method="post"
                               class=" bg-gray-50 border border-gray-200 min-h-[150px] rounded p-6 text-gray-600" id="myDropzone"
                               enctype="multipart/form-data"
-                              action="{{ path('media_upload') }}">
+                              action="{{ path('document_upload') }}">
                             <input type="hidden" name="certificat" value="{{ certificat.id }}">
                             <span class="dz-message">Choisissez un ou plusieurs fichiers à ajouter</span>
                         </form>

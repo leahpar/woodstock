@@ -1,11 +1,17 @@
 # https://github.com/dustin10/VichUploaderBundle/blob/master/docs/usage.md
 vich_uploader:
     db_driver: orm
+    storage: flysystem
+
+    # https://github.com/dustin10/VichUploaderBundle/blob/master/docs/storage/flysystem.md#issues-with-adapters-public-url
+    use_flysystem_to_resolve_uri: true
 
     mappings:
-        medias:
-            uri_prefix: /medias
-            upload_destination: '%kernel.project_dir%/public/uploads'
+        documents:
+
+            # flysystem
+            upload_destination: uploads.storage
+
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
 
             inject_on_load: false

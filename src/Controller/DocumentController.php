@@ -3,16 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Certificat;
-use App\Entity\Media;
+use App\Entity\Document;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class MediaController extends CommonController
+class DocumentController extends CommonController
 {
-    #[Route('/medias/upload', name: 'media_upload', methods: ['POST'])]
+    #[Route('/documents/upload', name: 'document_upload', methods: ['POST'])]
     public function upload(
         Request $request,
         EntityManagerInterface $em
@@ -36,24 +36,24 @@ class MediaController extends CommonController
             return new Response("Type de fichier non autorisé ($type)", 400);
         }
 
-        $media = new Media();
+        $document = new Document();
 
-        $media->setFile($uploadedFile); // Here goes the magic (VichUploaderBundle)
-        $media->certificat = $certificat;
+        $document->setFile($uploadedFile); // Here goes the magic (VichUploaderBundle)
+        $document->certificat = $certificat;
 
-        $em->persist($media);
-        $this->log('doc_upload', $certificat, ['document' => $media->originalName]);
+        $em->persist($document);
+        $this->log('doc_upload', $certificat, ['document' => $document->originalName]);
         $em->flush();
 
 
         return new Response(null, 201);
     }
 
-    #[Route('/medias/{id:media}', name: 'media_delete', methods: ['DELETE'])]
-    public function delete(Request $request, Media $media, EntityManagerInterface $em): Response
+    #[Route('/documents/{id:document}', name: 'document_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Document $document, EntityManagerInterface $em): Response
     {
-        $em->remove($media);
-        $this->log('doc_delete', $media->certificat, ['document' => $media->originalName]);
+        $em->remove($document);
+        $this->log('doc_delete', $document->certificat, ['document' => $document->originalName]);
         $em->flush();
 
         $referer = $request->headers->get('referer');

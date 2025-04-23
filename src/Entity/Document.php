@@ -2,27 +2,27 @@
 
 namespace App\Entity;
 
-use App\Repository\MediaRepository;
+use App\Repository\DocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[ORM\Entity(repositoryClass: DocumentRepository::class)]
 #[Vich\Uploadable]
-class Media
+class Document
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     public ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\ManyToOne(inversedBy: 'documents')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     public ?Certificat $certificat = null;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
     #[Vich\UploadableField(
-        mapping: 'medias',
+        mapping: 'documents',
         fileNameProperty: 'fileName',
         size: 'fileSize',
         mimeType: 'fileMimeType',
@@ -43,7 +43,6 @@ class Media
 
     #[ORM\Column(nullable: true)]
     public ?\DateTimeImmutable $updatedAt = null;
-
 
     public function setFile(?File $file = null): void
     {

@@ -42,12 +42,12 @@ class Certificat extends LoggableEntity
     #[ORM\Column(type: 'boolean')]
     public bool $alerte = false;
 
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'certificat', orphanRemoval: true)]
-    public Collection $medias;
+    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'certificat', orphanRemoval: true)]
+    public Collection $documents;
 
     public function __construct()
     {
-        $this->medias = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function __toString(): string
