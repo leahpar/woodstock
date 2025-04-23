@@ -21,20 +21,12 @@ class StockType extends AbstractType
                 'required' => true,
             ])
 
-            // Version avec chargement AJAX
-            //->add('reference', ReferenceAutocompleteField::class, [
-            //    'required' => true,
-            //])
-
-            // Version "simple"
             ->add('reference', EntityType::class, [
                 'class' => Reference::class,
                 'choice_value' => 'reference',
                 'required' => true,
                 'autocomplete' => true,
-                'tom_select_options' => [
-                    'plugins' => ['change_listener'],
-                ],
+                'tom_select_plugins' => ['change_listener'],
                 'placeholder' => 'Choisir une référence',
                 'group_by' => 'categorie',
             ])

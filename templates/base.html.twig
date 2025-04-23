@@ -18,8 +18,10 @@
         <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
         <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css">
 
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {{ encore_entry_link_tags('app') }}
+        <!-- TomSelect -->
+        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
+
         {% block stylesheets %}
         {% endblock %}
 
@@ -46,9 +48,21 @@
 
         </div>
 
-        {{ encore_entry_script_tags('app') }}
         {% block javascripts %}
         {% endblock %}
+
+    <script>
+        // TomSelect
+        document.addEventListener('DOMContentLoaded', function() {
+            const tomSelectElements = document.querySelectorAll('select[data-tom-select]');
+            tomSelectElements.forEach((el) => {
+                new TomSelect(el, {
+                    create: false,
+                    plugins: JSON.parse(el.dataset['tom-select-plugins'] ?? '{}'),
+                });
+            });
+        });
+    </script>
 
     </body>
 </html>

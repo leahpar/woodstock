@@ -27,7 +27,7 @@ class ChantierType extends AbstractType
             ->add('conducteurTravaux', EntityType::class, [
                 'required' => false,
                 'class' => User::class,
-                'autocomplete' => 'on',
+                'autocomplete' => true,
                 'placeholder' => 'Choisir un conducteur de travaux',
                 'query_builder' => fn ($er)
                 => $er->createQueryBuilder('u')
