@@ -45,7 +45,7 @@ class Intervention extends LoggableEntity
     public ?Intervention $parent = null;
 
     // Interventions multiples - enfants
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Intervention::class)]
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'parent')]
     #[Ignore]
     public Collection $enfants;
 
