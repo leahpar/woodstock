@@ -41,7 +41,7 @@ class Panier extends LoggableEntity
     #[ORM\ManyToOne()]
     public ?User $poseur = null;
 
-    #[ORM\OneToMany(mappedBy: 'panier', targetEntity: Stock::class)]
+    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'panier')]
     #[ORM\OrderBy(['id' => 'DESC'])]
     #[Ignore]
     public Collection $stocks;
@@ -81,6 +81,7 @@ class Panier extends LoggableEntity
                 'entree' => 'Entrée',
                 'sortie' => 'Sortie',
                 'retour' => 'Retour',
+                default => throw new \Exception("Type de panier '$this->type' inconnu"),
             }
             . ' - ' . $this->date->format('d/m/Y H:i')
             . ' - ' . $this->user->username;

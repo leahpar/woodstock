@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class NotifController extends CommonController
 {
     #[Route('/notifications', name: 'notifs')]
-    public function index(Request $request, EntityManagerInterface $em)
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -49,7 +49,7 @@ class NotifController extends CommonController
     }
 
     #[Route('/notifications/{id:notif}/traiter', name: 'notif_traiter', methods: ['POST'])]
-    public function traiter(Request $request, EntityManagerInterface $em, Notification $notif)
+    public function traiter(Request $request, EntityManagerInterface $em, Notification $notif): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -65,7 +65,7 @@ class NotifController extends CommonController
     }
 
     #[Route('/notifications/{id:notif}/ping', name: 'notif_ping', methods: ['POST'])]
-    public function ping(EntityManagerInterface $em, Notification $notif)
+    public function ping(EntityManagerInterface $em, Notification $notif): Response
     {
         // ajax only
         /** @var User $user */

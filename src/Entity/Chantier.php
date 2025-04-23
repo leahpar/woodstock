@@ -39,7 +39,7 @@ class Chantier extends LoggableEntity
     #[ORM\Column(nullable: true)]
     public ?string $commentaire = null;
 
-    #[ORM\OneToMany(mappedBy: 'chantier', targetEntity: Panier::class)]
+    #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'chantier')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[ORM\OrderBy(['id' => 'DESC'])]
     #[Serializer\Ignore]
@@ -48,7 +48,7 @@ class Chantier extends LoggableEntity
     #[ORM\ManyToOne(inversedBy: 'chantiers')]
     public ?User $conducteurTravaux = null;
 
-    #[ORM\OneToMany(mappedBy: 'chantier', targetEntity: Intervention::class)]
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'chantier')]
     #[ORM\OrderBy(['date' => 'DESC'])]
     private Collection $interventions;
 
@@ -151,7 +151,7 @@ class Chantier extends LoggableEntity
         );
     }
 
-    public function getMontant(string $truc, ?string $type = 'all'): int
+    public function getMontant(string $truc, ?string $type = 'all'): float
     {
         // $truc = 'devis', 'planifie', 'passe', 'restant', 'synthese'
         // $type = 'atelier' ou 'pose' ou 'all'

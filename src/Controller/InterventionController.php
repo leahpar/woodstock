@@ -25,9 +25,9 @@ class InterventionController extends CommonController
         }
 
         $search = new InterventionSearch([
-            'annee'     => $request->query->getInt('annee', date('Y')),
+            'annee'     => $request->query->getInt('annee', (int)date('Y')),
             'plage'     => $request->query->getInt('plage', 1),
-            'semaine'   => (int)$request->query->get('semaine'),
+            'semaine'   => $request->query->getInt('semaine', 0),
 //            'mois'      => (int)$request->query->get('mois'),
             'page'      => 1,
             'limit'     => 0,
@@ -176,7 +176,7 @@ class InterventionController extends CommonController
 
         return $this->render('planning/edit.html.twig', [
             'intervention' => $intervention,
-            'poseursEquipe' => $poseursEquipe??[],
+            'poseursEquipe' => $poseursEquipe,
             'form' => $form,
             'formHeures' => $action == 'create' ? null : $this->createForm(InterventionHeuresType::class, $intervention),
         ]);
@@ -307,8 +307,8 @@ class InterventionController extends CommonController
         $date = $request->request->get('date');
         $interventions = $em->getRepository(Intervention::class)->findByPoseurSemaine($poseur, $date);
 
-        /** @var Intervention $intervention */
         $cpt = 0;
+        /** @var Intervention $intervention */
         foreach ($interventions as $intervention) {
 
             if ($intervention->valide) {

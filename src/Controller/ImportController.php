@@ -18,7 +18,7 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 class ImportController extends AbstractController
 {
     #[Route('/import/stock', name: 'import_stock')]
-    public function importstock(EntityManagerInterface $em)
+    public function importstock(EntityManagerInterface $em): Response
     {
 
         $em->createQuery('DELETE FROM App\Entity\Reference')->execute();
@@ -95,7 +95,7 @@ class ImportController extends AbstractController
     }
 
     #[Route('/import/stock2')]
-    public function importstock2(EntityManagerInterface $em)
+    public function importstock2(EntityManagerInterface $em): Response
     {
         // Import stock lamelés
 
@@ -161,7 +161,7 @@ class ImportController extends AbstractController
     }
 
     #[Route('/import/users', name: 'import_users')]
-    public function importusers(EntityManagerInterface $em)
+    public function importusers(EntityManagerInterface $em): Response
     {
 
         $em->getRepository(User::class)
@@ -231,7 +231,7 @@ class ImportController extends AbstractController
     }
 
     #[Route('/import/chantiers', name: 'import_chantiers')]
-    public function imporchantiers(EntityManagerInterface $em)
+    public function imporchantiers(EntityManagerInterface $em): Response
     {
 
         $em->getRepository(Chantier::class)

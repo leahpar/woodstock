@@ -22,7 +22,7 @@ class ParamService
         return $param?->valeur;
     }
 
-    public function saveParam(string $nom, mixed $valeur)
+    public function saveParam(string $nom, mixed $valeur): void
     {
         $param = $this->em->getRepository(Param::class)->findOneBy(['nom' => $nom]) ?? new Param($nom);
         $this->em->persist($param);
@@ -45,12 +45,12 @@ class ParamService
         ]);
     }
 
-    private function majPrixm3(Param $param)
+    private function majPrixm3(Param $param): void
     {
         $essence = substr($param->nom, 7);
         $references = $this->em->getRepository(Reference::class)->findBy(['essence' => $essence]);
         foreach ($references as $ref) {
-            $ref->prixm3 = $param->valeur;
+            $ref->prixm3 = (float)$param->valeur;
 //            dump($ref->nom, $ref->prixm3, $ref->getVolume(), $ref->calcPrix());
             // MAJ du prix si volume défini
             if ($ref->getVolume() > 0) {
@@ -59,13 +59,13 @@ class ParamService
         }
     }
 
-    private function majTauxHoraire(Param $param)
+    private function majTauxHoraire(Param $param): void
     {
         // taux_horaire_2024
         $annee = substr($param->nom, 13);
         $taux = $param->valeur;
 
-        $interventions = $this->em->getRepository(Intervention::class)->findByAnnee($annee);
+        $interventions = $this->em->getRepository(Intervention::class)->findByAnnee((int)$annee);
         foreach ($interventions as $intervention) {
             $intervention->tauxHoraire = $taux;
         }

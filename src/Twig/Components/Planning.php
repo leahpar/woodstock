@@ -25,7 +25,7 @@ class Planning
         private readonly EntityManagerInterface $em,
     ){}
 
-    public function mount($interventions, InterventionSearch $search): void
+    public function mount(iterable $interventions, InterventionSearch $search): void
     {
         $date = new \DateTime($search->dateStart);
         $end = new \DateTime($search->dateEnd);

@@ -19,7 +19,7 @@ class Param
     #[ORM\Column(length: 255, nullable: true)]
     public ?string $valeur = null;
 
-    public function __construct(string $nom, $valeur = null)
+    public function __construct(string $nom, mixed $valeur = null)
     {
         $this->nom = $nom;
         if ($valeur !== null) $this->valeur = (string)$valeur;

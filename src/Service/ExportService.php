@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ExportService
 {
 
-    private function formatDataAndAutosize(Worksheet $sheet, /*int $startRow,*/ array $colonnes, array $data)
+    private function formatDataAndAutosize(Worksheet $sheet, /*int $startRow,*/ array $colonnes, array $data): void
     {
         $startRow = 1;
 
@@ -28,7 +28,7 @@ class ExportService
         }
     }
 
-    private function getWriterResponse(PS\Spreadsheet $spreadsheet, string $filename)
+    private function getWriterResponse(PS\Spreadsheet $spreadsheet, string $filename): StreamedResponse
     {
         // Stream du fichier dans une réponse symfony
         $response = new StreamedResponse();
@@ -41,7 +41,10 @@ class ExportService
                 break;
             case 'csv':
                 $writer = PS\IOFactory::createWriter($spreadsheet, "Csv");
-                $writer->setDelimiter(';');
+                // PhpSpreadsheet CSV writer doesn't have setDelimiter method in some versions
+                if (method_exists($writer, 'setDelimiter')) {
+                    $writer->setDelimiter(';');
+                }
                 $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
                 break;
             default:
@@ -56,7 +59,7 @@ class ExportService
         return $response;
     }
 
-    public function exportComptable(array $data, string $filename)
+    public function exportComptable(array $data, string $filename): StreamedResponse
     {
 
         $spreadsheet = new PS\Spreadsheet();
@@ -75,7 +78,7 @@ class ExportService
         return $this->getWriterResponse($spreadsheet, $filename);
     }
 
-    public function exportChantiers(array $data, string $filename)
+    public function exportChantiers(array $data, string $filename): StreamedResponse
     {
 
         $spreadsheet = new PS\Spreadsheet();
@@ -104,7 +107,7 @@ class ExportService
         return $this->getWriterResponse($spreadsheet, $filename);
     }
 
-    public function exportInventaire(array $references, string $filename)
+    public function exportInventaire(array $references, string $filename): StreamedResponse
     {
         $spreadsheet = new PS\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

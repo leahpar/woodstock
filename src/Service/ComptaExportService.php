@@ -23,12 +23,12 @@ class ComptaExportService
         $data = [];
         /** @var Stock $stock */
         foreach ($stocks as $stock) {
-            /** @var Chantier $chantier */
-            $chantier = $stock?->panier?->chantier;
+            /** @var ?Chantier $chantier */
+            $chantier = $stock->panier?->chantier;
 
-            $key  = ($chantier?->referenceTravaux??'7001');
+            $key  = $chantier->referenceTravaux??'7001';
             $key .= $stock->reference->codeComptaCompte;
-            $key .= ($stock->isEntree()) ? "E" : "S";
+            $key .= $stock->isEntree() ? "E" : "S";
             //dump('--------------');
             //dump(key: $key, credit: $stock->getCredit(), debit: $stock->getDebit());
             if (!isset($data[$key])) {
@@ -36,7 +36,7 @@ class ComptaExportService
                     /* 0 Journal    */ "ANA",
                     /* 1 Date       */ $stock->panier->date->format('t/m/Y'),
                     /* 2 Cpte       */ $stock->reference->codeComptaCompte,
-                    /* 3 Analytique */ $chantier?->referenceTravaux??'7001',
+                    /* 3 Analytique */ $chantier->referenceTravaux??'7001',
                     /* 4 Libellé    */ /*$stock->type .*/ "Sortie stock du " . $stock->panier->date->format('t/m/Y'),
                     /* 5 Débit      */ $stock->getDebit()  ?: 0,
                     /* 6 Crédit     */ $stock->getCredit() ?: 0,
@@ -49,7 +49,7 @@ class ComptaExportService
 
             $key  = "7000";
             $key .= $stock->reference->codeComptaCompte;
-            $key .= ($stock->isEntree()) ? "S" : "E"; // Inversé !
+            $key .= $stock->isEntree() ? "S" : "E"; // Inversé !
             //dump(key: $key, credit: $stock->getCredit(), debit: $stock->getDebit());
             if (!isset($data[$key])) {
                 $data[$key] = [
@@ -97,16 +97,16 @@ class ComptaExportService
                 throw new \Exception("Il y a des intervention(s) non validée(s)");
             }
 
-            /** @var Chantier $chantier */
-            $chantier = $intervention?->chantier;
+            /** @var ?Chantier $chantier */
+            $chantier = $intervention->chantier;
 
-            $key = ($chantier?->referenceTravaux??'7000');
+            $key = $chantier->referenceTravaux??'7000';
             if (!isset($data[$key])) {
                 $data[$key] = [
                     /* 0 Journal    */ "ANA",
                     /* 1 Date       */ $intervention->date->format('t/m/Y'),
                     /* 2 Cpte       */ "64110000",
-                    /* 3 Analytique */ $chantier?->referenceTravaux??'7000',
+                    /* 3 Analytique */ $chantier->referenceTravaux??'7000',
                     /* 4 Libellé    */ "Intervention",
                     /* 5 Débit      */ $intervention->getPrix() ?: 0,
                     /* 6 Crédit     */ $intervention->getPrix() ?: 0,

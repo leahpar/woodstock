@@ -61,8 +61,9 @@ class Media
         if (str_starts_with($this->fileMimeType, 'image')) {
             return 'image';
         }
-        if ($this->fileMimeType == "application/pdf") {
+        elseif ($this->fileMimeType == "application/pdf") {
             return 'PDF';
         }
+        throw new \Exception('Type de fichier non géré : ' . $this->fileMimeType);
     }
 }

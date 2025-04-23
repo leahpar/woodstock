@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\ComptaExportService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -15,7 +16,7 @@ class ComptaController extends CommonController
     #[Route('/export_heures',    name: 'compta_export_heures',    defaults: ['action' => 'heures'],    methods: ['POST'])]
     #[Route('/export_chantiers', name: 'compta_export_chantiers', defaults: ['action' => 'chantiers'], methods: ['GET'])]
     #[IsGranted('ROLE_COMPTA')]
-    public function exportStock(string $action, Request $request, ComptaExportService $comptaExportService)
+    public function exportStock(string $action, Request $request, ComptaExportService $comptaExportService): Response
     {
         try {
             $date = new \DateTime($request->request->get('date'));

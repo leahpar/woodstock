@@ -20,7 +20,7 @@ class InterventionService
      * Prérempli les donnes de l'intervention
      * avec les paramètres de la requête GET
      */
-    public function preremplissage(Intervention &$intervention, array $data)
+    public function preremplissage(Intervention &$intervention, array $data): void
     {
         $intervention->date = new \DateTime($data['date']??null);
         $poseur = $this->em->getRepository(User::class)->find((int)($data['poseur']??null));
@@ -124,7 +124,7 @@ class InterventionService
         return $interventions;
     }
 
-    public function detach(Intervention $intervention)
+    public function detach(Intervention $intervention): void
     {
         // les AUTRES enfants
         $enfants = $intervention->parent?->enfants->filter(fn (Intervention $i) => $i != $intervention);

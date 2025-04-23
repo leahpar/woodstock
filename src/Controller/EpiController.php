@@ -61,7 +61,7 @@ class EpiController extends CommonController
     }
 
     #[Route('/{id:epi}', name: 'epi_show', methods: ['GET', 'POST'])]
-    public function show(Epi $epi)
+    public function show(Epi $epi): Response
     {
         return $this->redirectToRoute('user_show', ['id' => $epi->user->id], Response::HTTP_SEE_OTHER);
     }

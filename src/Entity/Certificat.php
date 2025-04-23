@@ -26,10 +26,10 @@ class Certificat extends LoggableEntity
     public ?User $user = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    public ?\DateTimeInterface $dateDebut = null;
+    public ?\DateTime $dateDebut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    public ?\DateTimeInterface $dateFin = null;
+    public ?\DateTime $dateFin = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     #[Assert\PositiveOrZero]
@@ -42,7 +42,7 @@ class Certificat extends LoggableEntity
     #[ORM\Column(type: 'boolean')]
     public bool $alerte = false;
 
-    #[ORM\OneToMany(mappedBy: 'certificat', targetEntity: Media::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'certificat', orphanRemoval: true)]
     public Collection $medias;
 
     public function __construct()

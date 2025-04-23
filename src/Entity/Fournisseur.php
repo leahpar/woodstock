@@ -44,4 +44,8 @@ class Fournisseur extends LoggableEntity
     #[ORM\Column(length: 255, nullable: true)]
     public ?string $journalAchat = null;
 
+    public function __toString(): string
+    {
+        return $this->nom;
+    }
 }
