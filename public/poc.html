@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POC GED - PDF.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .document-list {
+            height: calc(100vh - 80px);
+        }
+        .pdf-preview {
+            height: calc(100vh - 80px);
+        }
+        .document-item:hover {
+            background-color: #f3f4f6;
+            cursor: pointer;
+        }
+        .document-item.active {
+            background-color: #e5e7eb;
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+<header class="bg-white shadow-sm p-4">
+    <h1 class="text-2xl font-semibold text-gray-800">POC GED - PDF.js</h1>
+</header>
+
+<div class="flex flex-col md:flex-row m-4 gap-4">
+    <!-- Liste des documents -->
+    <div class="w-full md:w-1/3 bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="p-4 border-b border-gray-200 bg-gray-50">
+            <h2 class="text-lg font-medium text-gray-700">Liste des documents</h2>
+        </div>
+        <div class="document-list overflow-y-auto p-2">
+            <div class="document-item active p-3 rounded-md mb-2" data-url="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf">
+                <div class="flex items-center">
+                    <div class="text-red-500 mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-800">rapport-annuel.pdf</p>
+                        <p class="text-sm text-gray-500">2.4 MB - Mis à jour le 28/04/2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="document-item p-3 rounded-md mb-2" data-url="https://raw.githubusercontent.com/mozilla/pdf.js/master/examples/learning/helloworld.pdf">
+                <div class="flex items-center">
+                    <div class="text-red-500 mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-800">guide-utilisation.pdf</p>
+                        <p class="text-sm text-gray-500">1.8 MB - Mis à jour le 25/04/2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="document-item p-3 rounded-md mb-2" data-url="https://raw.githubusercontent.com/mozilla/pdf.js/master/web/compressed.tracemonkey-pldi-09.pdf">
+                <div class="flex items-center">
+                    <div class="text-red-500 mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-800">documentation-technique.pdf</p>
+                        <p class="text-sm text-gray-500">3.2 MB - Mis à jour le 20/04/2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="document-item p-3 rounded-md mb-2" data-url="https://raw.githubusercontent.com/mozilla/pdf.js/master/test/pdfs/tracemonkey.pdf">
+                <div class="flex items-center">
+                    <div class="text-red-500 mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-800">contrat-client.pdf</p>
+                        <p class="text-sm text-gray-500">1.5 MB - Mis à jour le 15/04/2025</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Prévisualisation PDF -->
+    <div class="w-full md:w-2/3 bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+            <h2 class="text-lg font-medium text-gray-700">Prévisualisation</h2>
+            <div class="flex gap-2">
+                <button id="prev-page" class="bg-gray-200 hover:bg-gray-300 text-gray-600 px-3 py-1 rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <span id="page-info" class="px-3 py-1 text-gray-600">Page <span id="page-num">1</span> / <span id="page-count">?</span></span>
+                <button id="next-page" class="bg-gray-200 hover:bg-gray-300 text-gray-600 px-3 py-1 rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="pdf-preview overflow-auto bg-gray-100 flex justify-center p-4">
+            <canvas id="pdf-canvas" class="shadow-md"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Configuration de PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+    // Variables pour contrôler le PDF
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    let scale = 1.2;
+    let canvas = document.getElementById('pdf-canvas');
+    let ctx = canvas.getContext('2d');
+
+    // Fonction pour charger un PDF
+    function loadPDF(url) {
+        pageNum = 1;
+
+        pdfjsLib.getDocument(url).promise.then(function(pdf) {
+            pdfDoc = pdf;
+            document.getElementById('page-count').textContent = pdf.numPages;
+
+            // Rendu initial de la première page
+            renderPage(pageNum);
+        }).catch(function(error) {
+            console.error('Erreur lors du chargement du PDF:', error);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.width = 500;
+            canvas.height = 300;
+            ctx.font = '16px Arial';
+            ctx.fillStyle = 'red';
+            ctx.textAlign = 'center';
+            ctx.fillText('Erreur lors du chargement du PDF', canvas.width / 2, canvas.height / 2);
+        });
+    }
+
+    // Fonction pour afficher une page
+    function renderPage(num) {
+        pageRendering = true;
+
+        // Mise à jour de l'indicateur de page
+        document.getElementById('page-num').textContent = num;
+
+        pdfDoc.getPage(num).then(function(page) {
+            const viewport = page.getViewport({ scale: scale });
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // Rendu de la page
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+
+            page.render(renderContext).promise.then(function() {
+                pageRendering = false;
+
+                if (pageNumPending !== null) {
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
+            });
+        });
+    }
+
+    // Fonction pour changer de page
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
+        }
+    }
+
+    // Affichage de la page précédente
+    document.getElementById('prev-page').addEventListener('click', function() {
+        if (pdfDoc === null || pageNum <= 1) return;
+        pageNum--;
+        queueRenderPage(pageNum);
+    });
+
+    // Affichage de la page suivante
+    document.getElementById('next-page').addEventListener('click', function() {
+        if (pdfDoc === null || pageNum >= pdfDoc.numPages) return;
+        pageNum++;
+        queueRenderPage(pageNum);
+    });
+
+    // Gestion du clic sur les documents
+    const documents = document.querySelectorAll('.document-item');
+    documents.forEach(function(doc) {
+        doc.addEventListener('click', function() {
+            // Mise à jour de la classe active
+            documents.forEach(d => d.classList.remove('active'));
+            this.classList.add('active');
+
+            // Chargement du PDF
+            const url = this.getAttribute('data-url');
+            loadPDF(url);
+        });
+    });
+
+    // Chargement initial du premier PDF
+    loadPDF(documents[0].getAttribute('data-url'));
+</script>
+</body>
+</html>
